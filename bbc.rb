@@ -29,7 +29,6 @@ after do
 end
 
 get "/" do
-  "Hello"
+  @books = @storage.all_books
+  erb :books
 end
-
-
