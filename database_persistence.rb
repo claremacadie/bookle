@@ -7,6 +7,7 @@ class DatabasePersistence
           else
             PG.connect(dbname: "bbc")
           end
+    
     @logger = logger
   end
 
@@ -22,8 +23,10 @@ class DatabasePersistence
   def all_books
     sql = "SELECT * FROM books"
     result = query(sql)
-
-    tuple_to_list_hash(result.first)
+    
+    result.map do |tuple|
+      tuple_to_list_hash(tuple)
+    end
   end
 
   private
@@ -31,8 +34,6 @@ class DatabasePersistence
   def tuple_to_list_hash(tuple)
     { id: tuple["id"].to_i, 
       title: tuple["title"], 
-      collection_id: tuple["collection_id"].to_i, 
-      author_id: tuple["author_id"],
-      owner_id: tuple["owner_id"].to_i }
+      collection_id: tuple["collection_id"].to_i }
   end
 end
