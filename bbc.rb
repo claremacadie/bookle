@@ -33,6 +33,6 @@ get "/" do
 end
 
 get "/all_books_list" do
-  @books = @storage.all_books
+  @books = @storage.all_books_list
   erb :all_books_list
 end
