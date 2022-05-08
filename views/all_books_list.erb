@@ -1,5 +1,6 @@
 <ul>
   <% @books.each do |book| %>
     <li> <%= book[:title] %></li>
+    <li> <%= book[:collection_id] %></li>
   <% end %>
 </ul>

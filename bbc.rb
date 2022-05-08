@@ -29,6 +29,10 @@ after do
 end
 
 get "/" do
+  redirect "/all_books_list"
+end
+
+get "/all_books_list" do
   @books = @storage.all_books
-  erb :books
+  erb :all_books_list
 end
