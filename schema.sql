@@ -136,11 +136,11 @@ INSERT INTO books_categories (book_id, category_id) VALUES
   (18, 1)
 ; 
 
-INSERT INTO books_owners (book_id, owner_id) VALUES
-  (1, 1),
-  (2, 1),
-  (3, 2),
-  (3, 1)
+INSERT INTO books_owners (book_id, owner_id, available) VALUES
+  (1, 1, true),
+  (2, 1, false),
+  (3, 2, true),
+  (3, 1, false)
 ;
 
 INSERT INTO loans (books_owners_id, borrower_id, loan_start, loan_end) VALUES
@@ -153,21 +153,11 @@ INSERT INTO loans (books_owners_id, borrower_id) VALUES
 ;
 
 /*
-SELECT 
-  books.id,
-  books.title,
-  collections.name AS "collection", 
-  string_agg(DISTINCT authors.name, ', ') AS authors, 
-  string_agg(DISTINCT categories.name, ', ') AS categories,
-  string_agg(DISTINCT users.first_name || ' ' || users.last_name, ', ') as owners
-FROM books
-FULL OUTER JOIN books_owners ON books.id = books_owners.book_id
-FULL OUTER JOIN users on books_owners.owner_id = users.id
-INNER JOIN authors_books ON  books.id = authors_books.book_id
-INNER JOIN authors ON authors_books.author_id = authors.id
-INNER JOIN books_categories on books.id = books_categories.book_id
-INNER JOIN categories on books_categories.category_id = categories.id
-FULL OUTER JOIN collections on books.collection_id = collections.id
-GROUP BY books.title, collections.name, books.id
-ORDER BY title;
+    SELECT 
+      books_owners.book_id,
+      (users.first_name || ' ' || users.last_name) AS owner,
+      books_owners.available
+    FROM users
+    INNER JOIN books_owners ON users.id = books_owners.owner_id
+    WHERE books_owners.book_id = 1;
 */

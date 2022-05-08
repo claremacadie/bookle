@@ -38,6 +38,8 @@ get "/all_books_list" do
 end
 
 get "/book/:book_id" do
-  @book_id = params[:book_id].to_i
+  book_id = params[:book_id].to_i
+  @book = @storage.book_data(book_id)
+  @book_instance = @storage.book_instance(book_id)
   erb :book
 end

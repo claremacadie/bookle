@@ -1,1 +1,16 @@
-<p><%= @book_id %></p>
+<h2><%= @book[:title] %> by <%= @book[:authors] %></h2>
+<p>Part of the <%= @book[:collection] %> collection</p>
+<p>Belongs to the categories: <%= @book[:categories] %><p>
+<p>Owned by </p>
+<ul>
+  <% @book_instance.each do |book| %>
+    <li>
+      <%= book[:owner] %> - 
+      <% if book[:available] %>
+        available
+      <% else %>
+        on loan
+      <% end %>
+    <li>
+  <% end %>
+</ul>
