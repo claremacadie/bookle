@@ -72,9 +72,10 @@ class DatabasePersistence
     end.first
   end
 
-  def book_instance(book_id)
+  def book_instances(book_id)
     sql = <<~SQL
       SELECT 
+        books_owners.id,
         books_owners.book_id,
         (users.first_name || ' ' || users.last_name) AS owner,
         books_owners.available
@@ -86,13 +87,25 @@ class DatabasePersistence
     result = query(sql, book_id)
     
     result.map do |tuple|
-      tuple_to_book_instance_hash(tuple)
+      tuple_to_book_instances_hash(tuple)
     end
+  end
+
+  def book_availability(book_instance_id)
+    sql = <<~SQL
+      SELECT books_owners.available
+      FROM books_owners
+      WHERE books_owners.id = $1;
+    SQL
+    
+    result = query(sql, book_instance_id).first["available"]
+    
   end
   private
 
-  def tuple_to_book_instance_hash(tuple)
-    { book_id: tuple["book_id"].to_i, 
+  def tuple_to_book_instances_hash(tuple)
+    { book_instance_id: tuple["id"].to_i,
+      book_id: tuple["book_id"].to_i, 
       owner: tuple["owner"], 
       available: tuple["available"] == 't' }
   end

@@ -153,11 +153,7 @@ INSERT INTO loans (books_owners_id, borrower_id) VALUES
 ;
 
 /*
-    SELECT 
-      books_owners.book_id,
-      (users.first_name || ' ' || users.last_name) AS owner,
-      books_owners.available
-    FROM users
-    INNER JOIN books_owners ON users.id = books_owners.owner_id
-    WHERE books_owners.book_id = 1;
+    SELECT books_owners.available
+    FROM books_owners
+    WHERE books_owners.id = 1;
 */

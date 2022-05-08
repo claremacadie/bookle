@@ -1,0 +1,14 @@
+<form action="#" method="post">
+  <dl>
+    <dt><label for="title">Title</label></dt>
+    <dd><input id="title" type="text" name="title" value="<%= @book[:title] %>"></dd>
+    <dt><label for="authors">Author</label></dt>
+    <dd><input id="authors" type="text" name="authors" value="<%= @book[:authors] %>"></dd>
+    <dt><label for="collection">Collection</label></dt>
+    <dd><input id="collection" type="text" name="collection" value="<%= @book[:collection] %>"></dd>
+    <dt><label for="categories">Categories</label></dt>
+    <dd><input id="categories" type="text" name="categories" value="<%= @book[:categories] %>"></dd>
+    <dt><label for="available">Available or On loan?</label></dt>
+    <dd><input id="available" type="textavailable" name="available" value="<%= @book_availability %>"></dd>
+  </dl>
+</form>

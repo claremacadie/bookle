@@ -3,7 +3,7 @@
 <p>Belongs to the categories: <%= @book[:categories] %><p>
 <p>Owned by </p>
 <ul>
-  <% @book_instance.each do |book| %>
+  <% @book_instances.each do |book| %>
     <li>
       <%= book[:owner] %> - 
       <% if book[:available] %>
@@ -11,6 +11,7 @@
       <% else %>
         on loan
       <% end %>
+    <a href="/book/edit/<%= book[:book_instance_id] %>/<%= book[:book_id] %>">Edit</a>
     <li>
   <% end %>
 </ul>
