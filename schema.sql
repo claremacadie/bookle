@@ -51,7 +51,8 @@ CREATE TABLE books_categories (
 CREATE TABLE books_owners (
   id serial PRIMARY KEY,
   book_id integer NOT NULL REFERENCES books(id) ON DELETE CASCADE,
-  owner_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE
+  owner_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  available boolean DEFAULT true
 );
 
 CREATE TABLE loans (
@@ -153,6 +154,7 @@ INSERT INTO loans (books_owners_id, borrower_id) VALUES
 
 /*
 SELECT 
+  books.id,
   books.title,
   collections.name AS "collection", 
   string_agg(DISTINCT authors.name, ', ') AS authors, 
@@ -166,6 +168,6 @@ INNER JOIN authors ON authors_books.author_id = authors.id
 INNER JOIN books_categories on books.id = books_categories.book_id
 INNER JOIN categories on books_categories.category_id = categories.id
 FULL OUTER JOIN collections on books.collection_id = collections.id
-GROUP BY books.title, collections.name
+GROUP BY books.title, collections.name, books.id
 ORDER BY title;
 */

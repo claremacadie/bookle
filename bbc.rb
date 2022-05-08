@@ -36,3 +36,8 @@ get "/all_books_list" do
   @books = @storage.all_books_list
   erb :all_books_list
 end
+
+get "/book/:book_id" do
+  @book_id = params[:book_id].to_i
+  erb :book
+end
