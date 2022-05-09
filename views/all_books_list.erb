@@ -2,20 +2,20 @@
   <thead>
     <tr>
       <th scope = "col"> Title </th>
-      <th scope = "col"> Collection </th>
       <th scope = "col"> Author(s) </th>
       <th scope = "col"> Categories </th>
-      <th scope = "col"> Owners </th>
+      <th scope = "col"> Owner </th>
+      <th scope = "col"> Borrower </th>
     </tr>
   </thead>
   <tbody>
     <% @books.each do |book| %>
       <tr>
         <td> <a href="/book/<%= book[:id] %>"><%= book[:title] %></a></td>
-        <td> <%= book[:collection] %></td>
-        <td> <%= book[:authors] %></td>
+        <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
-        <td> <%= book[:owners] %></td>
+        <td> <%= book[:owner_name] %></td>
+        <td> <%= book[:borrower_name] %></td>
       </tr>
     <% end %>
   </tbody>
