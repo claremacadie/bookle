@@ -2,3 +2,7 @@
 <p>Belongs to the categories: <%= @book[:categories] %><p>
 <p>Owned by: <%= @book[:owner_name] %></p>
 <p>Availability: <%= book_availability(@book) %></p>
+
+<% if !@book[:borrower_id] %>
+<a href="">Request book</a>
+<% end %>
