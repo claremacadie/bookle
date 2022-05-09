@@ -45,6 +45,33 @@ class DatabasePersistence
       tuple_to_list_hash(tuple)
     end
   end
+
+  def ownedby_user_books_list(username)
+    sql = <<~SQL
+      SELECT 
+        books.id, 
+        books.title,
+        books.author,
+        string_agg(categories.name, ', ') AS categories,
+        owners.id AS owner_id,
+        owners.name AS owner_name,
+        borrowers.id AS borrower_id,
+        borrowers.name AS borrower_name
+      FROM books
+      INNER JOIN books_categories ON books.id = books_categories.book_id
+      INNER JOIN categories ON books_categories.category_id = categories.id
+      INNER JOIN users AS owners ON books.owner_id = owners.id
+      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+      WHERE owners.name = $1
+      GROUP BY books.id, owners.id, borrowers.id
+      ORDER BY title;
+      SQL
+    result = query(sql, username)
+    
+    result.map do |tuple|
+      tuple_to_list_hash(tuple)
+    end
+  end
   
   def book_data(book_id)
     sql = <<~SQL
