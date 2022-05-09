@@ -18,6 +18,7 @@ CREATE TABLE books (
   title text NOT NULL,
   author text NOT NULL,
   owner_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  requester_id integer REFERENCES users(id),
   borrower_id integer REFERENCES users(id)
 );
 
