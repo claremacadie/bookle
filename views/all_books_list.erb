@@ -4,8 +4,7 @@
       <th scope = "col"> Title </th>
       <th scope = "col"> Author(s) </th>
       <th scope = "col"> Categories </th>
-      <th scope = "col"> Owner </th>
-      <th scope = "col"> Borrower </th>
+      <th scope = "col"> Availability </th>
     </tr>
   </thead>
   <tbody>
@@ -14,8 +13,7 @@
         <td> <a href="/book/<%= book[:id] %>"><%= book[:title] %></a></td>
         <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
-        <td> <%= book[:owner_name] %></td>
-        <td> <%= book[:borrower_name] %></td>
+        <td> <%= book_availability(book) %></td>
       </tr>
     <% end %>
   </tbody>
