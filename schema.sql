@@ -5,9 +5,7 @@ DROP TABLE users;
 
 CREATE TABLE users (
   id serial PRIMARY KEY,
-  name text NOT NULL,
-  email text NOT NULL UNIQUE,
-  password text NOT NULL UNIQUE
+  name text NOT NULL
 );
 
 CREATE TABLE categories (
@@ -29,10 +27,10 @@ CREATE TABLE books_categories (
   category_id integer NOT NULL REFERENCES categories(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (name, email, password) VALUES
-  ('Clare MacAdie', 'clare@email.com', 'abc'),
-  ('Alice Allbright', 'alice@email.com', 'bbc'),
-  ('Beth Broom', 'beth@email.com', 'cbc')
+INSERT INTO users (name) VALUES
+  ('Clare MacAdie'),
+  ('Alice Allbright'),
+  ('Beth Broom')
   ;
 
 INSERT INTO categories (name) VALUES 

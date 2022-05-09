@@ -128,6 +128,7 @@ post "/users/signup" do
     status 422
     erb :signup
   else
+    @storage.add_new_user(new_username)
     upload_new_user_credentials(new_username, new_password)
     session[:username] = new_username
     session[:message] = "Your account has been created."

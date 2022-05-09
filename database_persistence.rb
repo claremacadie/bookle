@@ -73,6 +73,11 @@ class DatabasePersistence
     end.first
   end
 
+  def add_new_user(user_name)
+    sql = "INSERT INTO users (name) VALUES ($1)"
+    query(sql, user_name)
+  end
+
   private
 
   def tuple_to_list_hash(tuple)
