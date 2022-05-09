@@ -12,7 +12,10 @@
     </header>
 
     <main>
-      <%== yield %>
+      <% if session[:message] %>
+        <p class="message"><%= session.delete(:message) %></p>
+      <% end %>
+      <%= yield %>
     </main>
   </body>
 </html>

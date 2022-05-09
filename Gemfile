@@ -6,3 +6,5 @@ gem 'sinatra-contrib'
 gem 'pry'
 
 gem 'pg'
+
+gem 'bcrypt'
