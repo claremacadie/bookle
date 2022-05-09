@@ -1,8 +1,17 @@
 <p>Welcome to the Book Borrowers' Collective.</p>
 <p>You need to have an accout to lend and borrow books.</p>
-<a href="/users/signup">Create new account</a>
-<p>Sign in</p>
 
-<a href="">View your books</a>
-<p>Sign out</p>
-<a href="/all_books_list">View all books</a>
+<% if session[:username] %>
+  <form method="post" action="/users/signout">
+    <p>
+      Signed in as <%= session[:username] %>.
+      <button type="submit">Sign Out</button>
+    </p>
+  </form>
+<% else %>
+  <p><a href="/users/signin">Sign In</a></p>
+  <p><a href="/users/signup">Create Account</a></p>
+<% end %>
+
+<p><a href="">View your books</a></p>
+<p><a href="/all_books_list">View all books</a></p>
