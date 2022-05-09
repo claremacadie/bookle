@@ -51,9 +51,8 @@ end
 #   erb :book_edit
 # end
 
-# get "/book/:book_id" do
-#   book_id = params[:book_id].to_i
-#   @book = @storage.book_data(book_id)
-#   @book_instances = @storage.book_instances(book_id)
-#   erb :book
-# end
+get "/book/:book_id" do
+  book_id = params[:book_id].to_i
+  @book = @storage.book_data(book_id)
+  erb :book
+end

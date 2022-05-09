@@ -84,6 +84,7 @@ INSERT INTO books_categories (book_id, category_id) VALUES
 ; 
 
 /*
+*/
     SELECT 
       books.id, 
       books.title,
@@ -98,5 +99,5 @@ INSERT INTO books_categories (book_id, category_id) VALUES
     INNER JOIN categories ON books_categories.category_id = categories.id
     INNER JOIN users AS owners ON books.owner_id = owners.id
     LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+    WHERE books.id = 1
     GROUP BY books.id, owners.id, borrowers.id;
-*/
