@@ -14,7 +14,13 @@ end
 
 helpers do
   def book_availability(book)
-    book[:borrower_id] ? "On loan" : "Available"
+    if book[:borrower_id] 
+      "On loan" 
+    elsif book[:requester_id]
+      "Requested"
+    else
+      "Available"
+    end
   end
 end
 

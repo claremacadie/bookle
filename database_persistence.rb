@@ -29,8 +29,9 @@ class DatabasePersistence
         string_agg(categories.name, ', ') AS categories,
         owners.id AS owner_id,
         owners.name AS owner_name,
-        borrowers.id AS borrower_id,
+        requesters.id AS requester_id,
         requesters.name AS requester_name,
+        borrowers.id AS borrower_id,
         borrowers.name AS borrower_name
       FROM books
       INNER JOIN books_categories ON books.id = books_categories.book_id
