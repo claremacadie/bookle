@@ -88,17 +88,15 @@ class CMSTest < Minitest::Test
   #   assert_equal "You must be signed out to do that.", session[:message]
   # end
   
-  # this fails because the user "joe" is still there from the last test.
-  # maybe create a random name?
-  # def test_signup_signed_out
-  #   post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+  def test_signup_signed_out
+    post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
     
-  #   assert_equal 302, last_response.status
-  #   assert_equal "Your account has been created.", session[:message]
+    assert_equal 302, last_response.status
+    assert_equal "Your account has been created.", session[:message]
 
-  #   get "/"
-  #   assert_includes last_response.body, "Signed in as joe."
-  # end
+    get "/"
+    assert_includes last_response.body, "Signed in as joe."
+  end
   
   def test_signup_signed_in
     post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}, admin_session
