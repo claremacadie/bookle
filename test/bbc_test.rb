@@ -13,7 +13,8 @@ class CMSTest < Minitest::Test
   end
 
   def setup
-    
+    sql = File.read('test/schema_test.sql')
+    PG.connect(dbname: "bbc_test").exec(sql)
   end
 
   def teardown
@@ -87,6 +88,8 @@ class CMSTest < Minitest::Test
   #   assert_equal "You must be signed out to do that.", session[:message]
   # end
   
+  # this fails because the user "joe" is still there from the last test.
+  # maybe create a random name?
   # def test_signup_signed_out
   #   post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
     
