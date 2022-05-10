@@ -111,10 +111,10 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "That username already exists."
   end
 
-  # def test_signup_mismatched_passwords
-  #   post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "mismatched"}
+  def test_signup_mismatched_passwords
+    post "/users/signup", {new_username: "joanna", password: "dfghiewo34334", reenter_password: "mismatched"}
     
-  #   assert_equal 422, last_response.status
-  #   assert_includes last_response.body, "The passwords do not match."
-  # end
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "The passwords do not match."
+  end
 end
