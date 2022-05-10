@@ -81,12 +81,12 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Reenter password"
   end
   
-  # def test_view_signup_form_signed_in
-  #   get "/users/signup", {}, admin_session
+  def test_view_signup_form_signed_in
+    get "/users/signup", {}, admin_session
     
-  #   assert_equal 302, last_response.status
-  #   assert_equal "You must be signed out to do that.", session[:message]
-  # end
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed out to do that.", session[:message]
+  end
   
   def test_signup_signed_out
     post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}

@@ -93,6 +93,7 @@ post "/users/signout" do
 end
 
 get "/users/signup" do
+  require_signed_out_user
   erb :signup
 end
 
