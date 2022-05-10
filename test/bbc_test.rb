@@ -20,13 +20,13 @@ class CMSTest < Minitest::Test
   
   end
 
-  def session
-    last_request.env["rack.session"]
-  end
+  # def session
+  #   last_request.env["rack.session"]
+  # end
 
-  def admin_session
-    { "rack.session" => { username: "admin" } }
-  end
+  # def admin_session
+  #   { "rack.session" => { username: "admin" } }
+  # end
 
   def test_homepage
     get "/"
