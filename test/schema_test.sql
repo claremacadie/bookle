@@ -82,22 +82,3 @@ INSERT INTO books_categories (book_id, category_id) VALUES
   (17, 1),
   (18, 1)
 ; 
-
-/*
-    SELECT 
-      books.id, 
-      books.title,
-      books.author,
-      string_agg(categories.name, ', ') AS categories,
-      owners.id AS owner_id,
-      owners.name AS owner_name,
-      borrowers.id AS borrower_id,
-      borrowers.name AS borrower_name
-    FROM books
-    INNER JOIN books_categories ON books.id = books_categories.book_id
-    INNER JOIN categories ON books_categories.category_id = categories.id
-    INNER JOIN users AS owners ON books.owner_id = owners.id
-    LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-    WHERE books.id = 1
-    GROUP BY books.id, owners.id, borrowers.id;
-*/
