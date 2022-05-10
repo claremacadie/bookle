@@ -5,7 +5,8 @@ DROP TABLE users;
 
 CREATE TABLE users (
   id serial PRIMARY KEY,
-  name text NOT NULL
+  name text NOT NULL,
+  password text NOT NULL UNIQUE
 );
 
 CREATE TABLE categories (
@@ -28,11 +29,11 @@ CREATE TABLE books_categories (
   category_id integer NOT NULL REFERENCES categories(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (name) VALUES
-  ('Clare MacAdie'),
-  ('Alice Allbright'),
-  ('Beth Broom')
-  ;
+INSERT INTO users (name, password) VALUES
+  ('Clare MacAdie', '$2a$12$bEpZUdqQkgZpNe2wKL3vkO1xsCJzjTDNwolKVSMpKHMhtV6xm4vD6'),
+  ('Alice Allbright', '$2a$12$ujZUWGjRsLNXJkz8RsYooeGc1gfR/TCn.nBui99y0sSnkg9Soi2D.'),
+  ('Beth Broom', '$2a$12$sUdn9PHhPRKc2AVvRZj/r.uTGNh0Hu1Ell0yVdQKSXo6dyBGo0Rjm')
+;
 
 INSERT INTO categories (name) VALUES 
   ('Children''s'),

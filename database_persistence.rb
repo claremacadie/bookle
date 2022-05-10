@@ -109,9 +109,21 @@ class DatabasePersistence
     end.first
   end
 
-  def add_new_user(user_name)
-    sql = "INSERT INTO users (name) VALUES ($1)"
-    query(sql, user_name)
+  def upload_new_user_credentials(user_name, password)
+    hashed_password = BCrypt::Password.create(password).to_s
+    sql = "INSERT INTO users (name, password) VALUES ($1, $2)"
+    query(sql, user_name, hashed_password)
+  end
+
+  def load_user_credentials
+    sql = "SELECT name, password FROM users"
+    result = query(sql)
+    
+    users_hash = {}
+    result.map do |tuple|
+      users_hash[tuple["name"]] = tuple["password"] 
+    end
+    users_hash
   end
 
   private
