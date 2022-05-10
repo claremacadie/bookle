@@ -20,6 +20,23 @@ class DatabasePersistence
     @db.exec_params(statement, params)
   end
 
+  def upload_new_user_credentials(user_name, password)
+    hashed_password = BCrypt::Password.create(password).to_s
+    sql = "INSERT INTO users (name, password) VALUES ($1, $2)"
+    query(sql, user_name, hashed_password)
+  end
+
+  def load_user_credentials
+    sql = "SELECT name, password FROM users"
+    result = query(sql)
+    
+    users_hash = {}
+    result.map do |tuple|
+      users_hash[tuple["name"]] = tuple["password"] 
+    end
+    users_hash
+  end
+
   def all_books_list
     sql = <<~SQL
       SELECT 
@@ -107,23 +124,6 @@ class DatabasePersistence
     result.map do |tuple|
       tuple_to_list_hash(tuple)
     end.first
-  end
-
-  def upload_new_user_credentials(user_name, password)
-    hashed_password = BCrypt::Password.create(password).to_s
-    sql = "INSERT INTO users (name, password) VALUES ($1, $2)"
-    query(sql, user_name, hashed_password)
-  end
-
-  def load_user_credentials
-    sql = "SELECT name, password FROM users"
-    result = query(sql)
-    
-    users_hash = {}
-    result.map do |tuple|
-      users_hash[tuple["name"]] = tuple["password"] 
-    end
-    users_hash
   end
 
   private
