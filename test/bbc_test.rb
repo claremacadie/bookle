@@ -66,6 +66,24 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan"
   end
 
+  def test_view_book_signed_out
+    get "/book/2"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
+  # def test_view_book_signed_in
+  #   get "/ownedby_user_books_list", {}, {"rack.session" => { username: "Clare MacAdie" } }
+
+  #   assert_equal 200, last_response.status
+  #   assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+  #   assert_includes last_response.body, "Chamber of Secrets"
+  #   assert_includes last_response.body, "JK Rowling"
+  #   assert_includes last_response.body, "Children's, Fantasy"
+  #   assert_includes last_response.body, "On loan"
+  # end
+
   def test_signin_form
     get "/users/signin"
 

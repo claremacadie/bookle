@@ -15,6 +15,15 @@ configure(:development) do
   also_reload "database_persistence.rb"
 end
 
+before do
+  @storage = DatabasePersistence.new(logger)
+end
+
+after do
+  @storage.disconnect
+end
+
+# Helper methods for views (erb files)
 helpers do
   def book_availability(book)
     if book[:borrower_id] 
@@ -27,14 +36,7 @@ helpers do
   end
 end
 
-before do
-  @storage = DatabasePersistence.new(logger)
-end
-
-after do
-  @storage.disconnect
-end
-
+# Helper methods for routes
 def user_signed_in?
   session.key?(:username)
 end
@@ -64,6 +66,7 @@ def valid_credentials?(username, password)
   end
 end
 
+# Routes
 get "/" do
   erb :home
 end
@@ -128,12 +131,13 @@ end
 
 get "/ownedby_user_books_list" do
   require_signed_in_user
-
+  
   @user_owned_books = @storage.ownedby_user_books_list(session[:username])
   erb :ownedby_user_books_list
 end
 
 get "/book/:book_id" do
+  require_signed_in_user
   book_id = params[:book_id].to_i
   @book = @storage.book_data(book_id)
   erb :book
