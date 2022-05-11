@@ -125,6 +125,11 @@ class DatabasePersistence
     end.first
   end
 
+  def book_returned(book_id)
+    sql = "UPDATE books SET borrower_id = NULL WHERE id = $1"
+    query(sql, book_id)
+  end
+
   private
 
   def tuple_to_list_hash(tuple)
