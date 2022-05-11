@@ -149,7 +149,7 @@ post "/book/:book_id/loaned" do
  
   @storage.book_loaned(book_id)
   @book = @storage.book_data(book_id)
-  session[:message] = "#{@book[:title]} has been loaned to #{@book[:borrower_name]} "
+  session[:message] = "#{@book[:title]} has been loaned to #{@book[:borrower_name]}"
   redirect :ownedby_user_books_list
 end
 
