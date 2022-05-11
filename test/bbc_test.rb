@@ -84,7 +84,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan"
   end
 
-  def test_view_onloan_book_signed_in_as_book_owner_
+  def test_view_onloan_book_signed_in_as_book_owner
     get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
 
     assert_equal 200, last_response.status
@@ -92,6 +92,13 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "On loan"
     assert_includes last_response.body, %q(<button>Book Returned</button>)
+  end
+
+  def test_return_book
+    post "/book/2/returned", {}, {"rack.session" => { username: "Clare MacAdie" } }
+
+    assert_equal 302, last_response.status
+    assert_equal "Chamber of Secrets has been returned", session[:message]
   end
 
   def test_signin_form
