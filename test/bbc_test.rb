@@ -102,15 +102,15 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Available"
   end
   
-  # def test_view_available_book_signedin_as_not_book_owner
-  #   get "/book/a", {}, {"rack.session" => { username: "Alice Allbright" } }
+  def test_view_available_book_signedin_as_not_book_owner
+    get "/book/1", {}, {"rack.session" => { username: "Alice Allbright" } }
     
-  #   assert_equal 200, last_response.status
-  #   assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-  #   assert_includes last_response.body, "Philosopher's Stone"
-  #   assert_includes last_response.body, "Available"
-  #   assert_includes last_response.body, %q(<button>Request book</button>)
-  # end
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Philosopher's Stone"
+    assert_includes last_response.body, "Available"
+    assert_includes last_response.body, %q(<button>Request book</button>)
+  end
 
   def test_signin_form
     get "/users/signin"
