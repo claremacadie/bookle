@@ -4,7 +4,11 @@
 <p>Availability: <%= book_availability(@book) %></p>
 
 <% if @book[:owner_name] == session[:username] %>
-  <% if @book[:borrower_id] %>
+  <% if @book[:requester_id] %>
+    <form action="/book/<%= @book[:id] %>/loaned" method="post">
+      <button>Loan book to <%= @book[:requester_name] %></button>
+    </form>
+  <% elsif @book[:borrower_id] %>
     <form action="/book/<%= @book[:id] %>/returned" method="post">
       <button>Book Returned</button>
     </form>

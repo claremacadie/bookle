@@ -125,6 +125,15 @@ class DatabasePersistence
     end.first
   end
 
+  def book_loaned(book_id)
+    sql = "SELECT requester_id FROM books WHERE id = $1"
+    result = query(sql, book_id).first
+    requester_id = result["requester_id"]
+
+    sql = "UPDATE books SET requester_id = NULL, borrower_id = $1 WHERE id = $2"
+    query(sql, requester_id, book_id)
+  end
+
   def book_returned(book_id)
     sql = "UPDATE books SET borrower_id = NULL WHERE id = $1"
     query(sql, book_id)
