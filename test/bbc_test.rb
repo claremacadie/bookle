@@ -93,12 +93,15 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan"
     assert_includes last_response.body, %q(<button>Book Returned</button>)
   end
-
+  
   def test_return_book
     post "/book/2/returned", {}, {"rack.session" => { username: "Clare MacAdie" } }
-
+    
     assert_equal 302, last_response.status
     assert_equal "Chamber of Secrets has been returned", session[:message]
+    
+    get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
+    assert_includes last_response.body, "Available"
   end
 
   def test_signin_form
