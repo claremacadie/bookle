@@ -72,15 +72,15 @@ class CMSTest < Minitest::Test
     assert_equal "You must be signed in to do that.", session[:message]
   end
 
-  # def test_view_available_book_signed_in_as_book_owner
-  #   get "/book/1", {}, {"rack.session" => { username: "Clare MacAdie" } }
+  def test_view_available_book_signed_in_as_book_owner
+    get "/book/1", {}, {"rack.session" => { username: "Clare MacAdie" } }
     
-  #   assert_equal 200, last_response.status
-  #   assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-  #   assert_includes last_response.body, "Philosopher's Stone"
-  #   assert_includes last_response.body, "Available"
-  #   refute_includes last_response.body, %q(<button>)
-  # end
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Philosopher's Stone"
+    assert_includes last_response.body, "Available"
+    refute_includes last_response.body, %q(<button>)
+  end
 
   def test_view_onloan_book_signed_in_as_book_owner
     get "/book/3", {}, {"rack.session" => { username: "Clare MacAdie" } }

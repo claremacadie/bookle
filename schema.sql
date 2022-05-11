@@ -42,7 +42,7 @@ INSERT INTO categories (name) VALUES
 ;
 
 INSERT INTO books (title, author, owner_id, requester_id, borrower_id) VALUES
-  ('Philospher''s Stone', 'JK Rowling', 1, NULL, 2),
+  ('Philosopher''s Stone', 'JK Rowling', 1, NULL, 2),
   ('Chamber of Secrets', 'JK Rowling', 1, NULL, 2),
   ('Prisoner of Azkaban', 'JK Rowling', 1, 3, NULL),
   ('Goblet of Fire', 'JK Rowling', 1, 2, NULL),
