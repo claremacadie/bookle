@@ -48,6 +48,13 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan"
   end
 
+  def test_view_your_books_signed_out
+    get "/ownedby_user_books_list"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
   def test_signin_form
     get "/users/signin"
 
