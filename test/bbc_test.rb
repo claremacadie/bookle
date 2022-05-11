@@ -84,6 +84,18 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan"
   end
 
+  def test_view_onloan_book_signed_in_as_book_owner_
+    get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Chamber of Secrets"
+    assert_includes last_response.body, "On loan"
+    assert_includes last_response.body, "Book returned"
+    assert_includes last_response.body, "<input"
+    assert_includes last_response.body, %q(<button type="submit")
+  end
+
   def test_signin_form
     get "/users/signin"
 
