@@ -36,6 +36,17 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Welcome to the Book Borrowers' Collective."
   end
+  
+  def test_all_books_list
+    get "/all_books_list"
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Chamber of Secrets"
+    assert_includes last_response.body, "JK Rowling"
+    assert_includes last_response.body, "Children's, Fantasy"
+    assert_includes last_response.body, "On loan"
+  end
 
   def test_signin_form
     get "/users/signin"
@@ -83,14 +94,14 @@ class CMSTest < Minitest::Test
   
   def test_view_signup_form_signed_in
     get "/users/signup", {}, admin_session
-    
+
     assert_equal 302, last_response.status
     assert_equal "You must be signed out to do that.", session[:message]
   end
   
   def test_signup_signed_out
     post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
-    
+
     assert_equal 302, last_response.status
     assert_equal "Your account has been created.", session[:message]
 
