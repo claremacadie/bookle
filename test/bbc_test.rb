@@ -92,15 +92,15 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button>Book Returned</button>)
   end
   
-  # def test_return_book
-  #   post "/book/3/returned", {}, {"rack.session" => { username: "Clare MacAdie" } }
+  def test_return_book
+    post "/book/3/returned", {}, {"rack.session" => { username: "Clare MacAdie" } }
     
-  #   assert_equal 302, last_response.status
-  #   assert_equal "Prisoner of Azkaban has been returned", session[:message]
+    assert_equal 302, last_response.status
+    assert_equal "Prisoner of Azkaban has been returned", session[:message]
     
-  #   get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
-  #   assert_includes last_response.body, "Available"
-  # end
+    get "/book/3", {}, {"rack.session" => { username: "Clare MacAdie" } }
+    assert_includes last_response.body, "Available"
+  end
   
   # def test_view_available_book_signedin_as_not_book_owner
   #   get "/book/a", {}, {"rack.session" => { username: "Alice Allbright" } }
