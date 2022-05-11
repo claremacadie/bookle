@@ -3,7 +3,7 @@
 <p>Owned by: <%= @book[:owner_name] %></p>
 <p>Availability: <%= book_availability(@book) %></p>
 
-<% if @book[:owner_name] = session[:username] %>
+<% if @book[:owner_name] == session[:username] %>
   <% if @book[:borrower_id] %>
     <form action="/book/<%= @book[:id] %>/returned" method="post">
       <button>Book Returned</button>
@@ -11,6 +11,10 @@
   <% end %>
 <% end %>
 
-<% if !@book[:borrower_id] %>
-<a href="">Request book</a>
+<% if @book[:owner_name] != session[:username] %>
+  <% if !@book[:requester_id] && !@book[:borrower_id] %>
+    <form action="/book/<%= @book[:id] %>/request" method="post">
+      <button>Request book</button>
+    </form>
+  <% end %>
 <% end %>

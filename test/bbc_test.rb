@@ -86,7 +86,7 @@ class CMSTest < Minitest::Test
 
   def test_view_onloan_book_signed_in_as_book_owner
     get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
-
+    
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
@@ -102,6 +102,16 @@ class CMSTest < Minitest::Test
     
     get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
     assert_includes last_response.body, "Available"
+  end
+  
+  def test_view_available_book_signedin_as_not_book_owner
+    get "/book/3", {}, {"rack.session" => { username: "Alice Allbright" } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    assert_includes last_response.body, "Available"
+    assert_includes last_response.body, %q(<button>Request book</button>)
   end
 
   def test_signin_form
