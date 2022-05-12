@@ -36,9 +36,9 @@ class DatabasePersistence
     users_hash
   end
 
-  def get_user_id(username)
+  def get_user_id(user_name)
     sql = "SELECT id FROM users WHERE name = $1"
-    result = query(sql, username)
+    result = query(sql, user_name)
     result.first["id"].to_i
   end
 

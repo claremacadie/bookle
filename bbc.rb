@@ -38,7 +38,7 @@ end
 
 # Helper methods for routes
 def user_signed_in?
-  session.key?(:username)
+  session.key?(:user_name)
 end
 
 def require_signed_in_user
@@ -55,11 +55,11 @@ def require_signed_out_user
   end
 end
 
-def valid_credentials?(username, password)
+def valid_credentials?(user_name, password)
   credentials = @storage.load_user_credentials
 
-  if credentials.key?(username)
-    bcrypt_password = BCrypt::Password.new(credentials[username])
+  if credentials.key?(user_name)
+    bcrypt_password = BCrypt::Password.new(credentials[user_name])
     bcrypt_password == password
   else
     false
@@ -76,12 +76,12 @@ get "/users/signin" do
 end
 
 post "/users/signin" do
-  username = params[:username]
+  user_name = params[:user_name]
 
-  if valid_credentials?(username, params[:password])
-    session[:username] = username
+  if valid_credentials?(user_name, params[:password])
+    session[:user_name] = user_name
     session[:message] = "Welcome!"
-    session[:user_id] = @storage.get_user_id(username)
+    session[:user_id] = @storage.get_user_id(user_name)
     redirect "/"
   else
     session[:message] = "Invalid credentials"
@@ -91,7 +91,7 @@ post "/users/signin" do
 end
 
 post "/users/signout" do
-  session.delete(:username)
+  session.delete(:user_name)
   session.delete(:user_id)
   session[:message] = "You have been signed out"
   redirect "/"
@@ -120,7 +120,7 @@ post "/users/signup" do
     erb :signup
   else
     @storage.upload_new_user_credentials(new_username, new_password)
-    session[:username] = new_username
+    session[:user_name] = new_username
     session[:user_id] = @storage.get_user_id(new_username)
     session[:message] = "Your account has been created."
     redirect "/"

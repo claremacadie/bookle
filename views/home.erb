@@ -1,10 +1,10 @@
 <p>Welcome to the Book Borrowers' Collective.</p>
 <p>You need to have an accout to lend and borrow books.</p>
 
-<% if session[:username] %>
+<% if session[:user_name] %>
   <form method="post" action="/users/signout">
     <p>
-      Signed in as <%= session[:username] %>.
+      Signed in as <%= session[:user_name] %>.
       <button type="submit">Sign Out</button>
     </p>
   </form>

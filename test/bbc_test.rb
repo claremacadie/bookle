@@ -26,7 +26,7 @@ class CMSTest < Minitest::Test
   end
 
   def admin_session
-    { "rack.session" => { username: "admin" } }
+    { "rack.session" => { user_name: "admin" } }
   end
 
   def test_homepage
@@ -56,7 +56,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_your_books_signed_in
-    get "/ownedby_user_books_list", {}, {"rack.session" => { username: "Clare MacAdie" , user_id: 1 } }
+    get "/ownedby_user_books_list", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -73,7 +73,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_available_book_signed_in_as_book_owner
-    get "/book/1", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    get "/book/1", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -83,7 +83,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_requested_book_signed_in_as_book_owner
-    get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -94,7 +94,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_requested_book_signed_in_as_book_requester
-    get "/book/2", {}, {"rack.session" => { username: "Alice Allbright", user_id: 2 } }
+    get "/book/2", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -104,7 +104,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_requested_book_signed_in_as_not_book_owner_or_requester
-    get "/book/2", {}, {"rack.session" => { username: "Beth Broom", user_id: 3 } }
+    get "/book/2", {}, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -114,7 +114,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_onloan_book_signed_in_as_book_owner
-    get "/book/3", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    get "/book/3", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -124,7 +124,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_onloan_book_signed_in_as_book_borrower
-    get "/book/3", {}, {"rack.session" => { username: "Alice Allbright", user_id: 2 } }
+    get "/book/3", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -134,7 +134,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_onloan_book_signed_in_not_as_book_owner_or_borrower
-    get "/book/3", {}, {"rack.session" => { username: "Beth Broom", user_id: 3 } }
+    get "/book/3", {}, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -144,57 +144,57 @@ class CMSTest < Minitest::Test
   end
    
   def test_request_book
-    post "/book/1/requested", {}, {"rack.session" => { username: "Alice Allbright", user_id: 2 } }
+    post "/book/1/requested", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have requested Philosopher's Stone from Clare MacAdie", session[:message]
     
-    get "/book/1", {}, {"rack.session" => { username: "Alice Allbright" } }
+    get "/book/1", {}, {"rack.session" => { user_name: "Alice Allbright" } }
     assert_includes last_response.body, "Requested"
   end
    
   def test_cancel_request_book
-    post "/book/2/cancelled_request", {}, {"rack.session" => { username: "Alice Allbright", user_id: 2 } }
+    post "/book/2/cancelled_request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have cancelled your request for Chamber of Secrets from Clare MacAdie", session[:message]
     
-    get "/book/2", {}, {"rack.session" => { username: "Alice Allbright" } }
+    get "/book/2", {}, {"rack.session" => { user_name: "Alice Allbright" } }
     assert_includes last_response.body, "Available"
   end
    
   def test_loan_book
-    post "/book/2/loaned", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    post "/book/2/loaned", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 302, last_response.status
     assert_equal "Chamber of Secrets has been loaned to Alice Allbright", session[:message]
     
-    get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     assert_includes last_response.body, "On loan"
   end
    
   def test_reject_request_book
-    post "/book/2/rejected_request", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    post "/book/2/rejected_request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have rejected a request for Chamber of Secrets from Alice Allbright", session[:message]
     
-    get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     assert_includes last_response.body, "Available"
   end
 
   def test_return_book
-    post "/book/3/returned", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    post "/book/3/returned", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 302, last_response.status
     assert_equal "Prisoner of Azkaban has been returned", session[:message]
     
-    get "/book/3", {}, {"rack.session" => { username: "Clare MacAdie", user_id: 1 } }
+    get "/book/3", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     assert_includes last_response.body, "Available"
   end
   
   def test_view_available_book_signedin_as_not_book_owner
-    get "/book/1", {}, {"rack.session" => { username: "Alice Allbright", user_id: 2 } }
+    get "/book/1", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -212,31 +212,31 @@ class CMSTest < Minitest::Test
   end
 
   def test_signin
-    post "/users/signin", username: "admin", password: "secret"
+    post "/users/signin", user_name: "admin", password: "secret"
     assert_equal 302, last_response.status
     assert_equal "Welcome!", session[:message]
-    assert_equal "admin", session[:username]
+    assert_equal "admin", session[:user_name]
 
     get last_response["Location"]
     assert_includes last_response.body, "Signed in as admin"
   end
 
   def test_signin_with_bad_credentials
-    post "/users/signin", username: "guest", password: "shhhh"
+    post "/users/signin", user_name: "guest", password: "shhhh"
     assert_equal 422, last_response.status
-    assert_nil session[:username]
+    assert_nil session[:user_name]
     assert_includes last_response.body, "Invalid credentials"
   end
 
   def test_signout
-    get "/", {}, {"rack.session" => { username: "admin", user_id: 4 } }
+    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 4 } }
     assert_includes last_response.body, "Signed in as admin"
 
     post "/users/signout"
     assert_equal "You have been signed out", session[:message]
 
     get last_response["Location"]
-    assert_nil session[:username]
+    assert_nil session[:user_name]
     assert_includes last_response.body, "Sign In"
   end
   
