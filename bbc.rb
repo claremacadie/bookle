@@ -92,6 +92,7 @@ end
 
 post "/users/signout" do
   session.delete(:username)
+  session.delete(:user_id)
   session[:message] = "You have been signed out"
   redirect "/"
 end
@@ -133,8 +134,7 @@ end
 
 get "/ownedby_user_books_list" do
   require_signed_in_user
-  
-  @user_owned_books = @storage.ownedby_user_books_list(session[:username])
+  @user_owned_books = @storage.ownedby_user_books_list(session[:user_id])
   erb :ownedby_user_books_list
 end
 

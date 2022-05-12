@@ -71,7 +71,7 @@ class DatabasePersistence
     end
   end
 
-  def ownedby_user_books_list(username)
+  def ownedby_user_books_list(user_id)
     sql = <<~SQL
       SELECT
         books.id, 
@@ -90,11 +90,11 @@ class DatabasePersistence
       INNER JOIN users AS owners ON books.owner_id = owners.id
       LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
       LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-      WHERE owners.name = $1
+      WHERE owners.id = $1
       GROUP BY books.id, owners.id, requesters.id, borrowers.id
       ORDER BY title;
     SQL
-    result = query(sql, username)
+    result = query(sql, user_id)
     
     result.map do |tuple|
       tuple_to_list_hash(tuple)
