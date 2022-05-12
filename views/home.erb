@@ -13,5 +13,7 @@
   <p><a href="/users/signup">Create Account</a></p>
 <% end %>
 
-<p><a href="/ownedby_user_books_list">View your books</a></p>
 <p><a href="/all_books_list">View all books</a></p>
+<% if session[:user_name] %>
+  <p><a href="/ownedby_user_books_list">View your books</a></p>
+<% end %>
