@@ -126,13 +126,13 @@ post "/users/signup" do
 end
 
 get "/all_books_list" do
-  @books = @storage.all_books_list
+  @books = @storage.all_books
   erb :all_books_list
 end
 
 get "/users/book_list" do
   require_signed_in_user
-  @user_owned_books = @storage.ownedby_user_books_list(session[:user_id])
+  @user_owned_books = @storage.user_owned_books(session[:user_id])
   erb :user_owned_book_list
 end
 

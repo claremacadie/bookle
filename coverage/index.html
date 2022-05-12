@@ -14,7 +14,7 @@
       <img src="./assets/0.12.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" class="hide">
-      <div class="timestamp">Generated <abbr class="timeago" title="2022-05-12T19:35:09+01:00">2022-05-12T19:35:09+01:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2022-05-12T19:37:12+01:00">2022-05-12T19:37:12+01:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -1550,7 +1550,7 @@
 
             
 
-            <code class="ruby">  @books = @storage.all_books_list</code>
+            <code class="ruby">  @books = @storage.all_books</code>
           </li>
         </div>
       
@@ -1616,7 +1616,7 @@
 
             
 
-            <code class="ruby">  @user_owned_books = @storage.ownedby_user_books_list(session[:user_id])</code>
+            <code class="ruby">  @user_owned_books = @storage.user_owned_books(session[:user_id])</code>
           </li>
         </div>
       
@@ -2835,7 +2835,7 @@
 
             
 
-            <code class="ruby">  def all_books_list</code>
+            <code class="ruby">  def all_books</code>
           </li>
         </div>
       
@@ -3154,7 +3154,7 @@
 
             
 
-            <code class="ruby">  def ownedby_user_books_list(user_id)</code>
+            <code class="ruby">  def user_owned_books(user_id)</code>
           </li>
         </div>
       

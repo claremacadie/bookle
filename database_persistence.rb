@@ -42,7 +42,7 @@ class DatabasePersistence
     result.first["id"].to_i
   end
 
-  def all_books_list
+  def all_books
     sql = <<~SQL
       SELECT 
         books.id, 
@@ -71,7 +71,7 @@ class DatabasePersistence
     end
   end
 
-  def ownedby_user_books_list(user_id)
+  def user_owned_books(user_id)
     sql = <<~SQL
       SELECT
         books.id, 
