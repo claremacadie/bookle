@@ -163,31 +163,31 @@ post "/book/:book_id/cancel_request" do
   redirect :all_books_list
 end
 
-post "/book/:book_id/loaned" do
+post "/book/:book_id/loan" do
   require_signed_in_user
   book_id = params[:book_id].to_i
  
-  @storage.book_loaned(book_id)
+  @storage.book_loan(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "#{@book[:title]} has been loaned to #{@book[:borrower_name]}"
   redirect :user_owned_book_list
 end
 
-post "/book/:book_id/rejected_request" do
+post "/book/:book_id/reject_request" do
   require_signed_in_user
   book_id = params[:book_id].to_i
  
   @book = @storage.book_data(book_id)
   session[:message] = "You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}"
-  @storage.book_rejected_request(book_id)
+  @storage.book_reject_request(book_id)
   redirect :user_owned_book_list
 end
 
-post "/book/:book_id/returned" do
+post "/book/:book_id/return" do
   require_signed_in_user
   book_id = params[:book_id].to_i
  
-  @storage.book_returned(book_id)
+  @storage.book_return(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "#{@book[:title]} has been returned"
   redirect :user_owned_book_list

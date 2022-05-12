@@ -177,7 +177,7 @@ class CMSTest < Minitest::Test
   end
    
   def test_loan_book
-    post "/book/2/loaned", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/2/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 302, last_response.status
     assert_equal "Chamber of Secrets has been loaned to Alice Allbright", session[:message]
@@ -187,7 +187,7 @@ class CMSTest < Minitest::Test
   end
    
   def test_reject_request_book
-    post "/book/2/rejected_request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/2/reject_request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have rejected a request for Chamber of Secrets from Alice Allbright", session[:message]
@@ -197,7 +197,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_return_book
-    post "/book/3/returned", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/3/return", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 302, last_response.status
     assert_equal "Prisoner of Azkaban has been returned", session[:message]

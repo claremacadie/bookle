@@ -14,7 +14,7 @@
       <img src="./assets/0.12.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" class="hide">
-      <div class="timestamp">Generated <abbr class="timeago" title="2022-05-12T19:31:08+01:00">2022-05-12T19:31:08+01:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2022-05-12T19:35:09+01:00">2022-05-12T19:35:09+01:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -1957,7 +1957,7 @@
 
             
 
-            <code class="ruby">post &quot;/book/:book_id/loaned&quot; do</code>
+            <code class="ruby">post &quot;/book/:book_id/loan&quot; do</code>
           </li>
         </div>
       
@@ -2001,7 +2001,7 @@
 
             
 
-            <code class="ruby">  @storage.book_loaned(book_id)</code>
+            <code class="ruby">  @storage.book_loan(book_id)</code>
           </li>
         </div>
       
@@ -2067,7 +2067,7 @@
 
             
 
-            <code class="ruby">post &quot;/book/:book_id/rejected_request&quot; do</code>
+            <code class="ruby">post &quot;/book/:book_id/reject_request&quot; do</code>
           </li>
         </div>
       
@@ -2133,7 +2133,7 @@
 
             
 
-            <code class="ruby">  @storage.book_rejected_request(book_id)</code>
+            <code class="ruby">  @storage.book_reject_request(book_id)</code>
           </li>
         </div>
       
@@ -2177,7 +2177,7 @@
 
             
 
-            <code class="ruby">post &quot;/book/:book_id/returned&quot; do</code>
+            <code class="ruby">post &quot;/book/:book_id/return&quot; do</code>
           </li>
         </div>
       
@@ -2221,7 +2221,7 @@
 
             
 
-            <code class="ruby">  @storage.book_returned(book_id)</code>
+            <code class="ruby">  @storage.book_return(book_id)</code>
           </li>
         </div>
       
@@ -3924,7 +3924,7 @@
 
             
 
-            <code class="ruby">  def book_loaned(book_id)</code>
+            <code class="ruby">  def book_loan(book_id)</code>
           </li>
         </div>
       
@@ -3990,7 +3990,7 @@
 
             
 
-            <code class="ruby">  def book_rejected_request(book_id)</code>
+            <code class="ruby">  def book_reject_request(book_id)</code>
           </li>
         </div>
       
@@ -4045,7 +4045,7 @@
 
             
 
-            <code class="ruby">  def book_returned(book_id)</code>
+            <code class="ruby">  def book_return(book_id)</code>
           </li>
         </div>
       
