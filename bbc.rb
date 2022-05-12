@@ -154,6 +154,16 @@ post "/book/:book_id/requested" do
   redirect :all_books_list
 end
 
+post "/book/:book_id/cancelled_request" do
+  require_signed_in_user
+  book_id = params[:book_id].to_i
+ 
+  @storage.book_cancelled_request(book_id)
+  @book = @storage.book_data(book_id)
+  session[:message] = "You have cancelled your request for #{@book[:title]} from #{@book[:owner_name]}"
+  redirect :all_books_list
+end
+
 post "/book/:book_id/loaned" do
   require_signed_in_user
   book_id = params[:book_id].to_i

@@ -123,6 +123,16 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Requested"
   end
    
+  def test_cancel_request_book
+    post "/book/2/cancelled_request", {}, {"rack.session" => { username: "Alice Allbright" } }
+    
+    assert_equal 302, last_response.status
+    assert_equal "You have cancelled your request for Chamber of Secrets from Clare MacAdie", session[:message]
+    
+    get "/book/2", {}, {"rack.session" => { username: "Alice Allbright" } }
+    assert_includes last_response.body, "Available"
+  end
+   
   def test_loan_book
     post "/book/2/loaned", {}, {"rack.session" => { username: "Clare MacAdie" } }
     
