@@ -130,10 +130,10 @@ get "/all_books_list" do
   erb :all_books_list
 end
 
-get "/ownedby_user_books_list" do
+get "/users/book_list" do
   require_signed_in_user
   @user_owned_books = @storage.ownedby_user_books_list(session[:user_id])
-  erb :ownedby_user_books_list
+  erb :user_owned_book_list
 end
 
 get "/book/:book_id" do
@@ -170,7 +170,7 @@ post "/book/:book_id/loaned" do
   @storage.book_loaned(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "#{@book[:title]} has been loaned to #{@book[:borrower_name]}"
-  redirect :ownedby_user_books_list
+  redirect :user_owned_book_list
 end
 
 post "/book/:book_id/rejected_request" do
@@ -180,7 +180,7 @@ post "/book/:book_id/rejected_request" do
   @book = @storage.book_data(book_id)
   session[:message] = "You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}"
   @storage.book_rejected_request(book_id)
-  redirect :ownedby_user_books_list
+  redirect :user_owned_book_list
 end
 
 post "/book/:book_id/returned" do
@@ -190,7 +190,7 @@ post "/book/:book_id/returned" do
   @storage.book_returned(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "#{@book[:title]} has been returned"
-  redirect :ownedby_user_books_list
+  redirect :user_owned_book_list
 end
 
 not_found do

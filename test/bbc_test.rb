@@ -62,14 +62,14 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_your_books_signed_out
-    get "/ownedby_user_books_list"
+    get "/users/book_list"
 
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
   end
 
   def test_view_your_books_signed_in
-    get "/ownedby_user_books_list", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/users/book_list", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
