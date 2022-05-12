@@ -153,7 +153,7 @@ post "/book/:book_id/request" do
   redirect :all_books_list
 end
 
-post "/book/:book_id/cancelled_request" do
+post "/book/:book_id/cancel_request" do
   require_signed_in_user
   book_id = params[:book_id].to_i
  

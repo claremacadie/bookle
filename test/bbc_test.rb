@@ -167,7 +167,7 @@ class CMSTest < Minitest::Test
   end
    
   def test_cancel_request_book
-    post "/book/2/cancelled_request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    post "/book/2/cancel_request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have cancelled your request for Chamber of Secrets from Clare MacAdie", session[:message]
