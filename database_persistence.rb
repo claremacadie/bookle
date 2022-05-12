@@ -143,6 +143,11 @@ class DatabasePersistence
     query(sql, requester_id, book_id)
   end
 
+  def book_rejected_request(book_id)
+    sql = "UPDATE books SET requester_id = NULL WHERE id = $1"
+    query(sql, book_id)
+  end
+
   def book_returned(book_id)
     sql = "UPDATE books SET borrower_id = NULL WHERE id = $1"
     query(sql, book_id)

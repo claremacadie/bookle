@@ -164,6 +164,16 @@ post "/book/:book_id/loaned" do
   redirect :ownedby_user_books_list
 end
 
+post "/book/:book_id/rejected_request" do
+  require_signed_in_user
+  book_id = params[:book_id].to_i
+ 
+  @book = @storage.book_data(book_id)
+  session[:message] = "You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}"
+  @storage.book_rejected_request(book_id)
+  redirect :ownedby_user_books_list
+end
+
 post "/book/:book_id/returned" do
   require_signed_in_user
   book_id = params[:book_id].to_i

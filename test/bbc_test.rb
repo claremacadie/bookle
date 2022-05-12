@@ -122,6 +122,16 @@ class CMSTest < Minitest::Test
     get "/book/3", {}, {"rack.session" => { username: "Clare MacAdie" } }
     assert_includes last_response.body, "On loan"
   end
+   
+  def test_reject_request_book
+    post "/book/2/rejected_request", {}, {"rack.session" => { username: "Clare MacAdie" } }
+    
+    assert_equal 302, last_response.status
+    assert_equal "You have rejected a request for Chamber of Secrets from Alice Allbright", session[:message]
+    
+    get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
+    assert_includes last_response.body, "Available"
+  end
 
   def test_return_book
     post "/book/3/returned", {}, {"rack.session" => { username: "Clare MacAdie" } }
