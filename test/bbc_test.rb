@@ -119,7 +119,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "Chamber of Secrets has been loaned to Alice Allbright", session[:message]
     
-    get "/book/3", {}, {"rack.session" => { username: "Clare MacAdie" } }
+    get "/book/2", {}, {"rack.session" => { username: "Clare MacAdie" } }
     assert_includes last_response.body, "On loan"
   end
    
