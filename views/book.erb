@@ -23,5 +23,9 @@
     <form action="/book/<%= @book[:id] %>/requested" method="post">
       <button>Request book</button>
     </form>
+  <% elsif @book[:requester_name] == session[:username] %>
+    <form action="/book/<%= @book[:id] %>/cancelled_request" method="post">
+      <button>Cancel request</button>
+    </form>
   <% end %>
 <% end %>
