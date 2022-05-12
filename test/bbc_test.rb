@@ -101,7 +101,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
-    assert_includes last_response.body, "Requested"
+    assert_includes last_response.body, "Requested by Alice Allbright"
     assert_includes last_response.body, %q(<button>Loan book to Alice Allbright</button>)
     assert_includes last_response.body, %q(<button>Reject request from Alice Allbright</button>)
   end
