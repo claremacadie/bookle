@@ -143,7 +143,7 @@ get "/book/:book_id" do
   erb :book
 end
 
-post "/book/:book_id/requested" do
+post "/book/:book_id/request" do
   require_signed_in_user
   book_id = params[:book_id].to_i
  

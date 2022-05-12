@@ -20,7 +20,7 @@
 
 <% if @book[:owner_id] != session[:user_id] %>
   <% if !@book[:requester_id] && !@book[:borrower_id] %>
-    <form action="/book/<%= @book[:id] %>/requested" method="post">
+    <form action="/book/<%= @book[:id] %>/request" method="post">
       <button>Request book</button>
     </form>
   <% elsif @book[:requester_id] == session[:user_id] %>

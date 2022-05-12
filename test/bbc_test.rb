@@ -157,7 +157,7 @@ class CMSTest < Minitest::Test
   end
    
   def test_request_book
-    post "/book/1/requested", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    post "/book/1/request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have requested Philosopher's Stone from Clare MacAdie", session[:message]
