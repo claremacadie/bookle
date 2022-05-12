@@ -8,6 +8,9 @@
     <form action="/book/<%= @book[:id] %>/loaned" method="post">
       <button>Loan book to <%= @book[:requester_name] %></button>
     </form>
+    <form action="/book/<%= @book[:id] %>/rejected_request" method="post">
+      <button>Reject request from <%= @book[:requester_name] %></button>
+    </form>
   <% elsif @book[:borrower_id] %>
     <form action="/book/<%= @book[:id] %>/returned" method="post">
       <button>Book Returned</button>

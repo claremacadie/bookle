@@ -90,6 +90,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Requested"
     assert_includes last_response.body, %q(<button>Loan book to Alice Allbright</button>)
+    assert_includes last_response.body, %q(<button>Reject request from Alice Allbright</button>)
   end
 
   def test_view_onloan_book_signed_in_as_book_owner
