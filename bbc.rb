@@ -190,8 +190,8 @@ post "/book/:book_id/returned" do
   require_signed_in_user
   book_id = params[:book_id].to_i
  
+  @storage.book_returned(book_id)
   @book = @storage.book_data(book_id)
-  @storage.book_returned(book_id) # swap line with above
   session[:message] = "#{@book[:title]} has been returned"
   redirect :ownedby_user_books_list
 end
