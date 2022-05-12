@@ -148,9 +148,8 @@ end
 post "/book/:book_id/requested" do
   require_signed_in_user
   book_id = params[:book_id].to_i
-  requester_name = session[:username]
  
-  @storage.book_requested(book_id, requester_name)
+  @storage.book_requested(book_id, session[:user_id])
   @book = @storage.book_data(book_id)
   session[:message] = "You have requested #{@book[:title]} from #{@book[:owner_name]}"
   redirect :all_books_list

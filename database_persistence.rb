@@ -131,11 +131,7 @@ class DatabasePersistence
     end.first
   end
 
-  def book_requested(book_id, requester_name)
-    sql = "SELECT id FROM users WHERE name = $1"
-    result = query(sql, requester_name).first
-    requester_id = result["id"]
-
+  def book_requested(book_id, requester_id)
     sql = "UPDATE books SET requester_id = $1 WHERE id = $2"
     query(sql, requester_id, book_id)
   end
