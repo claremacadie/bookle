@@ -36,6 +36,12 @@ class DatabasePersistence
     users_hash
   end
 
+  def get_user_id(username)
+    sql = "SELECT id FROM users WHERE name = $1"
+    result = query(sql, username)
+    result.first["id"].to_i
+  end
+
   def all_books_list
     sql = <<~SQL
       SELECT 

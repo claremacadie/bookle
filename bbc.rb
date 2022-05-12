@@ -81,6 +81,7 @@ post "/users/signin" do
   if valid_credentials?(username, params[:password])
     session[:username] = username
     session[:message] = "Welcome!"
+    session[:user_id] = @storage.get_user_id(username)
     redirect "/"
   else
     session[:message] = "Invalid credentials"
