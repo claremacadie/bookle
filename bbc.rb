@@ -120,6 +120,7 @@ post "/users/signup" do
   else
     @storage.upload_new_user_credentials(new_username, new_password)
     session[:username] = new_username
+    session[:user_id] = @storage.get_user_id(new_username)
     session[:message] = "Your account has been created."
     redirect "/"
   end
