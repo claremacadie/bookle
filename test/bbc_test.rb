@@ -122,6 +122,26 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan"
     assert_includes last_response.body, %q(<button>Book Returned</button>)
   end
+
+  def test_view_onloan_book_signed_in_as_book_borrower
+    get "/book/3", {}, {"rack.session" => { username: "Alice Allbright" } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    assert_includes last_response.body, "On loan"
+    refute_includes last_response.body, %q(<button>)
+  end
+
+  def test_view_onloan_book_signed_in_not_as_book_owner_or_borrower
+    get "/book/3", {}, {"rack.session" => { username: "Beth Broom" } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    assert_includes last_response.body, "On loan"
+    refute_includes last_response.body, %q(<button>)
+  end
    
   def test_request_book
     post "/book/1/requested", {}, {"rack.session" => { username: "Alice Allbright" } }
