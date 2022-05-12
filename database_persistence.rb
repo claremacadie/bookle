@@ -137,15 +137,12 @@ class DatabasePersistence
   end
 
   def book_cancelled_request(book_id)
-    sql = "UPDATE books SET requester_id =NULL WHERE id = $1"
+    sql = "UPDATE books SET requester_id = NULL WHERE id = $1"
     query(sql, book_id)
   end
 
   def book_loaned(book_id)
-    sql = "SELECT requester_id FROM books WHERE id = $1"
-    result = query(sql, book_id).first
-    requester_id = result["requester_id"]
-
+    requester_id = get_requester_id(book_id)
     sql = "UPDATE books SET requester_id = NULL, borrower_id = $1 WHERE id = $2"
     query(sql, requester_id, book_id)
   end
@@ -173,5 +170,11 @@ class DatabasePersistence
       requester_name: tuple["requester_name"],
       borrower_id: tuple["borrower_id"],
       borrower_name: tuple["borrower_name"] }
+  end
+
+  def get_requester_id(book_id)
+    sql = "SELECT requester_id FROM books WHERE id = $1"
+    result = query(sql, book_id).first
+    result["requester_id"].to_i
   end
 end
