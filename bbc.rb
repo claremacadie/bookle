@@ -76,12 +76,10 @@ get "/users/signin" do
 end
 
 post "/users/signin" do
-  user_name = params[:user_name]
-
-  if valid_credentials?(user_name, params[:password])
-    session[:user_name] = user_name
+  if valid_credentials?(params[:user_name], params[:password])
+    session[:user_name] = params[:user_name]
     session[:message] = "Welcome!"
-    session[:user_id] = @storage.get_user_id(user_name)
+    session[:user_id] = @storage.get_user_id(session[:user_name])
     redirect "/"
   else
     session[:message] = "Invalid credentials"
