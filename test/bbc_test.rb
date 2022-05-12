@@ -100,7 +100,7 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Requested"
-    # assert_includes last_response.body, %q(<button>Cancel request</button>)
+    assert_includes last_response.body, %q(<button>Cancel request</button>)
   end
 
   def test_view_onloan_book_signed_in_as_book_owner
