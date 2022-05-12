@@ -102,6 +102,16 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button>Book Returned</button>)
   end
    
+  def test_request_book
+    post "/book/1/requested", {}, {"rack.session" => { username: "Alice Allbright" } }
+    
+    assert_equal 302, last_response.status
+    assert_equal "You have requested Philosopher's Stone from Clare MacAdie", session[:message]
+    
+    get "/book/1", {}, {"rack.session" => { username: "Alice Allbright" } }
+    assert_includes last_response.body, "Requested"
+  end
+   
   def test_loan_book
     post "/book/2/loaned", {}, {"rack.session" => { username: "Clare MacAdie" } }
     
