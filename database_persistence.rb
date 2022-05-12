@@ -131,7 +131,7 @@ class DatabasePersistence
     end.first
   end
 
-  def book_accept_request(book_id, requester_id)
+  def book_add_request(book_id, requester_id)
     sql = "UPDATE books SET requester_id = $1 WHERE id = $2"
     query(sql, requester_id, book_id)
   end
