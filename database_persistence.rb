@@ -164,12 +164,17 @@ class DatabasePersistence
       title: tuple["title"], 
       author: tuple["author"],
       categories: tuple["categories"],
-      owner_id: tuple["owner_id"],
+      owner_id: convert_string_to_integer(tuple["owner_id"]),
       owner_name: tuple["owner_name"],
-      requester_id: tuple["requester_id"],
+      requester_id: convert_string_to_integer(tuple["requester_id"]),
       requester_name: tuple["requester_name"],
-      borrower_id: tuple["borrower_id"],
+      borrower_id: convert_string_to_integer(tuple["borrower_id"]),
       borrower_name: tuple["borrower_name"] }
+  end
+
+  def convert_string_to_integer(str)
+    # This is needed because nil.to_i returns 0!!!
+    str ? str.to_i : nil
   end
 
   def get_requester_id(book_id)
