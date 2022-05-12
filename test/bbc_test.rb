@@ -3,6 +3,9 @@ ENV["RACK_ENV"] = "test"
 require "minitest/autorun"
 require "rack/test"
 
+require 'simplecov'
+SimpleCov.start
+
 require_relative "../bbc"
 
 class CMSTest < Minitest::Test
