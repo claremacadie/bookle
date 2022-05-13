@@ -92,9 +92,11 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Philosopher's Stone"
     assert_includes last_response.body, "Available"
+    assert_includes last_response.body, "Edit book"
+    assert_includes last_response.body, "Delete book"
     refute_includes last_response.body, %q(<button>)
   end
-
+  
   def test_view_requested_book_signed_in_as_book_owner
     get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
@@ -104,8 +106,10 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Requested by Alice Allbright"
     assert_includes last_response.body, %q(<button>Loan book to Alice Allbright</button>)
     assert_includes last_response.body, %q(<button>Reject request from Alice Allbright</button>)
+    assert_includes last_response.body, "Edit book details"
+    assert_includes last_response.body, "Delete book"
   end
-
+  
   def test_view_requested_book_signed_in_as_book_requester
     get "/book/2", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
@@ -114,8 +118,10 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Requested by you"
     assert_includes last_response.body, %q(<button>Cancel request</button>)
+    refute_includes last_response.body, "Edit book details"
+    refute_includes last_response.body, "Delete book"
   end
-
+  
   def test_view_requested_book_signed_in_as_not_book_owner_or_requester
     get "/book/2", {}, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     
@@ -124,8 +130,10 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Requested by Alice Allbright"
     refute_includes last_response.body, %q(<button>)
+    refute_includes last_response.body, "Edit book details"
+    refute_includes last_response.body, "Delete book"
   end
-
+  
   def test_view_onloan_book_signed_in_as_book_owner
     get "/book/3", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
@@ -134,8 +142,10 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "On loan to Alice Allbright"
     assert_includes last_response.body, %q(<button>Book Returned</button>)
+    assert_includes last_response.body, "Edit book details"
+    assert_includes last_response.body, "Delete book"
   end
-
+  
   def test_view_onloan_book_signed_in_as_book_borrower
     get "/book/3", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
@@ -144,8 +154,10 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "On loan to you"
     refute_includes last_response.body, %q(<button>)
+    refute_includes last_response.body, "Edit book details"
+    refute_includes last_response.body, "Delete book"
   end
-
+  
   def test_view_onloan_book_signed_in_not_as_book_owner_or_borrower
     get "/book/3", {}, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     
@@ -154,6 +166,8 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "On loan to Alice Allbright"
     refute_includes last_response.body, %q(<button>)
+    refute_includes last_response.body, "Edit book details"
+    refute_includes last_response.body, "Delete book"
   end
    
   def test_request_book

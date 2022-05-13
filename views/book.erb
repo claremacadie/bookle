@@ -4,6 +4,8 @@
 <p>Availability: <%= book_availability(@book) %></p>
 
 <% if @book[:owner_id] == session[:user_id] %>
+  <a href="/book/<%= @book[:id] %>/edit">Edit book details</a>
+  <a href="/book/<%= @book[:id] %>/delete">Delete book</a>
   <% if @book[:requester_id] %>
     <form action="/book/<%= @book[:id] %>/loan" method="post">
       <button>Loan book to <%= @book[:requester_name] %></button>

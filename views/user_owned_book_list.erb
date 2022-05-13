@@ -7,8 +7,6 @@ These are your books:
       <th scope = "col"> Author(s) </th>
       <th scope = "col"> Categories </th>
       <th scope = "col"> Availability </th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -18,8 +16,6 @@ These are your books:
         <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
         <td> <%= book_availability(book) %></td>
-        <td> <a href="/book/<%= book[:id] %>/edit">Edit</a></td>
-        <td> <a href="/book/<%= book[:id] %>/delete">Delete</a></td>
       </tr>
     <% end %>
   </tbody>
