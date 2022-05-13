@@ -201,6 +201,11 @@ post "/book/:book_id/return" do
   redirect :user_owned_book_list
 end
 
+get "/users/administer_books" do
+  require_signed_in_user
+  erb :administer_books
+end
+
 not_found do
   redirect "/"
 end

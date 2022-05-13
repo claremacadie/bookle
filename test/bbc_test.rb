@@ -39,15 +39,17 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Welcome to the Book Borrowers' Collective."
     assert_includes last_response.body, "View your books"
+    assert_includes last_response.body, "Administer your books"
   end
-
+  
   def test_homepage_signed_out
     get "/"
-
+    
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Welcome to the Book Borrowers' Collective."
     refute_includes last_response.body, "View your books"
+    refute_includes last_response.body, "Administer your books"
   end
   
   def test_all_books_list
