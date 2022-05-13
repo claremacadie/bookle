@@ -5,14 +5,14 @@
 
 <% if @book[:owner_id] == session[:user_id] %>
   <% if @book[:requester_id] %>
-    <form action="/book/<%= @book[:id] %>/loaned" method="post">
+    <form action="/book/<%= @book[:id] %>/loan" method="post">
       <button>Loan book to <%= @book[:requester_name] %></button>
     </form>
-    <form action="/book/<%= @book[:id] %>/rejected_request" method="post">
+    <form action="/book/<%= @book[:id] %>/reject_request" method="post">
       <button>Reject request from <%= @book[:requester_name] %></button>
     </form>
   <% elsif @book[:borrower_id] %>
-    <form action="/book/<%= @book[:id] %>/returned" method="post">
+    <form action="/book/<%= @book[:id] %>/return" method="post">
       <button>Book Returned</button>
     </form>
   <% end %>
