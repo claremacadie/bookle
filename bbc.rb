@@ -144,6 +144,20 @@ get "/users/book_list" do
   erb :user_owned_book_list
 end
 
+get "/book/:book_id/edit" do
+  require_signed_in_user
+  book_id = params[:book_id].to_i
+  @book = @storage.book_data(book_id)
+  erb :edit_book
+end
+
+get "/book/:book_id/delete" do
+  require_signed_in_user
+  book_id = params[:book_id].to_i
+  # @book = @storage.delete_book(book_id)
+  erb :delete_book
+end
+
 get "/book/:book_id" do
   require_signed_in_user
   book_id = params[:book_id].to_i
