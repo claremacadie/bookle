@@ -112,7 +112,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
-    assert_includes last_response.body, "Requested"
+    assert_includes last_response.body, "Requested by you"
     assert_includes last_response.body, %q(<button>Cancel request</button>)
   end
 
@@ -122,7 +122,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
-    assert_includes last_response.body, "Requested"
+    assert_includes last_response.body, "Requested by Alice Allbright"
     refute_includes last_response.body, %q(<button>)
   end
 
@@ -132,7 +132,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Prisoner of Azkaban"
-    assert_includes last_response.body, "On loan"
+    assert_includes last_response.body, "On loan to Alice Allbright"
     assert_includes last_response.body, %q(<button>Book Returned</button>)
   end
 
@@ -142,7 +142,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Prisoner of Azkaban"
-    assert_includes last_response.body, "On loan"
+    assert_includes last_response.body, "On loan to you"
     refute_includes last_response.body, %q(<button>)
   end
 
@@ -152,7 +152,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Prisoner of Azkaban"
-    assert_includes last_response.body, "On loan"
+    assert_includes last_response.body, "On loan to Alice Allbright"
     refute_includes last_response.body, %q(<button>)
   end
    
@@ -163,7 +163,7 @@ class CMSTest < Minitest::Test
     assert_equal "You have requested Philosopher's Stone from Clare MacAdie", session[:message]
     
     get "/book/1", {}, {"rack.session" => { user_name: "Alice Allbright" } }
-    assert_includes last_response.body, "Requested"
+    assert_includes last_response.body, "Requested by you"
   end
    
   def test_cancel_request_book
@@ -183,7 +183,7 @@ class CMSTest < Minitest::Test
     assert_equal "Chamber of Secrets has been loaned to Alice Allbright", session[:message]
     
     get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
-    assert_includes last_response.body, "On loan"
+    assert_includes last_response.body, "On loan to Alice Allbright"
   end
    
   def test_reject_request_book

@@ -27,9 +27,17 @@ end
 helpers do
   def book_availability(book)
     if book[:borrower_id] 
-      "On loan to #{book[:borrower_name]}" 
+      if book[:borrower_id] == session[:user_id]
+        "On loan to you"
+      else
+        "On loan to #{book[:borrower_name]}"
+      end
     elsif book[:requester_id]
-      "Requested by #{book[:requester_name]}"
+      if book[:requester_id] == session[:user_id]
+        "Requested by you"
+      else
+        "Requested by #{book[:requester_name]}"
+      end
     else
       "Available"
     end
