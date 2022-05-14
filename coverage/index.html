@@ -14,7 +14,7 @@
       <img src="./assets/0.12.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" class="hide">
-      <div class="timestamp">Generated <abbr class="timeago" title="2022-05-14T00:50:24+01:00">2022-05-14T00:50:24+01:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2022-05-14T15:55:21+01:00">2022-05-14T15:55:21+01:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -23,7 +23,7 @@
     <span class="group_name">All Files</span>
     (<span class="covered_percent">
       <span class="red">
-  25.79%
+  25.75%
 </span>
 
      </span>
@@ -43,11 +43,11 @@
   </div>
 
   <div class="t-line-summary">
-    <b>221</b> relevant lines,
-    <span class="green"><b>57</b> lines covered</span> and
-    <span class="red"><b>164</b> lines missed. </span>
+    <b>233</b> relevant lines,
+    <span class="green"><b>60</b> lines covered</span> and
+    <span class="red"><b>173</b> lines missed. </span>
     (<span class="red">
-  25.79%
+  25.75%
 </span>
 )
   </div>
@@ -72,23 +72,23 @@
         
           <tr class="t-file">
             <td class="strong t-file__name"><a href="#dc49ea87d0d5dc2e98f5f35c9f3bdad026584f14" class="src_link" title="bbc.rb">bbc.rb</a></td>
-            <td class="red strong cell--number t-file__coverage">23.94 %</td>
-            <td class="cell--number">222</td>
-            <td class="cell--number">142</td>
-            <td class="cell--number">34</td>
-            <td class="cell--number">108</td>
+            <td class="red strong cell--number t-file__coverage">23.53 %</td>
+            <td class="cell--number">241</td>
+            <td class="cell--number">153</td>
+            <td class="cell--number">36</td>
+            <td class="cell--number">117</td>
             <td class="cell--number">0.24</td>
             
           </tr>
         
           <tr class="t-file">
             <td class="strong t-file__name"><a href="#2f1d2659e93cf9ac706e03bfa1254034af6faadf" class="src_link" title="database_persistence.rb">database_persistence.rb</a></td>
-            <td class="red strong cell--number t-file__coverage">29.11 %</td>
-            <td class="cell--number">206</td>
-            <td class="cell--number">79</td>
-            <td class="cell--number">23</td>
+            <td class="red strong cell--number t-file__coverage">30.00 %</td>
+            <td class="cell--number">210</td>
+            <td class="cell--number">80</td>
+            <td class="cell--number">24</td>
             <td class="cell--number">56</td>
-            <td class="cell--number">0.29</td>
+            <td class="cell--number">0.30</td>
             
           </tr>
         
@@ -114,7 +114,7 @@
     <h3>bbc.rb</h3>
     <h4>
       <span class="red">
-  23.94%
+  23.53%
 </span>
 
       lines covered
@@ -123,9 +123,9 @@
     
 
     <div class="t-line-summary">
-      <b>142</b> relevant lines.
-      <span class="green"><b>34</b> lines covered</span> and
-      <span class="red"><b>108</b> lines missed.</span>
+      <b>153</b> relevant lines.
+      <span class="green"><b>36</b> lines covered</span> and
+      <span class="red"><b>117</b> lines missed.</span>
     </div>
 
     
@@ -972,24 +972,24 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="77">
-            
-            
-
-            
-
-            <code class="ruby"># Routes</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="covered" data-hits="1" data-linenumber="78">
+          <li class="covered" data-hits="1" data-linenumber="77">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">get &quot;/&quot; do</code>
+            <code class="ruby">def get_selected_category_ids(params)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="78">
+            
+            
+
+            
+
+            <code class="ruby">  category_ids = []</code>
           </li>
         </div>
       
@@ -1000,62 +1000,62 @@
 
             
 
-            <code class="ruby">  erb :home</code>
+            <code class="ruby">  params.each do |k, v|</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="80">
+          <li class="missed" data-hits="0" data-linenumber="80">
             
             
 
             
 
-            <code class="ruby">end</code>
+            <code class="ruby">    if k.include?(&quot;category_id&quot;)</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="81">
+          <li class="missed" data-hits="0" data-linenumber="81">
             
             
 
             
 
-            <code class="ruby"></code>
+            <code class="ruby">      category_ids &lt;&lt; v.to_i</code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="82">
-            <span class="hits">1</span>
+          <li class="never" data-hits="" data-linenumber="82">
+            
             
 
             
 
-            <code class="ruby">get &quot;/users/signin&quot; do</code>
+            <code class="ruby">    end</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="83">
+          <li class="never" data-hits="" data-linenumber="83">
             
             
 
             
 
-            <code class="ruby">  erb :signin</code>
+            <code class="ruby">  end</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="84">
+          <li class="missed" data-hits="0" data-linenumber="84">
             
             
 
             
 
-            <code class="ruby">end</code>
+            <code class="ruby">  category_ids</code>
           </li>
         </div>
       
@@ -1066,40 +1066,40 @@
 
             
 
+            <code class="ruby">end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="86">
+            
+            
+
+            
+
             <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="86">
+          <li class="never" data-hits="" data-linenumber="87">
+            
+            
+
+            
+
+            <code class="ruby"># Routes</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="88">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">post &quot;/users/signin&quot; do</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="87">
-            
-            
-
-            
-
-            <code class="ruby">  if valid_credentials?(params[:user_name], params[:password])</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="88">
-            
-            
-
-            
-
-            <code class="ruby">    session[:user_name] = params[:user_name]</code>
+            <code class="ruby">get &quot;/&quot; do</code>
           </li>
         </div>
       
@@ -1110,40 +1110,40 @@
 
             
 
-            <code class="ruby">    session[:message] = &quot;Welcome!&quot;</code>
+            <code class="ruby">  erb :home</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="90">
+          <li class="never" data-hits="" data-linenumber="90">
             
             
 
             
 
-            <code class="ruby">    session[:user_id] = @storage.get_user_id(session[:user_name])</code>
+            <code class="ruby">end</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="91">
+          <li class="never" data-hits="" data-linenumber="91">
             
             
 
             
 
-            <code class="ruby">    redirect &quot;/&quot;</code>
+            <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="92">
-            
-            
-
+          <li class="covered" data-hits="1" data-linenumber="92">
+            <span class="hits">1</span>
             
 
-            <code class="ruby">  else</code>
+            
+
+            <code class="ruby">get &quot;/users/signin&quot; do</code>
           </li>
         </div>
       
@@ -1154,45 +1154,12 @@
 
             
 
-            <code class="ruby">    session[:message] = &quot;Invalid credentials&quot;</code>
+            <code class="ruby">  erb :signin</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="94">
-            
-            
-
-            
-
-            <code class="ruby">    status 422</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="95">
-            
-            
-
-            
-
-            <code class="ruby">    erb :signin</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="96">
-            
-            
-
-            
-
-            <code class="ruby">  end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="97">
+          <li class="never" data-hits="" data-linenumber="94">
             
             
 
@@ -1203,7 +1170,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="98">
+          <li class="never" data-hits="" data-linenumber="95">
             
             
 
@@ -1214,13 +1181,46 @@
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="99">
+          <li class="covered" data-hits="1" data-linenumber="96">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">post &quot;/users/signout&quot; do</code>
+            <code class="ruby">post &quot;/users/signin&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="97">
+            
+            
+
+            
+
+            <code class="ruby">  if valid_credentials?(params[:user_name], params[:password])</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="98">
+            
+            
+
+            
+
+            <code class="ruby">    session[:user_name] = params[:user_name]</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="99">
+            
+            
+
+            
+
+            <code class="ruby">    session[:message] = &quot;Welcome!&quot;</code>
           </li>
         </div>
       
@@ -1231,7 +1231,7 @@
 
             
 
-            <code class="ruby">  session.delete(:user_name)</code>
+            <code class="ruby">    session[:user_id] = @storage.get_user_id(session[:user_name])</code>
           </li>
         </div>
       
@@ -1242,287 +1242,12 @@
 
             
 
-            <code class="ruby">  session.delete(:user_id)</code>
+            <code class="ruby">    redirect &quot;/&quot;</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="102">
-            
-            
-
-            
-
-            <code class="ruby">  session[:message] = &quot;You have been signed out&quot;</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="103">
-            
-            
-
-            
-
-            <code class="ruby">  redirect &quot;/&quot;</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="104">
-            
-            
-
-            
-
-            <code class="ruby">end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="105">
-            
-            
-
-            
-
-            <code class="ruby"></code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="covered" data-hits="1" data-linenumber="106">
-            <span class="hits">1</span>
-            
-
-            
-
-            <code class="ruby">get &quot;/users/signup&quot; do</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="107">
-            
-            
-
-            
-
-            <code class="ruby">  require_signed_out_user</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="108">
-            
-            
-
-            
-
-            <code class="ruby">  erb :signup</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="109">
-            
-            
-
-            
-
-            <code class="ruby">end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="110">
-            
-            
-
-            
-
-            <code class="ruby"></code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="covered" data-hits="1" data-linenumber="111">
-            <span class="hits">1</span>
-            
-
-            
-
-            <code class="ruby">post &quot;/users/signup&quot; do</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="112">
-            
-            
-
-            
-
-            <code class="ruby">  require_signed_out_user</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="113">
-            
-            
-
-            
-
-            <code class="ruby">  </code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="114">
-            
-            
-
-            
-
-            <code class="ruby">  new_username = params[:new_username]</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="115">
-            
-            
-
-            
-
-            <code class="ruby">  new_password = params[:password]</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="116">
-            
-            
-
-            
-
-            <code class="ruby">  reenter_password = params[:reenter_password]</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="117">
-            
-            
-
-            
-
-            <code class="ruby">  @users = @storage.load_user_credentials</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="118">
-            
-            
-
-            
-
-            <code class="ruby">  </code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="119">
-            
-            
-
-            
-
-            <code class="ruby">  if @users.keys.include?(new_username)</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="120">
-            
-            
-
-            
-
-            <code class="ruby">    session[:message] = &quot;That username already exists.&quot;</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="121">
-            
-            
-
-            
-
-            <code class="ruby">    status 422</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="122">
-            
-            
-
-            
-
-            <code class="ruby">    erb :signup</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="123">
-            
-            
-
-            
-
-            <code class="ruby">  elsif new_password != reenter_password</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="124">
-            
-            
-
-            
-
-            <code class="ruby">    session[:message] = &quot;The passwords do not match.&quot;</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="125">
-            
-            
-
-            
-
-            <code class="ruby">    status 422</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="126">
-            
-            
-
-            
-
-            <code class="ruby">    erb :signup</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="127">
+          <li class="never" data-hits="" data-linenumber="102">
             
             
 
@@ -1533,62 +1258,40 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="128">
+          <li class="missed" data-hits="0" data-linenumber="103">
             
             
 
             
 
-            <code class="ruby">    @storage.upload_new_user_credentials(new_username, new_password)</code>
+            <code class="ruby">    session[:message] = &quot;Invalid credentials&quot;</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="129">
+          <li class="missed" data-hits="0" data-linenumber="104">
             
             
 
             
 
-            <code class="ruby">    session[:user_name] = new_username</code>
+            <code class="ruby">    status 422</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="130">
+          <li class="missed" data-hits="0" data-linenumber="105">
             
             
 
             
 
-            <code class="ruby">    session[:user_id] = @storage.get_user_id(new_username)</code>
+            <code class="ruby">    erb :signin</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="131">
-            
-            
-
-            
-
-            <code class="ruby">    session[:message] = &quot;Your account has been created.&quot;</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="132">
-            
-            
-
-            
-
-            <code class="ruby">    redirect &quot;/&quot;</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="133">
+          <li class="never" data-hits="" data-linenumber="106">
             
             
 
@@ -1599,7 +1302,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="134">
+          <li class="never" data-hits="" data-linenumber="107">
             
             
 
@@ -1610,7 +1313,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="135">
+          <li class="never" data-hits="" data-linenumber="108">
             
             
 
@@ -1621,24 +1324,321 @@
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="136">
+          <li class="covered" data-hits="1" data-linenumber="109">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">get &quot;/all_books_list&quot; do</code>
+            <code class="ruby">post &quot;/users/signout&quot; do</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="137">
+          <li class="missed" data-hits="0" data-linenumber="110">
             
             
 
             
 
-            <code class="ruby">  @books = @storage.all_books</code>
+            <code class="ruby">  session.delete(:user_name)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="111">
+            
+            
+
+            
+
+            <code class="ruby">  session.delete(:user_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="112">
+            
+            
+
+            
+
+            <code class="ruby">  session[:message] = &quot;You have been signed out&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="113">
+            
+            
+
+            
+
+            <code class="ruby">  redirect &quot;/&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="114">
+            
+            
+
+            
+
+            <code class="ruby">end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="115">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="116">
+            <span class="hits">1</span>
+            
+
+            
+
+            <code class="ruby">get &quot;/users/signup&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="117">
+            
+            
+
+            
+
+            <code class="ruby">  require_signed_out_user</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="118">
+            
+            
+
+            
+
+            <code class="ruby">  erb :signup</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="119">
+            
+            
+
+            
+
+            <code class="ruby">end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="120">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="121">
+            <span class="hits">1</span>
+            
+
+            
+
+            <code class="ruby">post &quot;/users/signup&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="122">
+            
+            
+
+            
+
+            <code class="ruby">  require_signed_out_user</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="123">
+            
+            
+
+            
+
+            <code class="ruby">  </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="124">
+            
+            
+
+            
+
+            <code class="ruby">  new_username = params[:new_username]</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="125">
+            
+            
+
+            
+
+            <code class="ruby">  new_password = params[:password]</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="126">
+            
+            
+
+            
+
+            <code class="ruby">  reenter_password = params[:reenter_password]</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="127">
+            
+            
+
+            
+
+            <code class="ruby">  @users = @storage.load_user_credentials</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="128">
+            
+            
+
+            
+
+            <code class="ruby">  </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="129">
+            
+            
+
+            
+
+            <code class="ruby">  if @users.keys.include?(new_username)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="130">
+            
+            
+
+            
+
+            <code class="ruby">    session[:message] = &quot;That username already exists.&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="131">
+            
+            
+
+            
+
+            <code class="ruby">    status 422</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="132">
+            
+            
+
+            
+
+            <code class="ruby">    erb :signup</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="133">
+            
+            
+
+            
+
+            <code class="ruby">  elsif new_password != reenter_password</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="134">
+            
+            
+
+            
+
+            <code class="ruby">    session[:message] = &quot;The passwords do not match.&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="135">
+            
+            
+
+            
+
+            <code class="ruby">    status 422</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="136">
+            
+            
+
+            
+
+            <code class="ruby">    erb :signup</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="137">
+            
+            
+
+            
+
+            <code class="ruby">  else</code>
           </li>
         </div>
       
@@ -1649,40 +1649,40 @@
 
             
 
-            <code class="ruby">  erb :all_books_list</code>
+            <code class="ruby">    @storage.upload_new_user_credentials(new_username, new_password)</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="139">
+          <li class="missed" data-hits="0" data-linenumber="139">
             
             
 
             
 
-            <code class="ruby">end</code>
+            <code class="ruby">    session[:user_name] = new_username</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="140">
+          <li class="missed" data-hits="0" data-linenumber="140">
             
             
 
             
 
-            <code class="ruby"></code>
+            <code class="ruby">    session[:user_id] = @storage.get_user_id(new_username)</code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="141">
-            <span class="hits">1</span>
+          <li class="missed" data-hits="0" data-linenumber="141">
+            
             
 
             
 
-            <code class="ruby">get &quot;/users/book_list&quot; do</code>
+            <code class="ruby">    session[:message] = &quot;Your account has been created.&quot;</code>
           </li>
         </div>
       
@@ -1693,29 +1693,29 @@
 
             
 
-            <code class="ruby">  require_signed_in_user</code>
+            <code class="ruby">    redirect &quot;/&quot;</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="143">
+          <li class="never" data-hits="" data-linenumber="143">
             
             
 
             
 
-            <code class="ruby">  @user_owned_books = @storage.user_owned_books(session[:user_id])</code>
+            <code class="ruby">  end</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="144">
+          <li class="never" data-hits="" data-linenumber="144">
             
             
 
             
 
-            <code class="ruby">  erb :user_owned_book_list</code>
+            <code class="ruby">end</code>
           </li>
         </div>
       
@@ -1726,29 +1726,29 @@
 
             
 
-            <code class="ruby">end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="146">
-            
-            
-
-            
-
             <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="147">
+          <li class="covered" data-hits="1" data-linenumber="146">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">get &quot;/book/:book_id/edit&quot; do</code>
+            <code class="ruby">get &quot;/all_books_list&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="147">
+            
+            
+
+            
+
+            <code class="ruby">  @books = @storage.all_books</code>
           </li>
         </div>
       
@@ -1759,40 +1759,40 @@
 
             
 
-            <code class="ruby">  require_signed_in_user</code>
+            <code class="ruby">  erb :all_books_list</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="149">
+          <li class="never" data-hits="" data-linenumber="149">
             
             
 
             
 
-            <code class="ruby">  book_id = params[:book_id].to_i</code>
+            <code class="ruby">end</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="150">
+          <li class="never" data-hits="" data-linenumber="150">
             
             
 
             
 
-            <code class="ruby">  @book = @storage.book_data(book_id)</code>
+            <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="151">
-            
-            
-
+          <li class="covered" data-hits="1" data-linenumber="151">
+            <span class="hits">1</span>
             
 
-            <code class="ruby">  @categories = @storage.categories_list</code>
+            
+
+            <code class="ruby">get &quot;/users/book_list&quot; do</code>
           </li>
         </div>
       
@@ -1803,7 +1803,7 @@
 
             
 
-            <code class="ruby">  @book_category_ids = @storage.get_category_ids(book_id)</code>
+            <code class="ruby">  require_signed_in_user</code>
           </li>
         </div>
       
@@ -1814,18 +1814,18 @@
 
             
 
-            <code class="ruby">  erb :edit_book</code>
+            <code class="ruby">  @user_owned_books = @storage.user_owned_books(session[:user_id])</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="154">
+          <li class="missed" data-hits="0" data-linenumber="154">
             
             
 
             
 
-            <code class="ruby">end</code>
+            <code class="ruby">  erb :user_owned_book_list</code>
           </li>
         </div>
       
@@ -1836,29 +1836,29 @@
 
             
 
+            <code class="ruby">end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="156">
+            
+            
+
+            
+
             <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="156">
+          <li class="covered" data-hits="1" data-linenumber="157">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">get &quot;/book/:book_id/delete&quot; do</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="157">
-            
-            
-
-            
-
-            <code class="ruby">  require_signed_in_user</code>
+            <code class="ruby">get &quot;/book/:book_id/edit&quot; do</code>
           </li>
         </div>
       
@@ -1869,18 +1869,18 @@
 
             
 
-            <code class="ruby">  book_id = params[:book_id].to_i</code>
+            <code class="ruby">  require_signed_in_user</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="159">
+          <li class="missed" data-hits="0" data-linenumber="159">
             
             
 
             
 
-            <code class="ruby">  # @book = @storage.delete_book(book_id)</code>
+            <code class="ruby">  book_id = params[:book_id].to_i</code>
           </li>
         </div>
       
@@ -1891,12 +1891,45 @@
 
             
 
-            <code class="ruby">  erb :delete_book</code>
+            <code class="ruby">  @book = @storage.book_data(book_id)</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="161">
+          <li class="missed" data-hits="0" data-linenumber="161">
+            
+            
+
+            
+
+            <code class="ruby">  @categories = @storage.categories_list</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="162">
+            
+            
+
+            
+
+            <code class="ruby">  @book_category_ids = @storage.get_category_ids(book_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="163">
+            
+            
+
+            
+
+            <code class="ruby">  erb :edit_book</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="164">
             
             
 
@@ -1907,7 +1940,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="162">
+          <li class="never" data-hits="" data-linenumber="165">
             
             
 
@@ -1918,46 +1951,13 @@
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="163">
+          <li class="covered" data-hits="1" data-linenumber="166">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">get &quot;/book/:book_id&quot; do</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="164">
-            
-            
-
-            
-
-            <code class="ruby">  require_signed_in_user</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="165">
-            
-            
-
-            
-
-            <code class="ruby">  book_id = params[:book_id].to_i</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="166">
-            
-            
-
-            
-
-            <code class="ruby">  @book = @storage.book_data(book_id)</code>
+            <code class="ruby">post &quot;/book/:book_id/edit&quot; do</code>
           </li>
         </div>
       
@@ -1968,51 +1968,51 @@
 
             
 
-            <code class="ruby">  erb :book</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="168">
-            
-            
-
-            
-
-            <code class="ruby">end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="169">
-            
-            
-
-            
-
-            <code class="ruby"></code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="covered" data-hits="1" data-linenumber="170">
-            <span class="hits">1</span>
-            
-
-            
-
-            <code class="ruby">post &quot;/book/:book_id/request&quot; do</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="171">
-            
-            
-
-            
-
             <code class="ruby">  require_signed_in_user</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="168">
+            
+            
+
+            
+
+            <code class="ruby">  category_ids = get_selected_category_ids(params)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="169">
+            
+            
+
+            
+
+            <code class="ruby">  @storage.update_book_data</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="170">
+            
+            
+
+            
+
+            <code class="ruby">  # put code to fetch any other changes</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="171">
+            
+            
+
+            
+
+            <code class="ruby">  # create method in database_persistence to send all book data to database</code>
           </li>
         </div>
       
@@ -2023,7 +2023,7 @@
 
             
 
-            <code class="ruby">  book_id = params[:book_id].to_i</code>
+            <code class="ruby">  erb :home</code>
           </li>
         </div>
       
@@ -2034,67 +2034,12 @@
 
             
 
-            <code class="ruby"> </code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="174">
-            
-            
-
-            
-
-            <code class="ruby">  @storage.book_add_request(book_id, session[:user_id])</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="175">
-            
-            
-
-            
-
-            <code class="ruby">  @book = @storage.book_data(book_id)</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="176">
-            
-            
-
-            
-
-            <code class="ruby">  session[:message] = &quot;You have requested #{@book[:title]} from #{@book[:owner_name]}&quot;</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="177">
-            
-            
-
-            
-
-            <code class="ruby">  redirect :all_books_list</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="178">
-            
-            
-
-            
-
             <code class="ruby">end</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="179">
+          <li class="never" data-hits="" data-linenumber="174">
             
             
 
@@ -2105,18 +2050,18 @@
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="180">
+          <li class="covered" data-hits="1" data-linenumber="175">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">post &quot;/book/:book_id/cancel_request&quot; do</code>
+            <code class="ruby">get &quot;/book/:book_id/delete&quot; do</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="181">
+          <li class="missed" data-hits="0" data-linenumber="176">
             
             
 
@@ -2127,7 +2072,7 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="182">
+          <li class="missed" data-hits="0" data-linenumber="177">
             
             
 
@@ -2138,13 +2083,68 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="183">
+          <li class="never" data-hits="" data-linenumber="178">
             
             
 
             
 
-            <code class="ruby"> </code>
+            <code class="ruby">  # @book = @storage.delete_book(book_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="179">
+            
+            
+
+            
+
+            <code class="ruby">  erb :delete_book</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="180">
+            
+            
+
+            
+
+            <code class="ruby">end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="181">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="182">
+            <span class="hits">1</span>
+            
+
+            
+
+            <code class="ruby">get &quot;/book/:book_id&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="183">
+            
+            
+
+            
+
+            <code class="ruby">  require_signed_in_user</code>
           </li>
         </div>
       
@@ -2155,7 +2155,7 @@
 
             
 
-            <code class="ruby">  @storage.book_cancel_request(book_id)</code>
+            <code class="ruby">  book_id = params[:book_id].to_i</code>
           </li>
         </div>
       
@@ -2177,18 +2177,18 @@
 
             
 
-            <code class="ruby">  session[:message] = &quot;You have cancelled your request for #{@book[:title]} from #{@book[:owner_name]}&quot;</code>
+            <code class="ruby">  erb :book</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="187">
+          <li class="never" data-hits="" data-linenumber="187">
             
             
 
             
 
-            <code class="ruby">  redirect :all_books_list</code>
+            <code class="ruby">end</code>
           </li>
         </div>
       
@@ -2199,29 +2199,29 @@
 
             
 
-            <code class="ruby">end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="189">
-            
-            
-
-            
-
             <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="190">
+          <li class="covered" data-hits="1" data-linenumber="189">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">post &quot;/book/:book_id/loan&quot; do</code>
+            <code class="ruby">post &quot;/book/:book_id/request&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="190">
+            
+            
+
+            
+
+            <code class="ruby">  require_signed_in_user</code>
           </li>
         </div>
       
@@ -2232,29 +2232,29 @@
 
             
 
-            <code class="ruby">  require_signed_in_user</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="192">
-            
-            
-
-            
-
             <code class="ruby">  book_id = params[:book_id].to_i</code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="193">
+          <li class="never" data-hits="" data-linenumber="192">
             
             
 
             
 
             <code class="ruby"> </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="193">
+            
+            
+
+            
+
+            <code class="ruby">  @storage.book_add_request(book_id, session[:user_id])</code>
           </li>
         </div>
       
@@ -2265,7 +2265,7 @@
 
             
 
-            <code class="ruby">  @storage.book_loan(book_id)</code>
+            <code class="ruby">  @book = @storage.book_data(book_id)</code>
           </li>
         </div>
       
@@ -2276,7 +2276,7 @@
 
             
 
-            <code class="ruby">  @book = @storage.book_data(book_id)</code>
+            <code class="ruby">  session[:message] = &quot;You have requested #{@book[:title]} from #{@book[:owner_name]}&quot;</code>
           </li>
         </div>
       
@@ -2287,23 +2287,12 @@
 
             
 
-            <code class="ruby">  session[:message] = &quot;#{@book[:title]} has been loaned to #{@book[:borrower_name]}&quot;</code>
+            <code class="ruby">  redirect :all_books_list</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="197">
-            
-            
-
-            
-
-            <code class="ruby">  redirect :user_owned_book_list</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="198">
+          <li class="never" data-hits="" data-linenumber="197">
             
             
 
@@ -2314,7 +2303,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="199">
+          <li class="never" data-hits="" data-linenumber="198">
             
             
 
@@ -2325,18 +2314,18 @@
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="200">
+          <li class="covered" data-hits="1" data-linenumber="199">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">post &quot;/book/:book_id/reject_request&quot; do</code>
+            <code class="ruby">post &quot;/book/:book_id/cancel_request&quot; do</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="201">
+          <li class="missed" data-hits="0" data-linenumber="200">
             
             
 
@@ -2347,7 +2336,7 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="202">
+          <li class="missed" data-hits="0" data-linenumber="201">
             
             
 
@@ -2358,13 +2347,24 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="203">
+          <li class="never" data-hits="" data-linenumber="202">
             
             
 
             
 
             <code class="ruby"> </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="203">
+            
+            
+
+            
+
+            <code class="ruby">  @storage.book_cancel_request(book_id)</code>
           </li>
         </div>
       
@@ -2386,7 +2386,7 @@
 
             
 
-            <code class="ruby">  session[:message] = &quot;You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}&quot;</code>
+            <code class="ruby">  session[:message] = &quot;You have cancelled your request for #{@book[:title]} from #{@book[:owner_name]}&quot;</code>
           </li>
         </div>
       
@@ -2397,18 +2397,18 @@
 
             
 
-            <code class="ruby">  @storage.book_reject_request(book_id)</code>
+            <code class="ruby">  redirect :all_books_list</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="207">
+          <li class="never" data-hits="" data-linenumber="207">
             
             
 
             
 
-            <code class="ruby">  redirect :user_owned_book_list</code>
+            <code class="ruby">end</code>
           </li>
         </div>
       
@@ -2419,34 +2419,23 @@
 
             
 
-            <code class="ruby">end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="209">
-            
-            
-
-            
-
             <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="210">
+          <li class="covered" data-hits="1" data-linenumber="209">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">post &quot;/book/:book_id/return&quot; do</code>
+            <code class="ruby">post &quot;/book/:book_id/loan&quot; do</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="211">
+          <li class="missed" data-hits="0" data-linenumber="210">
             
             
 
@@ -2457,7 +2446,7 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="212">
+          <li class="missed" data-hits="0" data-linenumber="211">
             
             
 
@@ -2468,7 +2457,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="213">
+          <li class="never" data-hits="" data-linenumber="212">
             
             
 
@@ -2479,18 +2468,18 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="214">
+          <li class="missed" data-hits="0" data-linenumber="213">
             
             
 
             
 
-            <code class="ruby">  @storage.book_return(book_id)</code>
+            <code class="ruby">  @storage.book_loan(book_id)</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="215">
+          <li class="missed" data-hits="0" data-linenumber="214">
             
             
 
@@ -2501,18 +2490,18 @@
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="216">
+          <li class="missed" data-hits="0" data-linenumber="215">
             
             
 
             
 
-            <code class="ruby">  session[:message] = &quot;#{@book[:title]} has been returned&quot;</code>
+            <code class="ruby">  session[:message] = &quot;#{@book[:title]} has been loaned to #{@book[:borrower_name]}&quot;</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="217">
+          <li class="missed" data-hits="0" data-linenumber="216">
             
             
 
@@ -2523,7 +2512,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="218">
+          <li class="never" data-hits="" data-linenumber="217">
             
             
 
@@ -2534,7 +2523,7 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="219">
+          <li class="never" data-hits="" data-linenumber="218">
             
             
 
@@ -2545,13 +2534,24 @@
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="220">
+          <li class="covered" data-hits="1" data-linenumber="219">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">not_found do</code>
+            <code class="ruby">post &quot;/book/:book_id/reject_request&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="220">
+            
+            
+
+            
+
+            <code class="ruby">  require_signed_in_user</code>
           </li>
         </div>
       
@@ -2562,12 +2562,221 @@
 
             
 
-            <code class="ruby">  redirect &quot;/&quot;</code>
+            <code class="ruby">  book_id = params[:book_id].to_i</code>
           </li>
         </div>
       
         <div>
           <li class="never" data-hits="" data-linenumber="222">
+            
+            
+
+            
+
+            <code class="ruby"> </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="223">
+            
+            
+
+            
+
+            <code class="ruby">  @book = @storage.book_data(book_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="224">
+            
+            
+
+            
+
+            <code class="ruby">  session[:message] = &quot;You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="225">
+            
+            
+
+            
+
+            <code class="ruby">  @storage.book_reject_request(book_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="226">
+            
+            
+
+            
+
+            <code class="ruby">  redirect :user_owned_book_list</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="227">
+            
+            
+
+            
+
+            <code class="ruby">end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="228">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="229">
+            <span class="hits">1</span>
+            
+
+            
+
+            <code class="ruby">post &quot;/book/:book_id/return&quot; do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="230">
+            
+            
+
+            
+
+            <code class="ruby">  require_signed_in_user</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="231">
+            
+            
+
+            
+
+            <code class="ruby">  book_id = params[:book_id].to_i</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="232">
+            
+            
+
+            
+
+            <code class="ruby"> </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="233">
+            
+            
+
+            
+
+            <code class="ruby">  @storage.book_return(book_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="234">
+            
+            
+
+            
+
+            <code class="ruby">  @book = @storage.book_data(book_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="235">
+            
+            
+
+            
+
+            <code class="ruby">  session[:message] = &quot;#{@book[:title]} has been returned&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="236">
+            
+            
+
+            
+
+            <code class="ruby">  redirect :user_owned_book_list</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="237">
+            
+            
+
+            
+
+            <code class="ruby">end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="238">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="239">
+            <span class="hits">1</span>
+            
+
+            
+
+            <code class="ruby">not_found do</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="240">
+            
+            
+
+            
+
+            <code class="ruby">  redirect &quot;/&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="241">
             
             
 
@@ -2587,7 +2796,7 @@
     <h3>database_persistence.rb</h3>
     <h4>
       <span class="red">
-  29.11%
+  30.0%
 </span>
 
       lines covered
@@ -2596,8 +2805,8 @@
     
 
     <div class="t-line-summary">
-      <b>79</b> relevant lines.
-      <span class="green"><b>23</b> lines covered</span> and
+      <b>80</b> relevant lines.
+      <span class="green"><b>24</b> lines covered</span> and
       <span class="red"><b>56</b> lines missed.</span>
     </div>
 
@@ -4540,7 +4749,7 @@
 
             
 
-            <code class="ruby">  private</code>
+            <code class="ruby">  def update_book_data</code>
           </li>
         </div>
       
@@ -4551,40 +4760,40 @@
 
             
 
+            <code class="ruby">    # INSERT INTO books_categories (book_id, category_id) VALUES (1, 3) ON CONFLICT DO NOTHING</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="178">
+            
+            
+
+            
+
+            <code class="ruby">  end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="179">
+            
+            
+
+            
+
             <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="178">
+          <li class="covered" data-hits="1" data-linenumber="180">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">  def tuple_to_list_hash(tuple)</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="179">
-            
-            
-
-            
-
-            <code class="ruby">    { id: tuple[&quot;id&quot;].to_i, </code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="180">
-            
-            
-
-            
-
-            <code class="ruby">      title: tuple[&quot;title&quot;], </code>
+            <code class="ruby">  private</code>
           </li>
         </div>
       
@@ -4595,122 +4804,23 @@
 
             
 
-            <code class="ruby">      author: tuple[&quot;author&quot;],</code>
+            <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="182">
-            
-            
-
-            
-
-            <code class="ruby">      categories: tuple[&quot;categories&quot;],</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="183">
-            
-            
-
-            
-
-            <code class="ruby">      owner_id: convert_string_to_integer(tuple[&quot;owner_id&quot;]),</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="184">
-            
-            
-
-            
-
-            <code class="ruby">      owner_name: tuple[&quot;owner_name&quot;],</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="185">
-            
-            
-
-            
-
-            <code class="ruby">      requester_id: convert_string_to_integer(tuple[&quot;requester_id&quot;]),</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="186">
-            
-            
-
-            
-
-            <code class="ruby">      requester_name: tuple[&quot;requester_name&quot;],</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="187">
-            
-            
-
-            
-
-            <code class="ruby">      borrower_id: convert_string_to_integer(tuple[&quot;borrower_id&quot;]),</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="188">
-            
-            
-
-            
-
-            <code class="ruby">      borrower_name: tuple[&quot;borrower_name&quot;] }</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="189">
-            
-            
-
-            
-
-            <code class="ruby">  end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="190">
-            
-            
-
-            
-
-            <code class="ruby">  </code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="covered" data-hits="1" data-linenumber="191">
+          <li class="covered" data-hits="1" data-linenumber="182">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">  def tuple_to_category_hash(tuple)</code>
+            <code class="ruby">  def tuple_to_list_hash(tuple)</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="192">
+          <li class="missed" data-hits="0" data-linenumber="183">
             
             
 
@@ -4721,13 +4831,112 @@
         </div>
       
         <div>
+          <li class="never" data-hits="" data-linenumber="184">
+            
+            
+
+            
+
+            <code class="ruby">      title: tuple[&quot;title&quot;], </code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="185">
+            
+            
+
+            
+
+            <code class="ruby">      author: tuple[&quot;author&quot;],</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="186">
+            
+            
+
+            
+
+            <code class="ruby">      categories: tuple[&quot;categories&quot;],</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="187">
+            
+            
+
+            
+
+            <code class="ruby">      owner_id: convert_string_to_integer(tuple[&quot;owner_id&quot;]),</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="188">
+            
+            
+
+            
+
+            <code class="ruby">      owner_name: tuple[&quot;owner_name&quot;],</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="189">
+            
+            
+
+            
+
+            <code class="ruby">      requester_id: convert_string_to_integer(tuple[&quot;requester_id&quot;]),</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="190">
+            
+            
+
+            
+
+            <code class="ruby">      requester_name: tuple[&quot;requester_name&quot;],</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="191">
+            
+            
+
+            
+
+            <code class="ruby">      borrower_id: convert_string_to_integer(tuple[&quot;borrower_id&quot;]),</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="192">
+            
+            
+
+            
+
+            <code class="ruby">      borrower_name: tuple[&quot;borrower_name&quot;] }</code>
+          </li>
+        </div>
+      
+        <div>
           <li class="never" data-hits="" data-linenumber="193">
             
             
 
             
 
-            <code class="ruby">      name: tuple[&quot;name&quot;] }</code>
+            <code class="ruby">  end</code>
           </li>
         </div>
       
@@ -4738,29 +4947,29 @@
 
             
 
-            <code class="ruby">  end</code>
+            <code class="ruby">  </code>
           </li>
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="195">
-            
-            
-
-            
-
-            <code class="ruby"></code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="covered" data-hits="1" data-linenumber="196">
+          <li class="covered" data-hits="1" data-linenumber="195">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">  def convert_string_to_integer(str)</code>
+            <code class="ruby">  def tuple_to_category_hash(tuple)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="196">
+            
+            
+
+            
+
+            <code class="ruby">    { id: tuple[&quot;id&quot;].to_i, </code>
           </li>
         </div>
       
@@ -4771,18 +4980,18 @@
 
             
 
-            <code class="ruby">    # This is needed because nil.to_i returns 0!!!</code>
+            <code class="ruby">      name: tuple[&quot;name&quot;] }</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="198">
+          <li class="never" data-hits="" data-linenumber="198">
             
             
 
             
 
-            <code class="ruby">    str ? str.to_i : nil</code>
+            <code class="ruby">  end</code>
           </li>
         </div>
       
@@ -4793,29 +5002,29 @@
 
             
 
-            <code class="ruby">  end</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="200">
-            
-            
-
-            
-
             <code class="ruby"></code>
           </li>
         </div>
       
         <div>
-          <li class="covered" data-hits="1" data-linenumber="201">
+          <li class="covered" data-hits="1" data-linenumber="200">
             <span class="hits">1</span>
             
 
             
 
-            <code class="ruby">  def get_requester_id(book_id)</code>
+            <code class="ruby">  def convert_string_to_integer(str)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="201">
+            
+            
+
+            
+
+            <code class="ruby">    # This is needed because nil.to_i returns 0!!!</code>
           </li>
         </div>
       
@@ -4826,34 +5035,12 @@
 
             
 
-            <code class="ruby">    sql = &quot;SELECT requester_id FROM books WHERE id = $1&quot;</code>
+            <code class="ruby">    str ? str.to_i : nil</code>
           </li>
         </div>
       
         <div>
-          <li class="missed" data-hits="0" data-linenumber="203">
-            
-            
-
-            
-
-            <code class="ruby">    result = query(sql, book_id).first</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="missed" data-hits="0" data-linenumber="204">
-            
-            
-
-            
-
-            <code class="ruby">    result[&quot;requester_id&quot;].to_i</code>
-          </li>
-        </div>
-      
-        <div>
-          <li class="never" data-hits="" data-linenumber="205">
+          <li class="never" data-hits="" data-linenumber="203">
             
             
 
@@ -4864,7 +5051,73 @@
         </div>
       
         <div>
-          <li class="never" data-hits="" data-linenumber="206">
+          <li class="never" data-hits="" data-linenumber="204">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="205">
+            <span class="hits">1</span>
+            
+
+            
+
+            <code class="ruby">  def get_requester_id(book_id)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="206">
+            
+            
+
+            
+
+            <code class="ruby">    sql = &quot;SELECT requester_id FROM books WHERE id = $1&quot;</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="207">
+            
+            
+
+            
+
+            <code class="ruby">    result = query(sql, book_id).first</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="missed" data-hits="0" data-linenumber="208">
+            
+            
+
+            
+
+            <code class="ruby">    result[&quot;requester_id&quot;].to_i</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="209">
+            
+            
+
+            
+
+            <code class="ruby">  end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="210">
             
             
 

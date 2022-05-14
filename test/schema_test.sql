@@ -26,7 +26,8 @@ CREATE TABLE books (
 CREATE TABLE books_categories (
   id serial PRIMARY KEY,
   book_id integer NOT NULL REFERENCES books(id) ON DELETE CASCADE,
-  category_id integer NOT NULL REFERENCES categories(id) ON DELETE CASCADE
+  category_id integer NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+  UNIQUE (book_id, category_id)
 );
 
 INSERT INTO users (name, password) VALUES

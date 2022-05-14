@@ -173,6 +173,10 @@ class DatabasePersistence
     end
   end
 
+  def update_book_data
+    # INSERT INTO books_categories (book_id, category_id) VALUES (1, 3) ON CONFLICT DO NOTHING
+  end
+
   private
 
   def tuple_to_list_hash(tuple)

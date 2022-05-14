@@ -74,6 +74,16 @@ def valid_credentials?(user_name, password)
   end
 end
 
+def get_selected_category_ids(params)
+  category_ids = []
+  params.each do |k, v|
+    if k.include?("category_id")
+      category_ids << v.to_i
+    end
+  end
+  category_ids
+end
+
 # Routes
 get "/" do
   erb :home
@@ -151,6 +161,15 @@ get "/book/:book_id/edit" do
   @categories = @storage.categories_list
   @book_category_ids = @storage.get_category_ids(book_id)
   erb :edit_book
+end
+
+post "/book/:book_id/edit" do
+  require_signed_in_user
+  category_ids = get_selected_category_ids(params)
+  @storage.update_book_data
+  # put code to fetch any other changes
+  # create method in database_persistence to send all book data to database
+  erb :home
 end
 
 get "/book/:book_id/delete" do
