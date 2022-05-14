@@ -184,8 +184,8 @@ post "/book/:book_id/edit" do
   author = params[:author]
   category_ids = get_selected_category_ids(params)
   @storage.update_book_data(book_id, title, author, category_ids)
-  session[:message] = "Book details have been updated."
-  redirect "/"
+  session[:message] = "Book details have been updated for #{title}."
+  redirect "/users/book_list"
 end
 
 get "/book/:book_id/delete" do

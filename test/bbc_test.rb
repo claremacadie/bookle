@@ -257,7 +257,7 @@ class CMSTest < Minitest::Test
   def test_change_book_details
     post "/book/1/edit", { title: "new title", author: "new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 302, last_response.status
-    assert_equal "Book details have been updated.", session[:message]
+    assert_equal "Book details have been updated for new title.", session[:message]
     
     get "/book/1", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 200, last_response.status
