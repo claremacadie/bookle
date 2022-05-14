@@ -185,7 +185,7 @@ post "/book/:book_id/edit" do
   category_ids = get_selected_category_ids(params)
   @storage.update_book_data(book_id, title, author, category_ids)
   session[:message] = "Book details have been updated."
-  erb :home
+  redirect "/"
 end
 
 get "/book/:book_id/delete" do
