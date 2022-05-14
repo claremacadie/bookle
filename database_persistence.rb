@@ -173,8 +173,16 @@ class DatabasePersistence
     end
   end
 
-  def update_book_data
-    # INSERT INTO books_categories (book_id, category_id) VALUES (1, 3) ON CONFLICT DO NOTHING
+  def update_book_data(book_id, title, author, category_ids)
+    sql = <<~SQL
+      UPDATE books 
+      SET title = $2, author = $3
+      WHERE id = $1;
+      
+      SQL
+      # INSERT INTO books_categories (book_id, category_id) VALUES ON CONFLICT DO NOTHING
+    query(sql, book_id, title, author)
+    
   end
 
   private

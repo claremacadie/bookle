@@ -165,8 +165,11 @@ end
 
 post "/book/:book_id/edit" do
   require_signed_in_user
+  book_id = params[:book_id].to_i
+  title = params[:title]
+  author = params[:author]
   category_ids = get_selected_category_ids(params)
-  @storage.update_book_data
+  @storage.update_book_data(book_id, title, author, category_ids)
   # put code to fetch any other changes
   # create method in database_persistence to send all book data to database
   erb :home
