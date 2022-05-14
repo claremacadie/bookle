@@ -148,6 +148,8 @@ get "/book/:book_id/edit" do
   require_signed_in_user
   book_id = params[:book_id].to_i
   @book = @storage.book_data(book_id)
+  @categories = @storage.categories_list
+  @book_category_ids = @storage.get_category_ids(book_id)
   erb :edit_book
 end
 

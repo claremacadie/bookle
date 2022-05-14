@@ -157,6 +157,22 @@ class DatabasePersistence
     query(sql, book_id)
   end
 
+  def categories_list
+    sql = "SELECT * FROM categories"
+    result = query(sql)
+    result.map do |tuple|
+      tuple_to_category_hash(tuple)
+    end
+  end
+
+  def get_category_ids(book_id)
+    sql = "SELECT category_id FROM books_categories WHERE book_id = $1"
+    result = query(sql, book_id)
+    result.map do |tuple|
+      tuple["category_id"].to_i
+    end
+  end
+
   private
 
   def tuple_to_list_hash(tuple)
@@ -170,6 +186,11 @@ class DatabasePersistence
       requester_name: tuple["requester_name"],
       borrower_id: convert_string_to_integer(tuple["borrower_id"]),
       borrower_name: tuple["borrower_name"] }
+  end
+  
+  def tuple_to_category_hash(tuple)
+    { id: tuple["id"].to_i, 
+      name: tuple["name"] }
   end
 
   def convert_string_to_integer(str)

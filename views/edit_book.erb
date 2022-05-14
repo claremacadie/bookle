@@ -4,9 +4,28 @@
     <dd><input id="title" type="text" name="title" value="<%= @book[:title] %>"></dd>
     <dt><label for="authors">Author</label></dt>
     <dd><input id="authors" type="text" name="authors" value="<%= @book[:author] %>"></dd>
-    <dt><label for="collection">Collection</label></dt>
-    <dd><input id="categories" type="text" name="categories" value="<%= @book[:categories] %>"></dd>
-    <dt><label for="available">Availability</label></dt>
-    <dd><input id="available" type="textavailable" name="available" value="<%= book_availability(@book) %>"></dd>
+    
+    <dt><label for="categories">Categories</label></dt>
+    <dd>
+      <% @categories.each do |category| %>
+        <ul>
+          <li>
+            <label>
+              <input 
+                type="checkbox" 
+                value="<%= category[:id] %>" 
+                name="<%= category[:id] %>"
+                <% if @book_category_ids.include?(category[:id]) %>
+                  checked
+                <% end %>
+              />
+              <%= category[:name] %>
+            </label>
+          </li>
+        </ul>
+      <% end %>
+    </dd> 
+        
+
   </dl>
 </form>
