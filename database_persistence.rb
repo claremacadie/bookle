@@ -42,6 +42,11 @@ class DatabasePersistence
     result.first["id"].to_i
   end
 
+  def get_owner_id(book_id)
+    sql = "SELECT owner_id FROM books WHERE id = $1;"
+    result = query(sql, book_id).first["owner_id"].to_i
+  end
+
   def all_books
     sql = <<~SQL
       SELECT 

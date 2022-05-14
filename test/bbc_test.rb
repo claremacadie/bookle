@@ -230,9 +230,16 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button>Request book</button>)
   end
 
+  def test_edit_book_signedin_as_not_book_owner
+    get "/book/1/edit", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    
+    assert_equal 302, last_response.status
+    assert_equal "You must be the book owner to do that.", session[:message]
+  end
+
   def test_edit_book_not_signedin
     get "/book/1/edit"
-
+    
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
   end

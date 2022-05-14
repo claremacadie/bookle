@@ -49,9 +49,21 @@ def user_signed_in?
   session.key?(:user_name)
 end
 
+def user_is_book_owner?(book_id)
+  book_owner_id = @storage.get_owner_id(book_id)
+  session[:user_id] == book_owner_id
+end
+
 def require_signed_in_user
   unless user_signed_in?
     session[:message] = "You must be signed in to do that."
+    redirect "/"
+  end
+end
+
+def require_signed_in_as_book_owner(book_id)
+  unless user_is_book_owner?(book_id)
+    session[:message] = "You must be the book owner to do that."
     redirect "/"
   end
 end
@@ -157,6 +169,7 @@ end
 get "/book/:book_id/edit" do
   require_signed_in_user
   book_id = params[:book_id].to_i
+  require_signed_in_as_book_owner(book_id)
   @book = @storage.book_data(book_id)
   @categories = @storage.categories_list
   @book_category_ids = @storage.get_category_ids(book_id)
@@ -166,12 +179,11 @@ end
 post "/book/:book_id/edit" do
   require_signed_in_user
   book_id = params[:book_id].to_i
+  require_signed_in_as_book_owner(book_id)
   title = params[:title]
   author = params[:author]
   category_ids = get_selected_category_ids(params)
   @storage.update_book_data(book_id, title, author, category_ids)
-  # put code to fetch any other changes
-  # create method in database_persistence to send all book data to database
   erb :home
 end
 
