@@ -261,7 +261,7 @@ class CMSTest < Minitest::Test
     
     get "/book/1", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 200, last_response.status
-    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    qassert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "new title"
     assert_includes last_response.body, "new author"
   end
