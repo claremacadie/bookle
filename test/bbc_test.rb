@@ -230,6 +230,16 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button>Request book</button>)
   end
 
+  def test_edit_book_signedin_as_book_owner
+    get "/book/1/edit", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, %q(<input id="title" type="text" name="title" value="Philosopher's Stone")
+    assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value="JK Rowling")
+    assert_includes last_response.body, %q(<button type="submit">Submit</button>)
+  end
+
   def test_edit_book_signedin_as_not_book_owner
     get "/book/1/edit", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
@@ -242,6 +252,18 @@ class CMSTest < Minitest::Test
     
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
+  end
+
+  def test_change_book_details
+    post "/book/1/edit", { title: "new title", author: "new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 200, last_response.status
+    # assert_equal "Book details have been updated.", session[:message]
+    
+    get "/book/1", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "new title"
+    assert_includes last_response.body, "new author"
   end
 
   def test_signin_form

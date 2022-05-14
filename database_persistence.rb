@@ -186,16 +186,18 @@ class DatabasePersistence
       SQL
     query(sql, book_id, title, author)
 
-    sql = "DELETE FROM books_categories WHERE book_id = $1"
-    query(sql, book_id)
+    unless category_ids.empty?
+      sql = "DELETE FROM books_categories WHERE book_id = $1"
+      query(sql, book_id)
 
-    category_ids.each do |category_id|
-      sql = <<~SQL
-        INSERT INTO books_categories (book_id, category_id) 
-        VALUES ($1, $2) 
-        ON CONFLICT DO NOTHING;
-      SQL
-      query(sql, book_id, category_id)
+      category_ids.each do |category_id|
+        sql = <<~SQL
+          INSERT INTO books_categories (book_id, category_id) 
+          VALUES ($1, $2) 
+          ON CONFLICT DO NOTHING;
+        SQL
+        query(sql, book_id, category_id)
+      end
     end
   end
 
