@@ -178,11 +178,20 @@ class DatabasePersistence
       UPDATE books 
       SET title = $2, author = $3
       WHERE id = $1;
-      
       SQL
-      # INSERT INTO books_categories (book_id, category_id) VALUES ON CONFLICT DO NOTHING
     query(sql, book_id, title, author)
-    
+
+    sql = "DELETE FROM books_categories WHERE book_id = $1"
+    query(sql, book_id)
+
+    category_ids.each do |category_id|
+      sql = <<~SQL
+        INSERT INTO books_categories (book_id, category_id) 
+        VALUES ($1, $2) 
+        ON CONFLICT DO NOTHING;
+      SQL
+      query(sql, book_id, category_id)
+    end
   end
 
   private
