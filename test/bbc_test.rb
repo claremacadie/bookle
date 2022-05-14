@@ -230,6 +230,13 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button>Request book</button>)
   end
 
+  def test_edit_book_not_signedin
+    get "/book/1/edit"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
   def test_signin_form
     get "/users/signin"
 
