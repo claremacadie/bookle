@@ -61,8 +61,8 @@ class DatabasePersistence
         borrowers.id AS borrower_id,
         borrowers.name AS borrower_name
       FROM books
-      INNER JOIN books_categories ON books.id = books_categories.book_id
-      INNER JOIN categories ON books_categories.category_id = categories.id
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
       INNER JOIN users AS owners ON books.owner_id = owners.id
       LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
       LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
@@ -90,8 +90,8 @@ class DatabasePersistence
         borrowers.id AS borrower_id,
         borrowers.name AS borrower_name
       FROM books
-      INNER JOIN books_categories ON books.id = books_categories.book_id
-      INNER JOIN categories ON books_categories.category_id = categories.id
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
       INNER JOIN users AS owners ON books.owner_id = owners.id
       LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
       LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
@@ -120,8 +120,8 @@ class DatabasePersistence
         borrowers.id AS borrower_id,
         borrowers.name AS borrower_name
       FROM books
-      INNER JOIN books_categories ON books.id = books_categories.book_id
-      INNER JOIN categories ON books_categories.category_id = categories.id
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
       INNER JOIN users AS owners ON books.owner_id = owners.id
       LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
       LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
