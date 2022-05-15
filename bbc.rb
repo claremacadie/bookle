@@ -166,6 +166,23 @@ get "/users/book_list" do
   erb :user_owned_book_list
 end
 
+get "/book/add_new" do
+  require_signed_in_user
+  @categories = @storage.categories_list
+  erb :add_book
+end
+
+post "/book/add_new" do
+  require_signed_in_user
+  title = params[:title]
+  author = params[:author]
+  owner_id = session[:user_id]
+  category_ids = get_selected_category_ids(params)
+  @storage.add_book(title, author, owner_id, category_ids)
+  session[:message] = "#{title} has been added."
+  redirect "/users/book_list"
+end
+
 get "/book/:book_id/edit" do
   require_signed_in_user
   book_id = params[:book_id].to_i

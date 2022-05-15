@@ -1,11 +1,11 @@
-<h1>Edit book details</h1>
+<h1>Add a new book</h1>
 
-<form action="/book/<%= @book[:id] %>/edit" method="post">
+<form action="/book/add_new" method="post">
   <dl>
     <dt><label for="title">Title</label></dt>
-    <dd><input id="title" type="text" name="title" value="<%= @book[:title] %>"></dd>
+    <dd><input id="title" type="text" name="title" value=""></dd>
     <dt><label for="authors">Author</label></dt>
-    <dd><input id="authors" type="text" name="author" value="<%= @book[:author] %>"></dd>
+    <dd><input id="authors" type="text" name="author" value=""></dd>
     
     <dt><label for="categories">Categories</label></dt>
     <dd>
@@ -17,9 +17,6 @@
                 type="checkbox" 
                 value="<%= category[:id] %>" 
                 name="category_id_<%= category[:id] %>"
-                <% if @book_category_ids.include?(category[:id]) %>
-                  checked
-                <% end %>
               />
               <%= category[:name] %>
             </label>
@@ -28,5 +25,5 @@
       <% end %>
     </dd> 
   </dl>
-  <button type="submit">Submit</button>
+  <button type="submit">Add new book</button>
 </form>

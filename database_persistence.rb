@@ -201,6 +201,26 @@ class DatabasePersistence
     end
   end
 
+  def add_book(title, author, owner_id, category_ids)
+    sql = <<~SQL
+      INSERT INTO books (title, author, owner_id)
+      VALUES ($1, $2, $3);
+      SQL
+    query(sql, title, author, owner_id)
+
+    unless category_ids.empty?
+      book_id = @db.exec("SELECT max(id) FROM books;").first["max"].to_i
+      category_ids.each do |category_id|
+        sql = <<~SQL
+          INSERT INTO books_categories (book_id, category_id) 
+          VALUES ($1, $2) 
+          ON CONFLICT DO NOTHING;
+        SQL
+        query(sql, book_id, category_id)
+      end
+    end
+  end
+
   private
 
   def tuple_to_list_hash(tuple)

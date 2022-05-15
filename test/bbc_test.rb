@@ -73,6 +73,7 @@ class CMSTest < Minitest::Test
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Add new book"
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "JK Rowling"
     assert_includes last_response.body, "Children's, Fantasy"
@@ -228,6 +229,35 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Philosopher's Stone"
     assert_includes last_response.body, "Available"
     assert_includes last_response.body, %q(<button>Request book</button>)
+  end
+
+  def add_edit_book_not_signedin
+    get "/book/add"
+    
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+  
+  def test_add_book_signedin
+    get "/book/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, %q(<input id="title" type="text" name="title" value="")
+    assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value=)
+    assert_includes last_response.body, %q(<button type="submit">Add new book</button>)
+  end
+
+  def test_change_book_details
+    post "/book/add_new", { title: "new title", author: "new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 302, last_response.status
+    assert_equal "new title has been added.", session[:message]
+    
+    get last_response["Location"]
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "new title"
+    assert_includes last_response.body, "new author"
   end
 
   def test_edit_book_signedin_as_book_owner
