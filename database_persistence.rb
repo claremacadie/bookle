@@ -53,7 +53,7 @@ class DatabasePersistence
         books.id, 
         books.title,
         books.author,
-        string_agg(categories.name, ', ') AS categories,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
         owners.id AS owner_id,
         owners.name AS owner_name,
         requesters.id AS requester_id,
@@ -82,7 +82,7 @@ class DatabasePersistence
         books.id, 
         books.title,
         books.author,
-        string_agg(categories.name, ', ') AS categories,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
         owners.id AS owner_id,
         owners.name AS owner_name,
         requesters.id AS requester_id,
@@ -112,7 +112,7 @@ class DatabasePersistence
         books.id, 
         books.title,
         books.author,
-        string_agg(categories.name, ', ') AS categories,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
         owners.id AS owner_id,
         owners.name AS owner_name,
         requesters.id AS requester_id,
@@ -163,7 +163,7 @@ class DatabasePersistence
   end
 
   def categories_list
-    sql = "SELECT * FROM categories"
+    sql = "SELECT * FROM categories ORDER BY NAME"
     result = query(sql)
     result.map do |tuple|
       tuple_to_category_hash(tuple)
