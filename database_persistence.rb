@@ -29,11 +29,9 @@ class DatabasePersistence
     sql = "SELECT name, password FROM users"
     result = query(sql)
     
-    users_hash = {}
-    result.map do |tuple|
-      users_hash[tuple["name"]] = tuple["password"] 
+    result.each_with_object({}) do |tuple, hash|
+      hash[tuple["name"]] = tuple["password"] 
     end
-    users_hash
   end
 
   def get_user_id(user_name)
