@@ -4,18 +4,18 @@ DROP TABLE books;
 DROP TABLE users;
 
 CREATE TABLE users (
-  id serial PRIMARY KEY,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL,
   password text NOT NULL UNIQUE
 );
 
 CREATE TABLE categories (
-  id serial PRIMARY KEY,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL
 );
 
 CREATE TABLE books (
-  id serial PRIMARY KEY,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   title text NOT NULL,
   author text NOT NULL,
   owner_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -24,7 +24,7 @@ CREATE TABLE books (
 );
 
 CREATE TABLE books_categories (
-  id serial PRIMARY KEY,
+  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   book_id integer NOT NULL REFERENCES books(id) ON DELETE CASCADE,
   category_id integer NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
   UNIQUE (book_id, category_id)

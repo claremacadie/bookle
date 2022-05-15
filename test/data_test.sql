@@ -1,4 +1,5 @@
-TRUNCATE TABLE books, categories, books_categories, users;
+TRUNCATE TABLE books, categories, books_categories, users
+  RESTART IDENTITY;
 
 INSERT INTO users (name, password) VALUES
   ('Clare MacAdie', '$2a$12$bEpZUdqQkgZpNe2wKL3vkO1xsCJzjTDNwolKVSMpKHMhtV6xm4vD6'),

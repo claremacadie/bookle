@@ -16,7 +16,7 @@ class CMSTest < Minitest::Test
   end
 
   def setup
-    sql = File.read('test/schema_test.sql')
+    sql = File.read('test/data_test.sql')
     PG.connect(dbname: "bookle_test").exec(sql)
   end
 
