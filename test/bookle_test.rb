@@ -32,12 +32,18 @@ class CMSTest < Minitest::Test
     { "rack.session" => { user_name: "admin" } }
   end
 
+  ####### Unit (Method) tests
+
+
+
+
+  ####### Integration (Route) tests
   def test_homepage_signed_in
     get "/", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "Welcome to the Book Borrowers' Collective."
+    assert_includes last_response.body, "Welcome to Bookle."
     assert_includes last_response.body, "View your books"
   end
   
@@ -46,7 +52,7 @@ class CMSTest < Minitest::Test
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "Welcome to the Book Borrowers' Collective."
+    assert_includes last_response.body, "Welcome to Bookle."
     refute_includes last_response.body, "View your books"
   end
   
