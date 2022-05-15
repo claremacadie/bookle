@@ -6,7 +6,7 @@ require "rack/test"
 require 'simplecov'
 SimpleCov.start
 
-require_relative "../bbc"
+require_relative "../bookle"
 
 class CMSTest < Minitest::Test
   include Rack::Test::Methods
@@ -17,7 +17,7 @@ class CMSTest < Minitest::Test
 
   def setup
     sql = File.read('test/schema_test.sql')
-    PG.connect(dbname: "bbc_test").exec(sql)
+    PG.connect(dbname: "bookle_test").exec(sql)
   end
 
   def teardown
