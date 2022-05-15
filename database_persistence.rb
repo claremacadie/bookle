@@ -221,6 +221,11 @@ class DatabasePersistence
     end
   end
 
+  def delete_book(book_id, owner_id)
+    sql = "DELETE FROM books WHERE id = $1 AND owner_id = $2;"
+    query(sql, book_id, owner_id)
+  end
+
   private
 
   def tuple_to_list_hash(tuple)

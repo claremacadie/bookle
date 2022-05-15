@@ -231,7 +231,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button>Request book</button>)
   end
 
-  def add_edit_book_not_signedin
+  def add_book_not_signedin
     get "/book/add"
     
     assert_equal 302, last_response.status
@@ -248,7 +248,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button type="submit">Add new book</button>)
   end
 
-  def test_change_book_details
+  def test_add_new_book
     post "/book/add_new", { title: "new title", author: "new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 302, last_response.status
     assert_equal "new title has been added.", session[:message]
@@ -258,6 +258,43 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "new title"
     assert_includes last_response.body, "new author"
+  end
+
+  def delete_book_not_signedin
+    get "/book/1/delete"
+    
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
+  def delete_book_not_signedin_not_as_book_owner
+    get "/book/1/delete", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    
+    assert_equal 302, last_response.status
+    assert_equal "You must be the book owner to do that.", session[:message]
+  end
+  
+  def test_delete_book_signedin
+    get "/book/1/delete", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Are you sure you want to delete \"Philosopher's Stone\"?"
+    assert_includes last_response.body, %q(<button type="submit">Delete Philosopher's Stone</button>)
+    assert_includes last_response.body, %q(<button type="submit">Cancel</button>)
+  end
+
+  def test_delete_book
+    post "/book/1/delete", { book_id: "1" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 302, last_response.status
+    assert_equal "Philosopher's Stone has been deleted.", session[:message]
+    
+    get last_response["Location"]
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    
+    get "users/book_list"
+    refute_includes last_response.body, "Philosopher's Stone"
   end
 
   def test_edit_book_signedin_as_book_owner
