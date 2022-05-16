@@ -15,8 +15,12 @@ class DatabasePersistence
   end
 
   def query(statement, *params)
-    @logger.info "#{statement}: #{params}"
-    @db.exec_params(statement, params)
+    begin
+      @logger.info "#{statement}: #{params}"
+      @db.exec_params(statement, params)
+    rescue => error
+      error 
+    end
   end
 
   def upload_new_user_credentials(user_name, password)

@@ -20,7 +20,9 @@ CREATE TABLE books (
   author text NOT NULL,
   owner_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   requester_id integer REFERENCES users(id),
-  borrower_id integer REFERENCES users(id)
+  borrower_id integer REFERENCES users(id),
+  CHECK (owner_id != requester_id),
+  CHECK (owner_id != borrower_id)
 );
 
 CREATE TABLE books_categories (

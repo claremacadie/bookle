@@ -187,6 +187,21 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Requested by you"
   end
    
+  def test_request_book_user_owns
+    post "/book/1/request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    
+    output = StringIO.new
+    
+    # What assertions can confirm this error?
+  end
+  def test_loan_book_user_owns
+    post "/book/1/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    
+    output = StringIO.new
+    
+    # What assertions can confirm this error?
+  end
+   
   def test_cancel_request_book
     post "/book/2/cancel_request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
