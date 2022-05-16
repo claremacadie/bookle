@@ -1,19 +1,2 @@
 <p>Welcome to Bookle.</p>
-<p>You need to have an accout to lend and borrow books.</p>
-
-<% if session[:user_name] %>
-  <form method="post" action="/users/signout">
-    <p>
-      Signed in as <%= session[:user_name] %>.
-      <button type="submit">Sign Out</button>
-    </p>
-  </form>
-<% else %>
-  <p><a href="/users/signin">Sign In</a></p>
-  <p><a href="/users/signup">Create Account</a></p>
-<% end %>
-
-<p><a href="/all_books_list">View all books</a></p>
-<% if session[:user_name] %>
-  <p><a href="/users/book_list">View your books</a></p>
-<% end %>
+<p>You need to have an account to lend and borrow books.</p>
