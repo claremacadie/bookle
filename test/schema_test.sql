@@ -22,7 +22,8 @@ CREATE TABLE books (
   requester_id integer REFERENCES users(id),
   borrower_id integer REFERENCES users(id),
   CHECK (owner_id != requester_id),
-  CHECK (owner_id != borrower_id)
+  CHECK (owner_id != borrower_id),
+  CHECK (requester_id IS NULL OR borrower_id IS NULL)
 );
 
 CREATE TABLE books_categories (
