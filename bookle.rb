@@ -96,6 +96,16 @@ def get_selected_category_ids(params)
   category_ids
 end
 
+def availability_array(params)
+  availabilities = []
+  params.each do |k, v|
+    if v == "availability"
+      availabilities << k
+    end
+  end
+  availabilities
+end
+
 # Routes
 get "/" do
   erb :home
@@ -178,7 +188,8 @@ post "/books/filter" do
   title = params[:title]
   author = params[:author]
   category_ids = get_selected_category_ids(params)
-  @books = @storage.filter_books(title, author, category_ids)  
+  availabilities = availability_array(params)
+  @books = @storage.filter_books(title, author, category_ids, availabilities)  
   erb :books_filter_result
 end
 

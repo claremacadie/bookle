@@ -58,26 +58,26 @@ class DatabasePersistence
     end
   end
 
-  def filter_books(title, author, category_ids)
-    if !title.empty? && author.empty? && category_ids.empty?
+  def filter_books(title, author, category_ids, availabilities)
+    if !title.empty? && author.empty? && category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_title)
       result = query(sql, "%#{title}%")
-    elsif title.empty? && !author.empty? && category_ids.empty?
+    elsif title.empty? && !author.empty? && category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_author)
       result = query(sql, "%#{author}%")
-    elsif !title.empty? && !author.empty? && category_ids.empty?
+    elsif !title.empty? && !author.empty? && category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_title_and_author)
       result = query(sql, "%#{title}%", "%#{author}%")
-    elsif title.empty? && author.empty? && !category_ids.empty?
+    elsif title.empty? && author.empty? && !category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_category, category_ids)
       result = query(sql)
-    elsif !title.empty? && author.empty? && !category_ids.empty?
+    elsif !title.empty? && author.empty? && !category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_title_and_category, category_ids)
       result = query(sql, "%#{title}%")
-    elsif title.empty? && !author.empty? && !category_ids.empty?
+    elsif title.empty? && !author.empty? && !category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_author_and_category, category_ids)
       result = query(sql, "%#{author}%")
-    elsif !title.empty? && !author.empty? && !category_ids.empty?
+    elsif !title.empty? && !author.empty? && !category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_title_author_and_category, category_ids)
       result = query(sql, "%#{title}%", "%#{author}%")
     end
