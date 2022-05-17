@@ -18,7 +18,8 @@ INSERT INTO books (title, author, owner_id, requester_id, borrower_id) VALUES
   ('Philosopher''s Stone', 'JK Rowling', 1, NULL, NULL),
   ('Chamber of Secrets', 'JK Rowling', 1, 2, NULL),
   ('Prisoner of Azkaban', 'JK Rowling', 1, NULL, 2),
-  ('Goblet of Fire', 'JK Rowling', 1, 2, NULL)
+  ('Goblet of Fire', 'JK Rowling', 1, 2, NULL),
+  ('How to Train a Dragon', 'Cressida Cowell', 2, NULL, NULL)
 ;
 
 INSERT INTO books_categories (book_id, category_id) VALUES

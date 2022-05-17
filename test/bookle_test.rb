@@ -44,7 +44,14 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Welcome to Bookle."
+    assert_includes last_response.body, "Home"
+    assert_includes last_response.body, "View all books"
     assert_includes last_response.body, "View your books"
+    assert_includes last_response.body, "View available books"
+    assert_includes last_response.body, "Signed in as Clare MacAdie"
+    assert_includes last_response.body, %q(<button type="submit">Sign Out</button>)
+    refute_includes last_response.body, "Sign In"
+    refute_includes last_response.body, "Create Account"
   end
   
   def test_homepage_signed_out
@@ -53,11 +60,18 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Welcome to Bookle."
+    assert_includes last_response.body, "Home"
+    assert_includes last_response.body, "Sign In"
+    assert_includes last_response.body, "Create Account"
+    refute_includes last_response.body, "View all books"
     refute_includes last_response.body, "View your books"
+    refute_includes last_response.body, "View available books"
+    refute_includes last_response.body, "Signed in as"
+    refute_includes last_response.body, %q(<button type="submit">Sign Out</button>)
   end
   
-  def test_all_books_list
-    get "/all_books_list"
+  def test_all_books_list_signed_in
+    get "/all_books_list", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -66,23 +80,94 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Children's, Fantasy"
     assert_includes last_response.body, "On loan"
   end
-
-  def test_view_your_books_signed_out
-    get "/users/book_list"
-
+  
+  def test_all_books_list_signed_out
+    get "/all_books_list"
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
+    
+    get last_response["Location"]
+    assert_includes last_response.body, "Home"
   end
-
+  
+  def test_available_books_list_signed_in
+    get "/books/available", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    refute_includes last_response.body, "Chamber of Secrets"
+    assert_includes last_response.body, "How to Train a Dragon"
+  end
+  
+  def test_available_books_list_signed_out
+    get "/books/available"
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+    
+    get last_response["Location"]
+    assert_includes last_response.body, "Home"
+  end
+  
   def test_view_your_books_signed_in
     get "/users/book_list", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
-
+    
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Add new book"
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "JK Rowling"
     assert_includes last_response.body, "Children's, Fantasy"
+  end
+  
+  def test_view_your_books_signed_out
+    get "/users/book_list"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+  
+  def test_filter_books_form_signed_in
+    get "/books/filter", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, %q(<input id="title" type="text" name="title" value="")
+    assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value="")
+    assert_includes last_response.body, %q(<input type="checkbox")
+    assert_includes last_response.body, %q(<button type="submit">See Results</button>)
+  
+  end
+  
+  def test_filter_books_form_signed_out
+    get "/books/filter"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+
+  def test_filtered_by_title_books_list_signed_in
+    post "/books/filter", {title: 'k', author: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    refute_includes last_response.body, "Chamber of Secrets"
+  end
+
+  def test_filtered_by_author_books_list_signed_in
+    post "/books/filter", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    refute_includes last_response.body, "How to Train a Dragon"
+  end
+  
+  def test_filtered_books_list_signed_out
+    post "/books/filter"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
   end
 
   def test_view_book_signed_out

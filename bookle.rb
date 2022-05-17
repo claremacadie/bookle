@@ -156,8 +156,29 @@ post "/users/signup" do
 end
 
 get "/all_books_list" do
+  require_signed_in_user
   @books = @storage.all_books
   erb :all_books_list
+end
+
+get "/books/available" do
+  require_signed_in_user
+  @books = @storage.available_books(session[:user_id])
+  erb :available_books
+end
+
+get "/books/filter" do
+  require_signed_in_user
+  @categories = @storage.categories_list
+  erb :filter_books
+end
+
+post "/books/filter" do
+  require_signed_in_user
+  title = params[:title]
+  author = params[:author]
+  @books = @storage.filter_books(title, author)  
+  erb :books_filter_result
 end
 
 get "/users/book_list" do

@@ -78,6 +78,65 @@ class DatabasePersistence
     end
   end
 
+  def available_books(user_id)
+    sql = <<~SQL
+      SELECT 
+        books.id, 
+        books.title,
+        books.author,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
+        owners.id AS owner_id,
+        owners.name AS owner_name,
+        requesters.id AS requester_id,
+        requesters.name AS requester_name,
+        borrowers.id AS borrower_id,
+        borrowers.name AS borrower_name
+      FROM books
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
+      INNER JOIN users AS owners ON books.owner_id = owners.id
+      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+      WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL
+      GROUP BY books.id, owners.id, requesters.id, borrowers.id
+      ORDER BY title;
+    SQL
+    result = query(sql, user_id)
+
+    result.map do |tuple|
+      tuple_to_list_hash(tuple)
+    end
+  end
+  def filter_books(title, author)
+    sql = <<~SQL
+      SELECT 
+        books.id, 
+        books.title,
+        books.author,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
+        owners.id AS owner_id,
+        owners.name AS owner_name,
+        requesters.id AS requester_id,
+        requesters.name AS requester_name,
+        borrowers.id AS borrower_id,
+        borrowers.name AS borrower_name
+      FROM books
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
+      INNER JOIN users AS owners ON books.owner_id = owners.id
+      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+      WHERE books.title ILIKE $1 AND books.author ILIKE $2
+      GROUP BY books.id, owners.id, requesters.id, borrowers.id
+      ORDER BY title;
+      SQL
+    result = query(sql, '%' + title + '%',  '%' + author + '%')
+
+    result.map do |tuple|
+      tuple_to_list_hash(tuple)
+    end
+  end
+
   def user_owned_books(user_id)
     sql = <<~SQL
       SELECT
