@@ -77,6 +77,9 @@ class DatabasePersistence
     elsif title.empty? && !author.empty? && !category_ids.empty?
       sql = select_query(:filter_author_and_category, category_ids)
       result = query(sql, "%#{author}%")
+    elsif !title.empty? && !author.empty? && !category_ids.empty?
+      sql = select_query(:filter_title_author_and_category, category_ids)
+      result = query(sql, "%#{title}%", "%#{author}%")
     end
 
     result.map do |tuple|
@@ -230,6 +233,14 @@ class DatabasePersistence
                     when :filter_author_and_category
                       <<~WHERE_CLAUSE
                         WHERE books.author ILIKE $1 AND books.id IN (
+                          SELECT books.id FROM books 
+                          LEFT JOIN books_categories ON books.id = books_categories.book_id 
+                          WHERE books_categories.category_id IN (#{category_ids.join(', ')})
+                        )
+                      WHERE_CLAUSE
+                    when :filter_title_author_and_category
+                      <<~WHERE_CLAUSE
+                        WHERE books.title ILIKE $1 AND books.author ILIKE $2 AND books.id IN (
                           SELECT books.id FROM books 
                           LEFT JOIN books_categories ON books.id = books_categories.book_id 
                           WHERE books_categories.category_id IN (#{category_ids.join(', ')})
