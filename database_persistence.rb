@@ -67,7 +67,7 @@ class DatabasePersistence
       result = query(sql, "%#{author}%")
     elsif !title.empty? && !author.empty? && category_ids.empty?
       sql = select_query(:filter_title_and_author)
-      result = query(sql)
+      result = query(sql, "%#{title}%", "%#{author}%")
     elsif title.empty? && author.empty? && !category_ids.empty?
       sql = select_query(:filter_category, category_ids)
       result = query(sql)
