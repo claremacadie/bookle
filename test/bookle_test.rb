@@ -181,6 +181,15 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "How to Train a Dragon"
   end
 
+  def test_filtered_by_title_and_category_books_list_signed_in
+    post "/books/filter", {title: 'k', author: '', category_id: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    refute_includes last_response.body, "How to Train a Dragon"
+  end
+
   def test_filtered_by_author_and_category_books_list_signed_in
     post "/books/filter", {title: '', author: 'k', category_id: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
