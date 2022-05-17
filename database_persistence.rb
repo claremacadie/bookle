@@ -198,9 +198,7 @@ class DatabasePersistence
                     when :all_books
                       ''
                     when :available_books
-                      <<~WHERE_CLAUSE
-                        WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL
-                      WHERE_CLAUSE
+                      "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
                     when :filter_title
                       "WHERE books.title ILIKE $1"
                     when :filter_author
