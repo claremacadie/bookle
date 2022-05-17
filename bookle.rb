@@ -177,7 +177,8 @@ post "/books/filter" do
   require_signed_in_user
   title = params[:title]
   author = params[:author]
-  @books = @storage.filter_books(title, author)  
+  category_ids = get_selected_category_ids(params)
+  @books = @storage.filter_books(title, author, category_ids)  
   erb :books_filter_result
 end
 
