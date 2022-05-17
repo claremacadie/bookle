@@ -66,10 +66,10 @@ class DatabasePersistence
       sql = select_query(:filter_author)
       result = query(sql, "%#{author}%")
     elsif !title.empty? && !author.empty? && category_ids.empty?
-      sql = select_query(:filter_category)
+      sql = select_query(:filter_title_and_author)
       result = query(sql)
     elsif title.empty? && author.empty? && !category_ids.empty?
-      sql = select_query_join_table(category_ids)
+      sql = select_query(:filter_category)
       result = query(sql)
     end
 
@@ -206,7 +206,13 @@ class DatabasePersistence
                     when :filter_title_and_author
                       "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
                     when :filter_category
-                      "WHERE books_categories.category_id IN (#{category_ids.join(', ')})"
+                      <<~SQL
+                      WHERE books.id IN (
+                        SELECT books.id FROM books
+                        LEFT JOIN books_categories ON books.id = books_categories.book_id
+                        WHERE books_categories.category_id IN (1)
+                      )
+                      SQL
                     when :user_books
                       "WHERE owners.id = $1"
                     when :book_data
@@ -282,3 +288,22 @@ class DatabasePersistence
     result["requester_id"].to_i
   end
 end
+
+
+# SELECT
+#   books.title,
+#   string_agg(categories.name, ', ' ORDER BY categories.name) AS categories
+# FROM books
+# LEFT JOIN books_categories ON books.id = books_categories.book_id
+# LEFT JOIN categories ON books_categories.category_id = categories.id
+# INNER JOIN users AS owners ON books.owner_id = owners.id
+# LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+# LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+#  WHERE books.id IN(
+#         SELECT books.id FROM books
+#         LEFT JOIN books_categories ON books.id = books_categories.book_id
+#         WHERE books_categories.category_id IN (1)
+
+# )
+#  GROUP BY books.id, owners.id, requesters.id, borrowers.id
+#  ORDER BY title;
