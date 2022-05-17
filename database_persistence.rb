@@ -14,15 +14,6 @@ class DatabasePersistence
     @db.close
   end
 
-  def query(statement, *params)
-    begin
-      @logger.info "#{statement}: #{params}"
-      @db.exec_params(statement, params)
-    rescue => error
-      error 
-    end
-  end
-
   def upload_new_user_credentials(user_name, password)
     hashed_password = BCrypt::Password.create(password).to_s
     sql = "INSERT INTO users (name, password) VALUES ($1, $2)"
@@ -50,27 +41,7 @@ class DatabasePersistence
   end
 
   def all_books
-    sql = <<~SQL
-      SELECT 
-        books.id, 
-        books.title,
-        books.author,
-        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-        owners.id AS owner_id,
-        owners.name AS owner_name,
-        requesters.id AS requester_id,
-        requesters.name AS requester_name,
-        borrowers.id AS borrower_id,
-        borrowers.name AS borrower_name
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-      GROUP BY books.id, owners.id, requesters.id, borrowers.id
-      ORDER BY title;
-    SQL
+    sql = select_query(:all_books)
     result = query(sql)
 
     result.map do |tuple|
@@ -79,87 +50,25 @@ class DatabasePersistence
   end
 
   def available_books(user_id)
-    sql = <<~SQL
-      SELECT 
-        books.id, 
-        books.title,
-        books.author,
-        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-        owners.id AS owner_id,
-        owners.name AS owner_name,
-        requesters.id AS requester_id,
-        requesters.name AS requester_name,
-        borrowers.id AS borrower_id,
-        borrowers.name AS borrower_name
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-      WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL
-      GROUP BY books.id, owners.id, requesters.id, borrowers.id
-      ORDER BY title;
-    SQL
+    sql = select_query(:available_books)
     result = query(sql, user_id)
 
     result.map do |tuple|
       tuple_to_list_hash(tuple)
     end
   end
-  def filter_books(title, author)
-    sql = <<~SQL
-      SELECT 
-        books.id, 
-        books.title,
-        books.author,
-        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-        owners.id AS owner_id,
-        owners.name AS owner_name,
-        requesters.id AS requester_id,
-        requesters.name AS requester_name,
-        borrowers.id AS borrower_id,
-        borrowers.name AS borrower_name
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-      WHERE books.title ILIKE $1 AND books.author ILIKE $2
-      GROUP BY books.id, owners.id, requesters.id, borrowers.id
-      ORDER BY title;
-      SQL
-    result = query(sql, '%' + title + '%',  '%' + author + '%')
 
+  def filter_books(title, author)
+    sql = select_query(:filter)
+    result = query(sql, "%#{title}%",  "%#{author}%")
+    
     result.map do |tuple|
       tuple_to_list_hash(tuple)
     end
   end
-
+  
   def user_owned_books(user_id)
-    sql = <<~SQL
-      SELECT
-        books.id, 
-        books.title,
-        books.author,
-        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-        owners.id AS owner_id,
-        owners.name AS owner_name,
-        requesters.id AS requester_id,
-        requesters.name AS requester_name,
-        borrowers.id AS borrower_id,
-        borrowers.name AS borrower_name
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-      WHERE owners.id = $1
-      GROUP BY books.id, owners.id, requesters.id, borrowers.id
-      ORDER BY title;
-    SQL
+    sql = select_query(:user_books)
     result = query(sql, user_id)
     
     result.map do |tuple|
@@ -168,28 +77,7 @@ class DatabasePersistence
   end
   
   def book_data(book_id)
-    sql = <<~SQL
-      SELECT 
-        books.id, 
-        books.title,
-        books.author,
-        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-        owners.id AS owner_id,
-        owners.name AS owner_name,
-        requesters.id AS requester_id,
-        requesters.name AS requester_name,
-        borrowers.id AS borrower_id,
-        borrowers.name AS borrower_name
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-      WHERE books.id = $1
-      GROUP BY books.id, owners.id, requesters.id, borrowers.id
-      ORDER BY title;
-    SQL
+    sql = select_query(:book_data)
     result = query(sql, book_id)
     
     result.map do |tuple|
@@ -240,43 +128,28 @@ class DatabasePersistence
   end
 
   def update_book_data(book_id, title, author, category_ids)
-    sql = <<~SQL
-      UPDATE books 
-      SET title = $2, author = $3
-      WHERE id = $1;
-      SQL
+    sql = update_books_table_statement
     query(sql, book_id, title, author)
 
     unless category_ids.empty?
-      sql = "DELETE FROM books_categories WHERE book_id = $1"
+      sql = delete_from_books_categories_statement
       query(sql, book_id)
 
       category_ids.each do |category_id|
-        sql = <<~SQL
-          INSERT INTO books_categories (book_id, category_id) 
-          VALUES ($1, $2) 
-          ON CONFLICT DO NOTHING;
-        SQL
+        sql = add_to_books_categories_statement
         query(sql, book_id, category_id)
       end
     end
   end
 
   def add_book(title, author, owner_id, category_ids)
-    sql = <<~SQL
-      INSERT INTO books (title, author, owner_id)
-      VALUES ($1, $2, $3);
-      SQL
+    sql = insert_books_table_statement
     query(sql, title, author, owner_id)
 
     unless category_ids.empty?
       book_id = @db.exec("SELECT max(id) FROM books;").first["max"].to_i
       category_ids.each do |category_id|
-        sql = <<~SQL
-          INSERT INTO books_categories (book_id, category_id) 
-          VALUES ($1, $2) 
-          ON CONFLICT DO NOTHING;
-        SQL
+        sql = add_to_books_categories_statement
         query(sql, book_id, category_id)
       end
     end
@@ -288,6 +161,82 @@ class DatabasePersistence
   end
 
   private
+
+  def select_query(query_type, filters={})
+    select_clause = <<~SELECT_CLAUSE
+      SELECT 
+        books.id, 
+        books.title,
+        books.author,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
+        owners.id AS owner_id,
+        owners.name AS owner_name,
+        requesters.id AS requester_id,
+        requesters.name AS requester_name,
+        borrowers.id AS borrower_id,
+        borrowers.name AS borrower_name
+      FROM books
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
+      INNER JOIN users AS owners ON books.owner_id = owners.id
+      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+    SELECT_CLAUSE
+    
+    where_clause =  case query_type
+                    when :all_books
+                      ''
+                    when :available_books
+                      <<~WHERE_CLAUSE
+                        WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL
+                      WHERE_CLAUSE
+                    when :filter
+                      "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
+                    when :user_books
+                      "WHERE owners.id = $1"
+                    when :book_data
+                      "WHERE books.id = $1"
+    end
+
+    group_clause = <<~GROUP_CLAUSE
+      GROUP BY books.id, owners.id, requesters.id, borrowers.id
+    GROUP_CLAUSE
+
+    order_clause = <<~ORDER_CLAUSE
+      ORDER BY title
+    ORDER_CLAUSE
+     
+    [select_clause, where_clause, group_clause, order_clause].join(' ')
+  end
+
+  def update_books_table_statement
+    "UPDATE books SET title = $2, author = $3 WHERE id = $1"
+  end
+
+  def delete_from_books_categories_statement
+    "DELETE FROM books_categories WHERE book_id = $1"
+  end
+
+  def insert_books_table_statement
+    "INSERT INTO books (title, author, owner_id) VALUES ($1, $2, $3)"
+  end
+
+  def add_to_books_categories_statement
+    <<~SQL
+      INSERT INTO books_categories (book_id, category_id) 
+      VALUES ($1, $2) 
+      ON CONFLICT DO NOTHING;
+    SQL
+  end
+
+  def query(statement, *params)
+    begin
+      @logger.info "#{statement}: #{params}"
+      @db.exec_params(statement, params)
+    rescue => error
+      error 
+    end
+  end
 
   def tuple_to_list_hash(tuple)
     { id: tuple["id"].to_i, 
