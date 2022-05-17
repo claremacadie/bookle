@@ -195,7 +195,7 @@ class DatabasePersistence
     SELECT_CLAUSE
     
     where_clause = <<~WHERE_CLAUSE
-                        WHERE books_categories.category_id IN (1)
+                        WHERE books_categories.category_id IN (#{category_ids.join(', ')})
                     WHERE_CLAUSE
 
     group_clause = <<~GROUP_CLAUSE
