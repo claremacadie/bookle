@@ -69,7 +69,7 @@ class DatabasePersistence
       sql = select_query(:filter_title_and_author)
       result = query(sql)
     elsif title.empty? && author.empty? && !category_ids.empty?
-      sql = select_query(:filter_category)
+      sql = select_query(:filter_category, category_ids)
       result = query(sql)
     end
 
@@ -173,7 +173,7 @@ class DatabasePersistence
 
   private
 
-  def select_query(query_type, category_ids = '')
+  def select_query(query_type, category_ids = [])
     select_clause = <<~SELECT_CLAUSE
       SELECT 
         books.id, 
@@ -206,13 +206,7 @@ class DatabasePersistence
                     when :filter_title_and_author
                       "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
                     when :filter_category
-                      <<~SQL
-                      WHERE books.id IN (
-                        SELECT books.id FROM books
-                        LEFT JOIN books_categories ON books.id = books_categories.book_id
-                        WHERE books_categories.category_id IN (1)
-                      )
-                      SQL
+                      "WHERE books.id IN (SELECT books.id FROM books LEFT JOIN books_categories ON books.id = books_categories.book_id WHERE books_categories.category_id IN (#{category_ids.join(', ')}))"
                     when :user_books
                       "WHERE owners.id = $1"
                     when :book_data
