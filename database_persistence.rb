@@ -206,7 +206,13 @@ class DatabasePersistence
                     when :filter_title_and_author
                       "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
                     when :filter_category
-                      "WHERE books.id IN (SELECT books.id FROM books LEFT JOIN books_categories ON books.id = books_categories.book_id WHERE books_categories.category_id IN (#{category_ids.join(', ')}))"
+                      <<~WHERE_CLAUSE
+                        WHERE books.id IN (
+                          SELECT books.id FROM books 
+                          LEFT JOIN books_categories ON books.id = books_categories.book_id 
+                          WHERE books_categories.category_id IN (#{category_ids.join(', ')})
+                        )
+                      WHERE_CLAUSE
                     when :user_books
                       "WHERE owners.id = $1"
                     when :book_data
