@@ -59,9 +59,17 @@ class DatabasePersistence
   end
 
   def filter_books(title, author)
-    sql = select_query(:filter)
-    result = query(sql, "%#{title}%",  "%#{author}%")
-    
+    if !title.empty? && author.empty?
+      sql = select_query(:filter_title)
+      result = query(sql, "%#{title}%")
+    elsif title.empty? && !author.empty?
+      sql = select_query(:filter_author)
+      result = query(sql, "%#{author}%")
+    elsif !title.empty? && !author.empty?
+      sql = select_query(:filter_title_and_author)
+      result = query(sql, "%#{title}%",  "%#{author}%")
+    end
+
     result.map do |tuple|
       tuple_to_list_hash(tuple)
     end
@@ -190,7 +198,11 @@ class DatabasePersistence
                       <<~WHERE_CLAUSE
                         WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL
                       WHERE_CLAUSE
-                    when :filter
+                    when :filter_title
+                      "WHERE books.title ILIKE $1"
+                    when :filter_author
+                      "WHERE books.author ILIKE $1"
+                    when :filter_title_and_author
                       "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
                     when :user_books
                       "WHERE owners.id = $1"
