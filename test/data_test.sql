@@ -9,9 +9,9 @@ INSERT INTO users (name, password) VALUES
 ;
 
 INSERT INTO categories (name) VALUES 
-  ('Children''s'),
   ('Fantasy'),
-  ('Education')
+  ('Magic'),
+  ('History')
 ;
 
 INSERT INTO books (title, author, owner_id, requester_id, borrower_id) VALUES

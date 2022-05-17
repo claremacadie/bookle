@@ -77,7 +77,7 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "JK Rowling"
-    assert_includes last_response.body, "Children's, Fantasy"
+    assert_includes last_response.body, "Fantasy, Magic"
     assert_includes last_response.body, "On loan"
   end
   
@@ -116,7 +116,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Add new book"
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "JK Rowling"
-    assert_includes last_response.body, "Children's, Fantasy"
+    assert_includes last_response.body, "Fantasy, Magic"
   end
   
   def test_view_your_books_signed_out
