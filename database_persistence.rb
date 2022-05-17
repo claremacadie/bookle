@@ -66,8 +66,8 @@ class DatabasePersistence
       sql = select_query(:filter_author)
       result = query(sql, "%#{author}%")
     elsif !title.empty? && !author.empty? && category_ids.empty?
-      sql = select_query(:filter_title_and_author)
-      result = query(sql, "%#{title}%",  "%#{author}%")
+      sql = select_query(:filter_category)
+      result = query(sql)
     elsif title.empty? && author.empty? && !category_ids.empty?
       sql = select_query_join_table(category_ids)
       result = query(sql)
@@ -173,43 +173,7 @@ class DatabasePersistence
 
   private
 
-  def select_query_join_table(category_ids)
-    select_clause = <<~SELECT_CLAUSE
-      SELECT 
-        books.id, 
-        books.title,
-        books.author,
-        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-        owners.id AS owner_id,
-        owners.name AS owner_name,
-        requesters.id AS requester_id,
-        requesters.name AS requester_name,
-        borrowers.id AS borrower_id,
-        borrowers.name AS borrower_name
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-    SELECT_CLAUSE
-    
-    where_clause = <<~WHERE_CLAUSE
-                        WHERE books_categories.category_id IN (#{category_ids.join(', ')})
-                    WHERE_CLAUSE
-
-    group_clause = <<~GROUP_CLAUSE
-      GROUP BY books.id, owners.id, requesters.id, borrowers.id
-    GROUP_CLAUSE
-
-    order_clause = <<~ORDER_CLAUSE
-      ORDER BY title
-    ORDER_CLAUSE
-     
-    [select_clause, where_clause, group_clause, order_clause].join(' ')
-  end
-
-  def select_query(query_type, filters={})
+  def select_query(query_type, category_ids = '')
     select_clause = <<~SELECT_CLAUSE
       SELECT 
         books.id, 
@@ -243,6 +207,8 @@ class DatabasePersistence
                       "WHERE books.author ILIKE $1"
                     when :filter_title_and_author
                       "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
+                    when :filter_category
+                      "WHERE books_categories.category_id IN (#{category_ids.join(', ')})"
                     when :user_books
                       "WHERE owners.id = $1"
                     when :book_data
