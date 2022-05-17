@@ -68,6 +68,9 @@ class DatabasePersistence
     elsif !title.empty? && !author.empty? && category_ids.empty?
       sql = select_query(:filter_title_and_author)
       result = query(sql, "%#{title}%",  "%#{author}%")
+    elsif title.empty? && author.empty? && !category_ids.empty?
+      sql = select_query_join_table(category_ids)
+      result = query(sql)
     end
 
     result.map do |tuple|
@@ -169,6 +172,42 @@ class DatabasePersistence
   end
 
   private
+
+  def select_query_join_table(category_ids)
+    select_clause = <<~SELECT_CLAUSE
+      SELECT 
+        books.id, 
+        books.title,
+        books.author,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
+        owners.id AS owner_id,
+        owners.name AS owner_name,
+        requesters.id AS requester_id,
+        requesters.name AS requester_name,
+        borrowers.id AS borrower_id,
+        borrowers.name AS borrower_name
+      FROM books
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
+      INNER JOIN users AS owners ON books.owner_id = owners.id
+      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+    SELECT_CLAUSE
+    
+    where_clause = <<~WHERE_CLAUSE
+                        WHERE books_categories.category_id IN (1)
+                    WHERE_CLAUSE
+
+    group_clause = <<~GROUP_CLAUSE
+      GROUP BY books.id, owners.id, requesters.id, borrowers.id
+    GROUP_CLAUSE
+
+    order_clause = <<~ORDER_CLAUSE
+      ORDER BY title
+    ORDER_CLAUSE
+     
+    [select_clause, where_clause, group_clause, order_clause].join(' ')
+  end
 
   def select_query(query_type, filters={})
     select_clause = <<~SELECT_CLAUSE
