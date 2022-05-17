@@ -80,6 +80,9 @@ class DatabasePersistence
     elsif !title.empty? && !author.empty? && !category_ids.empty? && availabilities.empty?
       sql = select_query(:filter_title_author_and_category, category_ids)
       result = query(sql, "%#{title}%", "%#{author}%")
+    elsif title.empty? && author.empty? && category_ids.empty? && !availabilities.empty?
+      sql = select_query(:filter_availability, [], availabilities)
+      result = query(sql)
     end
 
     result.map do |tuple|
@@ -182,7 +185,7 @@ class DatabasePersistence
 
   private
 
-  def select_query(query_type, category_ids = [])
+  def select_query(query_type, category_ids = [], availabilities = [])
     select_clause = <<~SELECT_CLAUSE
       SELECT 
         books.id, 
@@ -202,7 +205,7 @@ class DatabasePersistence
       LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
       LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
     SELECT_CLAUSE
-    
+   
     where_clause =  case query_type
                     when :all_books
                       ''
@@ -246,6 +249,23 @@ class DatabasePersistence
                           WHERE books_categories.category_id IN (#{category_ids.join(', ')})
                         )
                       WHERE_CLAUSE
+                    when :filter_availability
+                      case availabilities
+                      when ['available', 'requested', 'on_loan']
+                        ''
+                      when ['available', 'requested']
+                        'WHERE books.borrower_id IS NULL'
+                      when ['available', 'on_loan']
+                        'WHERE books.requester_id IS NULL'
+                      when ['requested', 'on_loan']
+                        'WHERE books.requester_id IS NOT NULL OR books.borrower_id IS NOT NULL'
+                      when ['available']
+                        'WHERE books.borrower_id IS NULL AND books.requester_id IS NULL'
+                      when ['requested']
+                        'WHERE books.requester_id IS NOT NULL'
+                      when ['on_loan']
+                        'WHERE books.borrower_id IS NOT NULL'
+                      end
                     when :user_books
                       "WHERE owners.id = $1"
                     when :book_data
