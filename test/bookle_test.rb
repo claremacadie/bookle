@@ -291,8 +291,8 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "Prisoner of Azkaban"
   end
   
-  def test_filtered_by_title_and_availability_is_requested_books_list_signed_in
-    post "/books/filter", {title: 't', author: '', available: '', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+  def test_filtered_by_author_and_availability_is_requested_books_list_signed_in
+    post "/books/filter", {title: '', author: 'k', available: '', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -360,6 +360,18 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Goblet of Fire"
     assert_includes last_response.body, "How to Train a Dragon"
     assert_includes last_response.body, "Philosopher's Stone"
+    refute_includes last_response.body, "Prisoner of Azkaban"
+  end
+  
+  def test_filtered_by_title_author_category_and_availability_list_signed_in
+    post "/books/filter", {title: 'o', author: 'o', category_id: '1', available: 'availability' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Philosopher's Stone"
+    refute_includes last_response.body, "Chamber of Secrets"
+    refute_includes last_response.body, "Goblet of Fire"
+    refute_includes last_response.body, "How to Train a Dragon"
     refute_includes last_response.body, "Prisoner of Azkaban"
   end
   
