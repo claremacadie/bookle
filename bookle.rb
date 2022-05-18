@@ -50,7 +50,7 @@ def user_signed_in?
 end
 
 def user_is_book_owner?(book_id)
-  book_owner_id = @storage.get_owner_id(book_id)
+  book_owner_id = @storage.owner_id(book_id)
   session[:user_id] == book_owner_id
 end
 
@@ -86,7 +86,7 @@ def valid_credentials?(user_name, password)
   end
 end
 
-def get_selected_category_ids(params)
+def selected_category_ids(params)
   category_ids = []
   params.each do |k, v|
     if k.include?("category_id")
@@ -119,7 +119,7 @@ post "/users/signin" do
   if valid_credentials?(params[:user_name], params[:password])
     session[:user_name] = params[:user_name]
     session[:message] = "Welcome!"
-    session[:user_id] = @storage.get_user_id(session[:user_name])
+    session[:user_id] = @storage.user_id(session[:user_name])
     redirect "/"
   else
     session[:message] = "Invalid credentials"
@@ -159,7 +159,7 @@ post "/users/signup" do
   else
     @storage.upload_new_user_credentials(new_username, new_password)
     session[:user_name] = new_username
-    session[:user_id] = @storage.get_user_id(new_username)
+    session[:user_id] = @storage.user_id(new_username)
     session[:message] = "Your account has been created."
     redirect "/"
   end
@@ -187,7 +187,7 @@ post "/books/filter" do
   require_signed_in_user
   title = params[:title]
   author = params[:author]
-  category_ids = get_selected_category_ids(params)
+  category_ids = selected_category_ids(params)
   availabilities = availability_array(params)
   @books = @storage.filter_books(title, author, category_ids, availabilities)  
   erb :books_filter_result
@@ -210,7 +210,7 @@ post "/book/add_new" do
   title = params[:title]
   author = params[:author]
   owner_id = session[:user_id]
-  category_ids = get_selected_category_ids(params)
+  category_ids = selected_category_ids(params)
   @storage.add_book(title, author, owner_id, category_ids)
   session[:message] = "#{title} has been added."
   redirect "/users/book_list"
@@ -222,7 +222,7 @@ get "/book/:book_id/edit" do
   require_signed_in_as_book_owner(book_id)
   @book = @storage.book_data(book_id)
   @categories = @storage.categories_list
-  @book_category_ids = @storage.get_category_ids(book_id)
+  @book_category_ids = @storage.category_ids(book_id)
   erb :edit_book
 end
 
@@ -232,7 +232,7 @@ post "/book/:book_id/edit" do
   require_signed_in_as_book_owner(book_id)
   title = params[:title]
   author = params[:author]
-  category_ids = get_selected_category_ids(params)
+  category_ids = selected_category_ids(params)
   @storage.update_book_data(book_id, title, author, category_ids)
   session[:message] = "Book details have been updated for #{title}."
   redirect "/users/book_list"

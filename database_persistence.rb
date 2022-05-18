@@ -29,13 +29,13 @@ class DatabasePersistence
     end
   end
 
-  def get_user_id(user_name)
+  def user_id(user_name)
     sql = "SELECT id FROM users WHERE name = $1"
     result = query(sql, user_name)
     result.first["id"].to_i
   end
 
-  def get_owner_id(book_id)
+  def owner_id(book_id)
     sql = "SELECT owner_id FROM books WHERE id = $1;"
     result = query(sql, book_id).first["owner_id"].to_i
   end
@@ -99,7 +99,7 @@ class DatabasePersistence
   end
 
   def book_loan(book_id)
-    requester_id = get_requester_id(book_id)
+    requester_id = requester_id(book_id)
     sql = "UPDATE books SET requester_id = NULL, borrower_id = $1 WHERE id = $2"
     query(sql, requester_id, book_id)
   end
@@ -122,7 +122,7 @@ class DatabasePersistence
     end
   end
 
-  def get_category_ids(book_id)
+  def category_ids(book_id)
     sql = "SELECT category_id FROM books_categories WHERE book_id = $1"
     result = query(sql, book_id)
     result.map do |tuple|
@@ -278,7 +278,7 @@ class DatabasePersistence
     str ? str.to_i : nil
   end
 
-  def get_requester_id(book_id)
+  def requester_id(book_id)
     sql = "SELECT requester_id FROM books WHERE id = $1"
     result = query(sql, book_id).first
     result["requester_id"].to_i
