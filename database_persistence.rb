@@ -58,36 +58,68 @@ class DatabasePersistence
     end
   end
 
-  def filter_books(title, author, category_ids, availabilities)
-    if !title.empty? && author.empty? && category_ids.empty? && availabilities.empty?
-      sql = select_query(:filter_title)
-      result = query(sql, "%#{title}%")
-    elsif title.empty? && !author.empty? && category_ids.empty? && availabilities.empty?
-      sql = select_query(:filter_author)
-      result = query(sql, "%#{author}%")
-    elsif !title.empty? && !author.empty? && category_ids.empty? && availabilities.empty?
-      sql = select_query(:filter_title_and_author)
-      result = query(sql, "%#{title}%", "%#{author}%")
-    elsif title.empty? && author.empty? && !category_ids.empty? && availabilities.empty?
-      sql = select_query(:filter_category, category_ids)
-      result = query(sql)
-    elsif !title.empty? && author.empty? && !category_ids.empty? && availabilities.empty?
-      sql = select_query(:filter_title_and_category, category_ids)
-      result = query(sql, "%#{title}%")
-    elsif title.empty? && !author.empty? && !category_ids.empty? && availabilities.empty?
-      sql = select_query(:filter_author_and_category, category_ids)
-      result = query(sql, "%#{author}%")
-    elsif !title.empty? && !author.empty? && !category_ids.empty? && availabilities.empty?
-      sql = select_query(:filter_title_author_and_category, category_ids)
-      result = query(sql, "%#{title}%", "%#{author}%")
-    elsif title.empty? && author.empty? && category_ids.empty? && !availabilities.empty?
-      sql = select_query(:filter_availability, [], availabilities)
-      result = query(sql)
-    elsif !title.empty? && author.empty? && category_ids.empty? && !availabilities.empty?
-      sql = select_query(:filter_title_and_availability, [], availabilities)
-      result = query(sql, "%#{title}%")
+  def select_clause
+    select_clause = <<~SELECT_CLAUSE
+      SELECT 
+        books.id, 
+        books.title,
+        books.author,
+        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
+        owners.id AS owner_id,
+        owners.name AS owner_name,
+        requesters.id AS requester_id,
+        requesters.name AS requester_name,
+        borrowers.id AS borrower_id,
+        borrowers.name AS borrower_name
+      FROM books
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
+      INNER JOIN users AS owners ON books.owner_id = owners.id
+      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+    SELECT_CLAUSE
+    select_clause
+  end
+
+  def where_clause(category_ids, availabilities)
+    clause = "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
+    unless category_ids.empty?
+      clause << " AND books_categories.category_id IN (#{category_ids.join(', ')})"
     end
 
+    unless availabilities.empty?
+      case availabilities
+      # when ['available', 'requested', 'on_loan']
+      #   ''
+      when ['available', 'requested']
+        clause << ' AND books.borrower_id IS NULL'
+      when ['available', 'on_loan']
+        clause << ' AND books.requester_id IS NULL'
+      when ['requested', 'on_loan']
+        clause << ' AND books.requester_id IS NOT NULL OR books.borrower_id IS NOT NULL'
+      when ['available']
+        clause << ' AND books.borrower_id IS NULL AND books.requester_id IS NULL'
+      when ['requested']
+        clause << ' AND books.requester_id IS NOT NULL'
+      when ['on_loan']
+        clause << ' AND books.borrower_id IS NOT NULL'
+      end
+    end
+    clause
+  end
+
+  def group_clause
+    "GROUP BY books.id, owners.id, requesters.id, borrowers.id"
+  end
+
+  def order_clause
+    "ORDER BY title"
+  end
+ 
+  def filter_books(title, author, category_ids, availabilities)
+    sql = [select_clause, where_clause(category_ids, availabilities), group_clause, order_clause].join(' ')
+    result = query(sql, "%#{title}%", "%#{author}%")
+    
     result.map do |tuple|
       tuple_to_list_hash(tuple)
     end
