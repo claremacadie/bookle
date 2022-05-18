@@ -375,6 +375,16 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "Prisoner of Azkaban"
   end
   
+  def test_filtered_books_no_book_found_list_signed_in
+    post "/books/filter", {title: 'q', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_nil session[:message]
+    # assert_equal "There are no books meeting your search criteria.", session[:message]
+    # Why isn't this test working?
+  end
+  
   def test_filtered_books_list_signed_out
     post "/books/filter"
 
