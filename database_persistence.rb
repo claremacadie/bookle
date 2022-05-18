@@ -41,7 +41,7 @@ class DatabasePersistence
   end
 
   def all_books
-    sql = select_query(:all_books)
+    sql = [select_clause, group_clause, order_clause].join(' ')
     result = query(sql)
 
     result.map do |tuple|
@@ -50,7 +50,8 @@ class DatabasePersistence
   end
 
   def available_books(user_id)
-    sql = select_query(:available_books)
+    where_clause = "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
+    sql = [select_clause, where_clause, group_clause, order_clause].join(' ')
     result = query(sql, user_id)
 
     result.map do |tuple|
@@ -58,8 +59,8 @@ class DatabasePersistence
     end
   end
  
-  def filter_books(title, author, category_ids, availabilities)
-    sql = [select_clause, where_clause(category_ids, availabilities), group_clause, order_clause].join(' ')
+  def filter_books(query_type, title='', author='', category_ids=[], availabilities=[])
+    sql = [select_clause, where_clause(query_type, category_ids, availabilities), group_clause, order_clause].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%")
     
     result.map do |tuple|
@@ -67,8 +68,9 @@ class DatabasePersistence
     end
   end
   
-  def user_owned_books(user_id)
-    sql = select_query(:user_books)
+  def user_owned_books(user_id)    
+    where_clause = "WHERE owners.id = $1"
+    sql = [select_clause, where_clause, group_clause, order_clause].join(' ')
     result = query(sql, user_id)
     
     result.map do |tuple|
@@ -77,7 +79,8 @@ class DatabasePersistence
   end
   
   def book_data(book_id)
-    sql = select_query(:book_data)
+    where_clause = "WHERE books.id = $1"
+    sql = [select_clause, where_clause, group_clause, order_clause].join(' ')
     result = query(sql, book_id)
     
     result.map do |tuple|
@@ -185,29 +188,40 @@ class DatabasePersistence
     select_clause
   end
 
-  def where_clause(category_ids, availabilities)
-    clause = "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
-    unless category_ids.empty?
-      clause << " AND books_categories.category_id IN (#{category_ids.join(', ')})"
-    end
-
-    unless availabilities.empty?
-      case availabilities
-      when ['available', 'requested']
-        clause << ' AND books.borrower_id IS NULL'
-      when ['available', 'on_loan']
-        clause << ' AND books.requester_id IS NULL'
-      when ['requested', 'on_loan']
-        clause << ' AND books.requester_id IS NOT NULL OR books.borrower_id IS NOT NULL'
-      when ['available']
-        clause << ' AND books.borrower_id IS NULL AND books.requester_id IS NULL'
-      when ['requested']
-        clause << ' AND books.requester_id IS NOT NULL'
-      when ['on_loan']
-        clause << ' AND books.borrower_id IS NOT NULL'
+  def where_clause(query_type, category_ids, availabilities)
+    where_clause =  case query_type
+    when :all_books
+      ''
+    when :available_books
+      "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
+    when :user_books
+      "WHERE owners.id = $1"
+    when :book_data
+      "WHERE books.id = $1"
+    when :filter
+      clause = "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
+      unless category_ids.empty?
+        clause << " AND books_categories.category_id IN (#{category_ids.join(', ')})"
       end
+
+      unless availabilities.empty?
+        case availabilities
+        when ['available', 'requested']
+          clause << ' AND books.borrower_id IS NULL'
+        when ['available', 'on_loan']
+          clause << ' AND books.requester_id IS NULL'
+        when ['requested', 'on_loan']
+          clause << ' AND books.requester_id IS NOT NULL OR books.borrower_id IS NOT NULL'
+        when ['available']
+          clause << ' AND books.borrower_id IS NULL AND books.requester_id IS NULL'
+        when ['requested']
+          clause << ' AND books.requester_id IS NOT NULL'
+        when ['on_loan']
+          clause << ' AND books.borrower_id IS NOT NULL'
+        end
+      end
+      clause
     end
-    clause
   end
 
   def group_clause
@@ -216,21 +230,6 @@ class DatabasePersistence
 
   def order_clause
     "ORDER BY title"
-  end
-
-  def select_query(query_type, category_ids = [], availabilities = [])
-    where_clause =  case query_type
-                    when :all_books
-                      ''
-                    when :available_books
-                      "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
-                    when :user_books
-                      "WHERE owners.id = $1"
-                    when :book_data
-                      "WHERE books.id = $1"
-    end
-
-    [select_clause, where_clause, group_clause, order_clause].join(' ')
   end
 
   def update_books_table_statement
