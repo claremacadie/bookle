@@ -166,7 +166,7 @@ class DatabasePersistence
   private
 
   def select_clause
-    select_clause = <<~SELECT_CLAUSE
+    <<~SELECT_CLAUSE
       SELECT 
         books.id, 
         books.title,
@@ -185,7 +185,6 @@ class DatabasePersistence
       LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
       LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
     SELECT_CLAUSE
-    select_clause
   end
 
   def availabilities_clause(availabilities)
