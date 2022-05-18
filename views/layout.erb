@@ -11,9 +11,7 @@
       <nav>
         <a href="/">Home</a>
         <% if session[:user_id] %>
-          <a href="/all_books_list">View all books</a>
-          <a href="/users/book_list">View your books</a>
-          <a href="/books/available">View available books</a>
+          <a href="/all_books_list">View books</a>
         <% end %>
       </nav>
       <% if session[:user_id] %>

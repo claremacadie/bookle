@@ -45,9 +45,7 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Welcome to Bookle."
     assert_includes last_response.body, "Home"
-    assert_includes last_response.body, "View all books"
-    assert_includes last_response.body, "View your books"
-    assert_includes last_response.body, "View available books"
+    assert_includes last_response.body, "View books"
     assert_includes last_response.body, "Signed in as Clare MacAdie"
     assert_includes last_response.body, %q(<button type="submit">Sign Out</button>)
     refute_includes last_response.body, "Sign In"
@@ -63,9 +61,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Home"
     assert_includes last_response.body, "Sign In"
     assert_includes last_response.body, "Create Account"
-    refute_includes last_response.body, "View all books"
-    refute_includes last_response.body, "View your books"
-    refute_includes last_response.body, "View available books"
+    refute_includes last_response.body, "View books"
     refute_includes last_response.body, "Signed in as"
     refute_includes last_response.body, %q(<button type="submit">Sign Out</button>)
   end
@@ -75,6 +71,9 @@ class CMSTest < Minitest::Test
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "List available books for you to borrow"
+    assert_includes last_response.body, "List your books"
+    assert_includes last_response.body, "Search books"
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "JK Rowling"
     assert_includes last_response.body, "Fantasy, Magic"
