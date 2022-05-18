@@ -189,7 +189,7 @@ post "/books/filter" do
   author = params[:author]
   category_ids = get_selected_category_ids(params)
   availabilities = availability_array(params)
-  @books = @storage.filter_books(:filter, title, author, category_ids, availabilities)  
+  @books = @storage.filter_books(title, author, category_ids, availabilities)  
   erb :books_filter_result
 end
 
