@@ -162,49 +162,6 @@ class DatabasePersistence
 
   private
 
-  def select_query(query_type, category_ids = [], availabilities = [])
-    select_clause = <<~SELECT_CLAUSE
-      SELECT 
-        books.id, 
-        books.title,
-        books.author,
-        string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-        owners.id AS owner_id,
-        owners.name AS owner_name,
-        requesters.id AS requester_id,
-        requesters.name AS requester_name,
-        borrowers.id AS borrower_id,
-        borrowers.name AS borrower_name
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-    SELECT_CLAUSE
-   
-    where_clause =  case query_type
-                    when :all_books
-                      ''
-                    when :available_books
-                      "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
-                    when :user_books
-                      "WHERE owners.id = $1"
-                    when :book_data
-                      "WHERE books.id = $1"
-    end
-
-    group_clause = <<~GROUP_CLAUSE
-      GROUP BY books.id, owners.id, requesters.id, borrowers.id
-    GROUP_CLAUSE
-
-    order_clause = <<~ORDER_CLAUSE
-      ORDER BY title
-    ORDER_CLAUSE
-     
-    [select_clause, where_clause, group_clause, order_clause].join(' ')
-  end
-
   def select_clause
     select_clause = <<~SELECT_CLAUSE
       SELECT 
@@ -259,6 +216,21 @@ class DatabasePersistence
 
   def order_clause
     "ORDER BY title"
+  end
+
+  def select_query(query_type, category_ids = [], availabilities = [])
+    where_clause =  case query_type
+                    when :all_books
+                      ''
+                    when :available_books
+                      "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
+                    when :user_books
+                      "WHERE owners.id = $1"
+                    when :book_data
+                      "WHERE books.id = $1"
+    end
+
+    [select_clause, where_clause, group_clause, order_clause].join(' ')
   end
 
   def update_books_table_statement
