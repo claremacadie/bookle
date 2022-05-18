@@ -83,6 +83,9 @@ class DatabasePersistence
     elsif title.empty? && author.empty? && category_ids.empty? && !availabilities.empty?
       sql = select_query(:filter_availability, [], availabilities)
       result = query(sql)
+    elsif !title.empty? && author.empty? && category_ids.empty? && !availabilities.empty?
+      sql = select_query(:filter_title_and_availability, [], availabilities)
+      result = query(sql, "%#{title}%")
     end
 
     result.map do |tuple|
@@ -265,6 +268,24 @@ class DatabasePersistence
                         'WHERE books.requester_id IS NOT NULL'
                       when ['on_loan']
                         'WHERE books.borrower_id IS NOT NULL'
+                      end
+                    when :filter_title_and_availability
+                      title_clause = 'WHERE books.title ILIKE $1'
+                      case availabilities
+                      when ['available', 'requested', 'on_loan']
+                        title_clause
+                      when ['available', 'requested']
+                        "#{title_clause} AND books.borrower_id IS NULL"
+                      when ['available', 'on_loan']
+                        "#{title_clause} AND books.requester_id IS NULL"
+                      when ['requested', 'on_loan']
+                        "#{title_clause} AND books.requester_id IS NOT NULL OR books.borrower_id IS NOT NULL"
+                      when ['available']
+                        "#{title_clause} AND books.borrower_id IS NULL AND books.requester_id IS NULL"
+                      when ['requested']
+                        "#{title_clause} AND books.requester_id IS NOT NULL"
+                      when ['on_loan']
+                        "#{title_clause} AND books.borrower_id IS NOT NULL"
                       end
                     when :user_books
                       "WHERE owners.id = $1"
