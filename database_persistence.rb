@@ -49,16 +49,37 @@ class DatabasePersistence
     end
   end
 
-  def available_books(user_id)
-    where_clause = "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
-    sql = [select_clause, where_clause, group_clause, order_clause].join(' ')
-    result = query(sql, user_id)
-
+  def count_all_books
+    sql = "SELECT count(books.id) FROM books"
+    query(sql).first["count"].to_i
+  end
+  
+  def all_books_limit_offset(limit, offset)
+    limit_clause = "LIMIT #{limit}"
+    offset_clause = "OFFSET #{offset}"
+    sql = [select_clause, group_clause, order_clause, limit_clause, offset_clause].join(' ')
+    result = query(sql)
+    
     result.map do |tuple|
       tuple_to_list_hash(tuple)
     end
   end
- 
+
+  def count_available_books(user_id)
+    sql = "SELECT count(books.id) FROM books WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
+    query(sql, user_id).first["count"].to_i
+  end
+  
+  def available_books(user_id)
+    where_clause = "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
+    sql = [select_clause, where_clause, group_clause, order_clause].join(' ')
+    result = query(sql, user_id)
+    
+    result.map do |tuple|
+      tuple_to_list_hash(tuple)
+    end
+  end
+  
   def filter_books(title='', author='', category_ids=[], availabilities=[])
     sql = [select_clause, where_clause(category_ids, availabilities), group_clause, order_clause].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%")
@@ -66,6 +87,11 @@ class DatabasePersistence
     result.map do |tuple|
       tuple_to_list_hash(tuple)
     end
+  end
+
+  def count_user_books(user_id)
+    sql = "SELECT count(books.id) FROM books WHERE owner_id = $1"
+    query(sql, user_id).first["count"].to_i
   end
   
   def user_owned_books(user_id)    

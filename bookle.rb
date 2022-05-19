@@ -106,6 +106,11 @@ def availability_array(params)
   availabilities
 end
 
+def format_heading(string)
+  word_array = string.split('_')
+  word_array.map! {|word| word.capitalize}.join(' ')
+end
+
 # Routes
 get "/" do
   erb :home
@@ -165,25 +170,34 @@ post "/users/signup" do
   end
 end
 
-get "/all_books_list" do
+get "/paginated_books_list/:list_type/:offset" do
   require_signed_in_user
-  @books = @storage.all_books
-  erb :all_books_list
+  @list_type = params[:list_type]
+  @heading = format_heading(@list_type)
+  @limit = 3
+  @offset = params[:offset].to_i
+  case @list_type
+  when "all_books"
+    books_count = @storage.count_all_books
+    @books = @storage.all_books_limit_offset(@limit, @offset)
+  when "available_to_borrow"
+    books_count = @storage.count_available_books(session[:user_id])
+    @books = @storage.available_books(session[:user_id])
+  when "your_books"
+    books_count = @storage.count_user_books(session[:user_id])
+    @books = @storage.user_owned_books(session[:user_id])
+  end
+    @number_of_pages = (books_count/ @limit.to_f).ceil
+  erb :paginated_books_list
 end
 
-get "/books/available" do
-  require_signed_in_user
-  @books = @storage.available_books(session[:user_id])
-  erb :available_books
-end
-
-get "/books/filter" do
+get "/books/filter_form" do
   require_signed_in_user
   @categories = @storage.categories_list
-  erb :filter_books
+  erb :books_filter_form
 end
 
-post "/books/filter" do
+post "/books/filter_results" do
   require_signed_in_user
   title = params[:title]
   author = params[:author]
