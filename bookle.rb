@@ -186,6 +186,16 @@ get "/paginated_books_list/:list_type/:offset" do
   when "your_books"
     books_count = @storage.count_user_books(session[:user_id])
     @books = @storage.user_owned_books(session[:user_id])
+  when "filter_results"
+    title = params[:title]
+    author = params[:author]
+    category_ids = selected_category_ids(params)
+    availabilities = availability_array(params)
+    books_count = 5
+    @books = @storage.filter_books(title, author, category_ids, availabilities)
+    if @books.empty?
+      session[:message] = "There are no books meeting your search criteria."
+    end
   end
     @number_of_pages = (books_count/ @limit.to_f).ceil
   erb :paginated_books_list
@@ -195,19 +205,6 @@ get "/books/filter_form" do
   require_signed_in_user
   @categories = @storage.categories_list
   erb :books_filter_form
-end
-
-post "/books/filter_results" do
-  require_signed_in_user
-  title = params[:title]
-  author = params[:author]
-  category_ids = selected_category_ids(params)
-  availabilities = availability_array(params)
-  @books = @storage.filter_books(title, author, category_ids, availabilities)
-  if @books.empty?
-    session[:message] = "There are no books meeting your search criteria."
-  end
-  erb :books_filter_result
 end
 
 get "/users/book_list" do
