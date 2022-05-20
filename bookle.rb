@@ -197,7 +197,7 @@ get "/books/filter_form" do
   erb :books_filter_form
 end
 
-post "/books/filter_results" do
+get "/books/filter_results" do
   require_signed_in_user
   title = params[:title]
   author = params[:author]
