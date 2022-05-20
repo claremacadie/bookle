@@ -191,27 +191,6 @@ post "/users/signup" do
   end
 end
 
-get "/paginated_books_list/:list_type/:offset" do
-  require_signed_in_user
-  @list_type = params[:list_type]
-  @heading = format_heading(@list_type)
-  @limit = LIMIT
-  @offset = params[:offset].to_i
-  case @list_type
-  # when "all_books"
-  #   books_count = @storage.count_all_books
-  #   @books = @storage.all_books_limit_offset(@limit, @offset)
-  when "available_to_borrow"
-    books_count = @storage.count_available_books(session[:user_id])
-    @books = @storage.available_books(session[:user_id])
-  when "your_books"
-    books_count = @storage.count_user_books(session[:user_id])
-    @books = @storage.user_owned_books(session[:user_id])
-  end
-  @number_of_pages = (books_count/ @limit.to_f).ceil
-  erb :paginated_books_list
-end
-  
 get "/books/filter_form" do
   require_signed_in_user
   @categories = @storage.categories_list
@@ -228,20 +207,34 @@ get "/books/filter_results/:filter_type/:offset" do
   @limit = LIMIT
   @offset = params[:offset].to_i
   case 
-  when @filter_type == 'search' || @filter_type == 'all_books'
+  when @filter_type == 'search'
     books_count = @storage.count_filter_books(@title, @author, @categories, @availabilities)
     if books_count == 0
       session[:message] = "There are no books meeting your search criteria. Try again!"
       redirect "/books/filter_form"
     end
     @books = @storage.filter_books(@title, @author, @categories, @availabilities, @limit, @offset)
-  when 'available_to_borrow'
+  when @filter_type == 'all_books'
+    books_count = @storage.count_filter_books(@title, @author, @categories, @availabilities)
+    if books_count == 0
+      session[:message] = "There are no books on Bookle."
+      redirect "/"
+    end
+    @books = @storage.filter_books(@title, @author, @categories, @availabilities, @limit, @offset)
+  when @filter_type == 'available_to_borrow'
     books_count = @storage.count_available_books(session[:user_id])
     if books_count == 0
-      session[:message] = "There are no books meeting your search criteria. Try again!"
-      redirect "/books/filter_form"
+      session[:message] = "There are no books available for you to borrow."
+      redirect "/"
     end
     @books = @storage.available_books(session[:user_id])
+  when @filter_type == 'your_books'
+    books_count = @storage.count_user_books(session[:user_id])
+    if books_count == 0
+      session[:message] = "You don't own any books on Bookle."
+      redirect "/"
+    end
+    @books = @storage.user_owned_books(session[:user_id])
   end
   @heading = heading(@filter_type)
   @number_of_pages = (books_count/ @limit.to_f).ceil

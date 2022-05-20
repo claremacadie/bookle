@@ -132,7 +132,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_your_books_signed_in
-    get "paginated_books_list/your_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -143,7 +143,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_your_books_signed_out
-    get "paginated_books_list/your_books/0"
+    get "/books/filter_results/your_books/0"
 
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
