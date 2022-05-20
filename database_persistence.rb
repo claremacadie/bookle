@@ -60,7 +60,7 @@ class DatabasePersistence
   end
  
   def filter_books(title='', author='', category_ids=[], availabilities=[])
-    sql = [select_clause, where_clause(category_ids, availabilities), group_clause, order_clause].join(' ')
+    sql = [select_clause, where_clause_filter(category_ids, availabilities), group_clause, order_clause].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%")
     
     result.map do |tuple|
@@ -218,6 +218,25 @@ class DatabasePersistence
     clause
   end
 
+  def where_clause_filter(category_ids, availabilities)
+    clause = "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
+    unless category_ids.empty?
+      clause << <<~CATEGORY_CLAUSE
+        AND books.id IN (
+          SELECT books.id FROM books
+          INNER JOIN books_categories ON books.id = books_categories.book_id
+          WHERE books_categories.category_id IN (#{category_ids.join(', ')})
+        )
+      CATEGORY_CLAUSE
+      # clause << " AND books_categories.category_id IN (#{category_ids.join(', ')})"
+    end
+
+    unless availabilities.empty?
+      clause << availabilities_clause(availabilities)
+    end
+    clause
+  end
+
   def group_clause
     "GROUP BY books.id, owners.id, requesters.id, borrowers.id"
   end
@@ -284,3 +303,28 @@ class DatabasePersistence
     result["requester_id"].to_i
   end
 end
+
+# SELECT
+#   books.id,
+#   books.title,
+#   books.author,
+#   string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
+#   owners.id AS owner_id,
+#   owners.name AS owner_name,
+#   requesters.id AS requester_id,
+#   requesters.name AS requester_name,
+#   borrowers.id AS borrower_id,
+#   borrowers.name AS borrower_name
+# FROM books
+# LEFT JOIN books_categories ON books.id = books_categories.book_id
+# LEFT JOIN categories ON books_categories.category_id = categories.id
+# INNER JOIN users AS owners ON books.owner_id = owners.id
+# LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+# LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+#  WHERE books.id IN (
+#         SELECT books.id FROM books
+#         INNER JOIN books_categories ON books.id = books_categories.book_id
+#         WHERE books_categories.category_id IN (1)
+# ) AND
+# books.title ILIKE '%%' AND books.author ILIKE '%%'
+# GROUP BY books.id, owners.id, requesters.id, borrowers.id ORDER BY title;
