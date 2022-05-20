@@ -127,6 +127,8 @@ def heading(filter_type)
     "Search Results"
   when 'all_books'
     'All Books'
+  when 'available_to_borrow'
+    'Books Available For You To Borrow'
   end
 end
 
@@ -223,16 +225,26 @@ get "/books/filter_results/:filter_type/:offset" do
   @author = params[:author]
   @categories = selected_category_ids(params)
   @availabilities = availability_array(params)
-  books_count = @storage.count_filter_books(@title, @author, @categories, @availabilities)
-  if books_count == 0
-    session[:message] = "There are no books meeting your search criteria. Try again!"
-    redirect "/books/filter_form"
-  end
-  @heading = heading(@filter_type)
   @limit = LIMIT
   @offset = params[:offset].to_i
+  case 
+  when @filter_type == 'search' || @filter_type == 'all_books'
+    books_count = @storage.count_filter_books(@title, @author, @categories, @availabilities)
+    if books_count == 0
+      session[:message] = "There are no books meeting your search criteria. Try again!"
+      redirect "/books/filter_form"
+    end
+    @books = @storage.filter_books(@title, @author, @categories, @availabilities, @limit, @offset)
+  when 'available_to_borrow'
+    books_count = @storage.count_available_books(session[:user_id])
+    if books_count == 0
+      session[:message] = "There are no books meeting your search criteria. Try again!"
+      redirect "/books/filter_form"
+    end
+    @books = @storage.available_books(session[:user_id])
+  end
+  @heading = heading(@filter_type)
   @number_of_pages = (books_count/ @limit.to_f).ceil
-  @books = @storage.filter_books(@title, @author, @categories, @availabilities, @limit, @offset)
   erb :books_filter_result
 end
 
