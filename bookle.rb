@@ -106,7 +106,7 @@ def availability_array(params)
       availabilities << k
     end
   end
-  availabilities
+  availabilities.join(', ')
 end
 
 def format_heading(string)
