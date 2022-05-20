@@ -207,7 +207,7 @@ get "/books/filter_form" do
   erb :books_filter_form
 end
   
-get "/books/filter_results" do
+get "/books/filter_results/:offset" do
   require_signed_in_user
   @title = params[:title]
   @author = params[:author]
@@ -220,7 +220,7 @@ get "/books/filter_results" do
   end
   @heading = "Search results"
   @limit = LIMIT
-  @offset = 0
+  @offset = params[:offset].to_i
   @number_of_pages = (books_count/ @limit.to_f).ceil
   @books = @storage.filter_books(@title, @author, @category_ids, @availabilities, @limit, @offset)
   erb :books_filter_result
