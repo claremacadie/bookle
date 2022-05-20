@@ -2,7 +2,7 @@
 <p><a href="/paginated_books_list/your_books/0">List your books</a></p>
 <p><a href="/books/filter_form">Search books</a></p>
 <p><a href="/paginated_books_list/all_books/0">Paginated books</a></p>
-<h1>Search result</h1>
+<h1><%= @heading %></h1>
 <table>
   <thead>
     <tr>
@@ -23,3 +23,14 @@
     <% end %>
   </tbody>
 </table>
+
+<ul>
+  <% 1.upto(@number_of_pages) do |page| %>
+    <% page_offset = @limit * (page - 1) %>
+    <% if @offset == page_offset %>
+      Page <%= page %>
+    <% else %>  
+      <a href="/paginated_books_list/<%= @list_type %>/<%= page_offset %>">Page <%= page %></a>
+    <% end %>
+  <% end %>
+</ul>

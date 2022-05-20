@@ -211,10 +211,10 @@ get "/books/filter_results" do
     session[:message] = "There are no books meeting your search criteria. Try again!"
     redirect "/books/filter_form"
   end
+  @heading = "Search results"
   @limit = LIMIT
   @offset = 0
-  p @number_of_pages = (books_count/ @limit.to_f).ceil
-  gets
+  @number_of_pages = (books_count/ @limit.to_f).ceil
   @books = @storage.filter_books(title, author, category_ids, availabilities, @limit, @offset)
   erb :books_filter_result
 end
