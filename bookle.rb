@@ -207,7 +207,7 @@ get "/books/filter_form" do
   erb :books_filter_form
 end
   
-get "/books/filter_results/:offset" do
+get "/books/filter_results/search/:offset" do
   require_signed_in_user
   @title = params[:title]
   @author = params[:author]
