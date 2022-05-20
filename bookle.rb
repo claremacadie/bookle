@@ -15,6 +15,9 @@ configure(:development) do
   also_reload "database_persistence.rb"
 end
 
+# Define constants
+LIMIT = 3
+
 before do
   @storage = DatabasePersistence.new(logger)
 end
@@ -174,7 +177,7 @@ get "/paginated_books_list/:list_type/:offset" do
   require_signed_in_user
   @list_type = params[:list_type]
   @heading = format_heading(@list_type)
-  @limit = 3
+  @limit = LIMIT
   @offset = params[:offset].to_i
   case @list_type
   when "all_books"
@@ -208,7 +211,7 @@ get "/books/filter_results" do
     session[:message] = "There are no books meeting your search criteria. Try again!"
     redirect "/books/filter_form"
   end
-  @limit = 3
+  @limit = LIMIT
   @offset = 0
   @books = @storage.filter_books(title, author, category_ids, availabilities, @limit, @offset)
   erb :books_filter_result
