@@ -125,6 +125,8 @@ def heading(filter_type)
   case filter_type
   when "search"
     "Search Results"
+  when 'all_books'
+    'All Books'
   end
 end
 
@@ -194,9 +196,9 @@ get "/paginated_books_list/:list_type/:offset" do
   @limit = LIMIT
   @offset = params[:offset].to_i
   case @list_type
-  when "all_books"
-    books_count = @storage.count_all_books
-    @books = @storage.all_books_limit_offset(@limit, @offset)
+  # when "all_books"
+  #   books_count = @storage.count_all_books
+  #   @books = @storage.all_books_limit_offset(@limit, @offset)
   when "available_to_borrow"
     books_count = @storage.count_available_books(session[:user_id])
     @books = @storage.available_books(session[:user_id])
