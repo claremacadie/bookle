@@ -81,7 +81,7 @@ class DatabasePersistence
   end
   
   def count_filter_books(title, author, category_ids, availabilities)
-    sql = [count_clause, where_clause_filter(category_ids, availabilities), group_clause, order_clause].join(' ')
+    sql = [count_clause, where_clause_filter(category_ids, availabilities)].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%").first
     if result == nil
       0
@@ -205,13 +205,8 @@ class DatabasePersistence
 
   def count_clause
     <<~COUNT_CLAUSE
-      SELECT count(books.id)
-      FROM books
-      LEFT JOIN books_categories ON books.id = books_categories.book_id
-      LEFT JOIN categories ON books_categories.category_id = categories.id
-      INNER JOIN users AS owners ON books.owner_id = owners.id
-      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+    SELECT count(books.id)
+    FROM books
     COUNT_CLAUSE
   end
 
@@ -272,7 +267,7 @@ class DatabasePersistence
     clause = "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
     unless category_ids.empty?
       clause << <<~CATEGORY_CLAUSE
-        AND books.id IN (
+         AND books.id IN (
           SELECT books.id FROM books
           INNER JOIN books_categories ON books.id = books_categories.book_id
           WHERE books_categories.category_id IN (#{category_ids.join(', ')})
@@ -354,6 +349,17 @@ class DatabasePersistence
   end
 end
 
+
+# count_clause
+# SELECT count(books.id)
+# FROM books
+#  WHERE books.title ILIKE '%%' AND books.author ILIKE '%k%' AND books.id IN (
+#   SELECT books.id FROM books
+#   INNER JOIN books_categories ON books.id = books_categories.book_id
+#   WHERE books_categories.category_id IN (1)
+# );
+
+# select_clause
 # SELECT
 #   books.id,
 #   books.title,

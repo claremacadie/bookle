@@ -190,16 +190,16 @@ get "/paginated_books_list/:list_type/:offset" do
     books_count = @storage.count_user_books(session[:user_id])
     @books = @storage.user_owned_books(session[:user_id])
   end
-    @number_of_pages = (books_count/ @limit.to_f).ceil
+  @number_of_pages = (books_count/ @limit.to_f).ceil
   erb :paginated_books_list
 end
-
+  
 get "/books/filter_form" do
   require_signed_in_user
   @categories = @storage.categories_list
   erb :books_filter_form
 end
-
+  
 get "/books/filter_results" do
   require_signed_in_user
   title = params[:title]
@@ -213,6 +213,8 @@ get "/books/filter_results" do
   end
   @limit = LIMIT
   @offset = 0
+  p @number_of_pages = (books_count/ @limit.to_f).ceil
+  gets
   @books = @storage.filter_books(title, author, category_ids, availabilities, @limit, @offset)
   erb :books_filter_result
 end
