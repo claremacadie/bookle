@@ -202,11 +202,11 @@ end
   
 get "/books/filter_results" do
   require_signed_in_user
-  title = params[:title]
-  author = params[:author]
-  category_ids = selected_category_ids(params)
-  availabilities = availability_array(params)
-  books_count = @storage.count_filter_books(title, author, category_ids, availabilities)
+  @title = params[:title]
+  @author = params[:author]
+  @category_ids = selected_category_ids(params)
+  @availabilities = availability_array(params)
+  books_count = @storage.count_filter_books(@title, @author, @category_ids, @availabilities)
   if books_count == 0
     session[:message] = "There are no books meeting your search criteria. Try again!"
     redirect "/books/filter_form"
@@ -215,7 +215,7 @@ get "/books/filter_results" do
   @limit = LIMIT
   @offset = 0
   @number_of_pages = (books_count/ @limit.to_f).ceil
-  @books = @storage.filter_books(title, author, category_ids, availabilities, @limit, @offset)
+  @books = @storage.filter_books(@title, @author, @category_ids, @availabilities, @limit, @offset)
   erb :books_filter_result
 end
 
