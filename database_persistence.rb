@@ -348,39 +348,3 @@ class DatabasePersistence
     result["requester_id"].to_i
   end
 end
-
-
-# count_clause
-# SELECT count(books.id)
-# FROM books
-#  WHERE books.title ILIKE '%%' AND books.author ILIKE '%k%' AND books.id IN (
-#   SELECT books.id FROM books
-#   INNER JOIN books_categories ON books.id = books_categories.book_id
-#   WHERE books_categories.category_id IN (1)
-# );
-
-# select_clause
-# SELECT
-#   books.id,
-#   books.title,
-#   books.author,
-#   string_agg(categories.name, ', ' ORDER BY categories.name) AS categories,
-#   owners.id AS owner_id,
-#   owners.name AS owner_name,
-#   requesters.id AS requester_id,
-#   requesters.name AS requester_name,
-#   borrowers.id AS borrower_id,
-#   borrowers.name AS borrower_name
-# FROM books
-# LEFT JOIN books_categories ON books.id = books_categories.book_id
-# LEFT JOIN categories ON books_categories.category_id = categories.id
-# INNER JOIN users AS owners ON books.owner_id = owners.id
-# LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
-# LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
-#  WHERE books.id IN (
-#         SELECT books.id FROM books
-#         INNER JOIN books_categories ON books.id = books_categories.book_id
-#         WHERE books_categories.category_id IN (1)
-# ) AND
-# books.title ILIKE '%%' AND books.author ILIKE '%%'
-# GROUP BY books.id, owners.id, requesters.id, borrowers.id ORDER BY title;
