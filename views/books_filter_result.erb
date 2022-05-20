@@ -27,6 +27,10 @@
 <ul>
   <% 1.upto(@number_of_pages) do |page| %>
     <% page_offset = @limit * (page - 1) %>
-    <a href="/books/filter_results/<%= page_offset %>?title=<%= @title %>&author=<%= @author %>&category_ids=<%= @category_ids %>&availabilities=<%= @availabilities %>">Page <%= page %></a>
+    <% if page_offset == @offset %>
+      Page <%= page %>
+    <% else %>
+      <a href="/books/filter_results/<%= page_offset %>?title=<%= @title %>&author=<%= @author %>&category_ids=<%= @category_ids %>&availabilities=<%= @availabilities %>">Page <%= page %></a>
+    <% end %>
   <% end %>
 </ul>
