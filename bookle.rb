@@ -203,10 +203,12 @@ get "/books/filter_results" do
   author = params[:author]
   category_ids = selected_category_ids(params)
   availabilities = availability_array(params)
-  @books = @storage.filter_books(title, author, category_ids, availabilities)
-  if @books.empty?
-    session[:message] = "There are no books meeting your search criteria."
+  books_count = @storage.count_filter_books(title, author, category_ids, availabilities)
+  if books_count == 0
+    session[:message] = "There are no books meeting your search criteria. Try again!"
+    redirect "/books/filter_form"
   end
+  @books = @storage.filter_books(title, author, category_ids, availabilities)
   erb :books_filter_result
 end
 

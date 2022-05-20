@@ -379,12 +379,10 @@ class CMSTest < Minitest::Test
   def test_filtered_books_no_book_found_list_signed_in
     get "/books/filter_results", {title: 'q', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_nil session[:message]
-    # assert_equal "There are no books meeting your search criteria.", session[:message]
-    # Why isn't this test working?
-  end
+    assert_equal "There are no books meeting your search criteria. Try again!", session[:message]
+    end
   
   def test_filtered_books_list_signed_out
     get "/books/filter_results"

@@ -80,6 +80,16 @@ class DatabasePersistence
     end
   end
   
+  def count_filter_books(title, author, category_ids, availabilities)
+    sql = [count_clause, where_clause_filter(category_ids, availabilities), group_clause, order_clause].join(' ')
+    result = query(sql, "%#{title}%", "%#{author}%").first
+    if result == nil
+      0
+    else
+      convert_string_to_integer(result["count"])
+    end
+  end
+
   def filter_books(title='', author='', category_ids=[], availabilities=[])
     sql = [select_clause, where_clause_filter(category_ids, availabilities), group_clause, order_clause].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%")
@@ -190,6 +200,18 @@ class DatabasePersistence
   end
 
   private
+
+  def count_clause
+    <<~COUNT_CLAUSE
+      SELECT count(books.id)
+      FROM books
+      LEFT JOIN books_categories ON books.id = books_categories.book_id
+      LEFT JOIN categories ON books_categories.category_id = categories.id
+      INNER JOIN users AS owners ON books.owner_id = owners.id
+      LEFT OUTER JOIN users AS requesters ON books.requester_id = requesters.id
+      LEFT OUTER JOIN users AS borrowers ON  books.borrower_id = borrowers.id
+    COUNT_CLAUSE
+  end
 
   def select_clause
     <<~SELECT_CLAUSE
