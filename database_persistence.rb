@@ -90,7 +90,7 @@ class DatabasePersistence
     end
   end
 
-  def filter_books(title='', author='', category_ids=[], availabilities=[])
+  def filter_books(title='', author='', category_ids=[], availabilities=[], limit, offset)
     sql = [select_clause, where_clause_filter(category_ids, availabilities), group_clause, order_clause].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%")
     
