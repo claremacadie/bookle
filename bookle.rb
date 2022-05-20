@@ -121,6 +121,13 @@ def format_heading(string)
   word_array.map! {|word| word.capitalize}.join(' ')
 end
 
+def heading(filter_type)
+  case filter_type
+  when "search"
+    "Search Results"
+  end
+end
+
 # Routes
 get "/" do
   erb :home
@@ -207,8 +214,9 @@ get "/books/filter_form" do
   erb :books_filter_form
 end
   
-get "/books/filter_results/search/:offset" do
+get "/books/filter_results/:filter_type/:offset" do
   require_signed_in_user
+  @filter_type = params[:filter_type]
   @title = params[:title]
   @author = params[:author]
   @categories = selected_category_ids(params)
@@ -218,7 +226,7 @@ get "/books/filter_results/search/:offset" do
     session[:message] = "There are no books meeting your search criteria. Try again!"
     redirect "/books/filter_form"
   end
-  @heading = "Search results"
+  @heading = heading(@filter_type)
   @limit = LIMIT
   @offset = params[:offset].to_i
   @number_of_pages = (books_count/ @limit.to_f).ceil
