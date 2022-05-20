@@ -142,24 +142,41 @@ class CMSTest < Minitest::Test
     assert_equal "You must be signed in to do that.", session[:message]
   end
 
-  def test_filtered_by_title_books_list_signed_in
+  def test_filtered_by_title_books_list_signed_in_pagination_test
     get "/books//filter_results/0", {title: 'k', author: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Prisoner of Azkaban"
     refute_includes last_response.body, "Chamber of Secrets"
+    refute_includes last_response.body, "Page"
   end
-
-  def test_filtered_by_author_books_list_signed_in
+  
+  def test_filtered_by_author_books_list_signed_in_pagination_test
     get "/books//filter_results/0", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
-
+    
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Goblet of Fire"
     assert_includes last_response.body, "Philosopher's Stone"
+    assert_includes last_response.body, "Page 1"
+    assert_includes last_response.body, "Page 2"
     refute_includes last_response.body, "Prisoner of Azkaban"
+    refute_includes last_response.body, "How to Train a Dragon"
+  end
+  
+  def test_filtered_by_author_books_list_signed_in_pagination_test
+    get "/books//filter_results/3", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Page 1"
+    assert_includes last_response.body, "Page 2"
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    refute_includes last_response.body, "Chamber of Secrets"
+    refute_includes last_response.body, "Goblet of Fire"
+    refute_includes last_response.body, "Philosopher's Stone"
     refute_includes last_response.body, "How to Train a Dragon"
   end
 
