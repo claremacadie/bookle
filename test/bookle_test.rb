@@ -127,13 +127,12 @@ class CMSTest < Minitest::Test
   def test_filter_books_form_signed_in
     get "/books/filter_form", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
-    # assert_equal 200, last_response.status
-    # assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    # assert_includes last_response.body, %q(<input id="title" type="text" name="title" value="")
-    # assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value="")
-    # assert_includes last_response.body, %q(<input type="checkbox")
-    # assert_includes last_response.body, %q(<button type="submit">See Results</button>)
-  
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, %q(<input id="title" type="text" name="title" value="")
+    assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value="")
+    assert_includes last_response.body, %q(<input type="checkbox")
+    assert_includes last_response.body, %q(<button type="submit">See Results</button>)
   end
   
   def test_filter_books_form_signed_out
@@ -174,7 +173,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_category_books_list_signed_in
-    get "/books/filter_results", {title: '', author: '', category_id: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results", {title: '', author: '', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -186,7 +185,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_title_and_category_books_list_signed_in
-    get "/books/filter_results", {title: 'k', author: '', category_id: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results", {title: 'k', author: '', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -195,7 +194,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_author_and_category_books_list_signed_in
-    get "/books/filter_results", {title: '', author: 'k', category_id: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results", {title: '', author: 'k', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -371,7 +370,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_title_author_category_and_availability_list_signed_in
-    get "/books/filter_results", {title: 'o', author: 'o', category_id: '1', available: 'availability' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results", {title: 'o', author: 'o', category_id_1: '1', available: 'availability' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
