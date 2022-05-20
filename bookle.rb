@@ -90,6 +90,10 @@ def valid_credentials?(user_name, password)
 end
 
 def selected_category_ids(params)
+  if params.keys.include?('category_ids')
+    # Convert "[1, 2, 3]" to [1, 2, 3]
+    return params['category_ids'].delete('[' ']').split(', ').map(&:to_i)
+  end
   category_ids = []
   params.each do |k, v|
     if k.include?("category_id")
@@ -100,6 +104,9 @@ def selected_category_ids(params)
 end
 
 def availability_array(params)
+  if params.keys.include?('availabilities')
+    return params['availabilities']
+  end
   availabilities = []
   params.each do |k, v|
     if v == "availability"
