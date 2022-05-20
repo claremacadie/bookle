@@ -31,7 +31,7 @@
       <% if page_offset == @offset %>
         Page <%= page %>
       <% else %>
-        <a href="/books/filter_results/<%= page_offset %>?title=<%= @title %>&author=<%= @author %>&category_ids=<%= @category_ids %>&availabilities=<%= @availabilities %>">Page <%= page %></a>
+        <a href="/books/filter_results/<%= page_offset %>?title=<%= @title %>&author=<%= @author %>&categories=<%= @categories %>&availabilities=<%= @availabilities %>">Page <%= page %></a>
       <% end %>
     <% end %>
   </ul>

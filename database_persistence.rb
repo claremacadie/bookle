@@ -80,8 +80,8 @@ class DatabasePersistence
     end
   end
   
-  def count_filter_books(title, author, category_ids, availabilities)
-    sql = [count_clause, where_clause_filter(category_ids, availabilities)].join(' ')
+  def count_filter_books(title, author, categories, availabilities)
+    sql = [count_clause, where_clause_filter(categories, availabilities)].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%").first
     if result == nil
       0
@@ -90,10 +90,10 @@ class DatabasePersistence
     end
   end
 
-  def filter_books(title='', author='', category_ids=[], availabilities=[], limit, offset)
+  def filter_books(title='', author='', categories=[], availabilities=[], limit, offset)
     limit_clause = "LIMIT #{limit}"
     offset_clause = "OFFSET #{offset}"
-    sql = [select_clause, where_clause_filter(category_ids, availabilities), group_clause, order_clause, limit_clause, offset_clause].join(' ')
+    sql = [select_clause, where_clause_filter(categories, availabilities), group_clause, order_clause, limit_clause, offset_clause].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%")
     
     result.map do |tuple|
@@ -160,7 +160,7 @@ class DatabasePersistence
     end
   end
 
-  def category_ids(book_id)
+  def categories(book_id)
     sql = "SELECT category_id FROM books_categories WHERE book_id = $1"
     result = query(sql, book_id)
     result.map do |tuple|
@@ -168,28 +168,28 @@ class DatabasePersistence
     end
   end
 
-  def update_book_data(book_id, title, author, category_ids)
+  def update_book_data(book_id, title, author, categories)
     sql = update_books_table_statement
     query(sql, book_id, title, author)
 
-    unless category_ids.empty?
+    unless categories.empty?
       sql = delete_from_books_categories_statement
       query(sql, book_id)
 
-      category_ids.each do |category_id|
+      categories.each do |category_id|
         sql = add_to_books_categories_statement
         query(sql, book_id, category_id)
       end
     end
   end
 
-  def add_book(title, author, owner_id, category_ids)
+  def add_book(title, author, owner_id, categories)
     sql = insert_books_table_statement
     query(sql, title, author, owner_id)
 
-    unless category_ids.empty?
+    unless categories.empty?
       book_id = @db.exec("SELECT max(id) FROM books;").first["max"].to_i
-      category_ids.each do |category_id|
+      categories.each do |category_id|
         sql = add_to_books_categories_statement
         query(sql, book_id, category_id)
       end
@@ -251,10 +251,10 @@ class DatabasePersistence
     end
   end
 
-  def where_clause(category_ids, availabilities)
+  def where_clause(categories, availabilities)
     clause = "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
-    unless category_ids.empty?
-      clause << " AND books_categories.category_id IN (#{category_ids.join(', ')})"
+    unless categories.empty?
+      clause << " AND books_categories.category_id IN (#{categories.join(', ')})"
     end
 
     unless availabilities.empty?
@@ -263,17 +263,16 @@ class DatabasePersistence
     clause
   end
 
-  def where_clause_filter(category_ids, availabilities)
+  def where_clause_filter(categories, availabilities)
     clause = "WHERE books.title ILIKE $1 AND books.author ILIKE $2"
-    unless category_ids.empty?
+    unless categories.empty?
       clause << <<~CATEGORY_CLAUSE
          AND books.id IN (
           SELECT books.id FROM books
           INNER JOIN books_categories ON books.id = books_categories.book_id
-          WHERE books_categories.category_id IN (#{category_ids.join(', ')})
+          WHERE books_categories.category_id IN (#{categories.join(', ')})
         )
       CATEGORY_CLAUSE
-      # clause << " AND books_categories.category_id IN (#{category_ids.join(', ')})"
     end
 
     unless availabilities.empty?

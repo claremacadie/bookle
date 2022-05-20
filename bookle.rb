@@ -90,17 +90,17 @@ def valid_credentials?(user_name, password)
 end
 
 def selected_category_ids(params)
-  if params.keys.include?('category_ids')
+  if params.keys.include?('categories')
     # Convert "[1, 2, 3]" to [1, 2, 3]
-    return params['category_ids'].delete('[' ']').split(', ').map(&:to_i)
+    return params['categories'].delete('[' ']').split(', ').map(&:to_i)
   end
-  category_ids = []
+  categories = []
   params.each do |k, v|
     if k.include?("category_id")
-      category_ids << v.to_i
+      categories << v.to_i
     end
   end
-  category_ids
+  categories
 end
 
 def availability_array(params)
@@ -211,9 +211,9 @@ get "/books/filter_results/:offset" do
   require_signed_in_user
   @title = params[:title]
   @author = params[:author]
-  @category_ids = selected_category_ids(params)
+  @categories = selected_category_ids(params)
   @availabilities = availability_array(params)
-  books_count = @storage.count_filter_books(@title, @author, @category_ids, @availabilities)
+  books_count = @storage.count_filter_books(@title, @author, @categories, @availabilities)
   if books_count == 0
     session[:message] = "There are no books meeting your search criteria. Try again!"
     redirect "/books/filter_form"
@@ -222,7 +222,7 @@ get "/books/filter_results/:offset" do
   @limit = LIMIT
   @offset = params[:offset].to_i
   @number_of_pages = (books_count/ @limit.to_f).ceil
-  @books = @storage.filter_books(@title, @author, @category_ids, @availabilities, @limit, @offset)
+  @books = @storage.filter_books(@title, @author, @categories, @availabilities, @limit, @offset)
   erb :books_filter_result
 end
 
@@ -243,8 +243,8 @@ post "/book/add_new" do
   title = params[:title]
   author = params[:author]
   owner_id = session[:user_id]
-  category_ids = selected_category_ids(params)
-  @storage.add_book(title, author, owner_id, category_ids)
+  categories = selected_category_ids(params)
+  @storage.add_book(title, author, owner_id, categories)
   session[:message] = "#{title} has been added."
   redirect "/users/book_list"
 end
@@ -255,7 +255,7 @@ get "/book/:book_id/edit" do
   require_signed_in_as_book_owner(book_id)
   @book = @storage.book_data(book_id)
   @categories = @storage.categories_list
-  @book_category_ids = @storage.category_ids(book_id)
+  @book_category_ids = @storage.categories(book_id)
   erb :edit_book
 end
 
@@ -265,8 +265,8 @@ post "/book/:book_id/edit" do
   require_signed_in_as_book_owner(book_id)
   title = params[:title]
   author = params[:author]
-  category_ids = selected_category_ids(params)
-  @storage.update_book_data(book_id, title, author, category_ids)
+  categories = selected_category_ids(params)
+  @storage.update_book_data(book_id, title, author, categories)
   session[:message] = "Book details have been updated for #{title}."
   redirect "/users/book_list"
 end
