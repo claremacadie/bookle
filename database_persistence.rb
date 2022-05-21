@@ -241,7 +241,7 @@ class DatabasePersistence
     when availabilities.include?('available') && availabilities.include?('on_loan') && !availabilities.include?('requested')
       ' AND books.requester_id IS NULL'
     when availabilities.include?('requested') && availabilities.include?('on_loan') && !availabilities.include?('available')
-      ' AND books.requester_id IS NOT NULL OR books.borrower_id IS NOT NULL'
+      ' AND (books.requester_id IS NOT NULL OR books.borrower_id IS NOT NULL)'
     when availabilities.include?('available') && !availabilities.include?('requested') && !availabilities.include?('on_loan')
       ' AND books.borrower_id IS NULL AND books.requester_id IS NULL'
     when availabilities.include?('requested') && !availabilities.include?('available') && !availabilities.include?('on_loan')

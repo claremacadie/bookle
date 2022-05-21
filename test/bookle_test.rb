@@ -424,7 +424,8 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Goblet of Fire"
-    assert_includes last_response.body, "Prince Caspian"
+    assert_includes last_response.body, "The Silver Chair"
+    refute_includes last_response.body, "Prince Caspian"
     refute_includes last_response.body, "Prisoner of Azkaban"
     refute_includes last_response.body, "How to Train a Dragon"
     refute_includes last_response.body, "Philosopher's Stone"
