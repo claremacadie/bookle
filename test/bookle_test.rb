@@ -689,18 +689,18 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button type="submit">Cancel</button>)
   end
 
-  # def test_delete_book
-  #   post "/book/1/delete", { book_id: "1" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
-  #   assert_equal 302, last_response.status
-  #   assert_equal "Philosopher's Stone has been deleted.", session[:message]
+  def test_delete_book
+    post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 302, last_response.status
+    assert_equal "Deathly Hallows has been deleted.", session[:message]
     
-  #   get last_response["Location"]
-  #   assert_equal 200, last_response.status
-  #   assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    get last_response["Location"]
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     
-  #   get "users/book_list"
-  #   refute_includes last_response.body, "Philosopher's Stone"
-  # end
+    get "/books/filter_results/your_books/0"
+    refute_includes last_response.body, "Deathly Hallows"
+  end
 
   def test_edit_book_signedin_as_book_owner
     get "/book/1/edit", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
