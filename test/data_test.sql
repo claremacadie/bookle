@@ -19,7 +19,20 @@ INSERT INTO books (title, author, owner_id, requester_id, borrower_id) VALUES
   ('Chamber of Secrets', 'JK Rowling', 1, 2, NULL),
   ('Prisoner of Azkaban', 'JK Rowling', 1, NULL, 2),
   ('Goblet of Fire', 'JK Rowling', 1, 2, NULL),
-  ('How to Train a Dragon', 'Cressida Cowell', 2, NULL, NULL)
+  ('Order of the Phoenix', 'JK Rowling', 1, NULL, NULL),
+  ('Half-Blood Prince', 'JK Rowling', 1, NULL, NULL),
+  ('Deathly Hallows', 'JK Rowling', 1, NULL, NULL),
+  ('Prince Caspian', 'CS Lewis', 2, NULL, 3),
+  ('The Voyage of the Dawn Treader', 'CS Lewis', 2, NULL, 1),
+  ('The Lion, the Witch and the Wardrobe', 'CS Lewis', 2, NULL, NULL),
+  ('The Silver Chair', 'CS Lewis', 2, 1, NULL),
+  ('The Horse and His Boy', 'CS Lewis', 2, NULL, NULL),
+  ('The Magcian''s Nephew', 'CS Lewis', 2, NULL, NULL),
+  ('The Last Battle', 'CS Lewis', 2, NULL, NULL),
+  ('How to Train Your Dragon', 'Cressida Cowell', 2, NULL, NULL),
+  ('How to Be a Pirate', 'Cressida Cowell', 2, NULL, NULL),
+  ('How to Speak Dragonese', 'Cressida Cowell', 2, NULL, NULL),
+  ('How to Cheat a Dragon''s Curse', 'Cressida Cowell', 2, NULL, NULL)
 ;
 
 INSERT INTO books_categories (book_id, category_id) VALUES

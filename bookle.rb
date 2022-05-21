@@ -227,7 +227,7 @@ get "/books/filter_results/:filter_type/:offset" do
       session[:message] = "There are no books available for you to borrow."
       redirect "/"
     end
-    @books = @storage.available_books(session[:user_id])
+    @books = @storage.available_books(session[:user_id], @limit, @offset)
   when @filter_type == 'your_books'
     books_count = @storage.count_user_books(session[:user_id])
     if books_count == 0

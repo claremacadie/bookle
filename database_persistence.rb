@@ -70,9 +70,11 @@ class DatabasePersistence
     query(sql, user_id).first["count"].to_i
   end
   
-  def available_books(user_id)
+  def available_books(user_id, limit, offset)
+    limit_clause = "LIMIT #{limit}"
+    offset_clause = "OFFSET #{offset}"
     where_clause = "WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL"
-    sql = [select_clause, where_clause, group_clause, order_clause].join(' ')
+    sql = [select_clause, where_clause, group_clause, order_clause, limit_clause, offset_clause].join(' ')
     result = query(sql, user_id)
     
     result.map do |tuple|
