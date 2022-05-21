@@ -200,24 +200,23 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "How to Train a Dragon"
   end
   
-  # def test_filtered_by_author_books_list_signed_in_pagination_test
-  #   get "/books//filter_results/search/3", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+  def test_filtered_by_author_books_list_signed_in_pagination_test
+    get "/books/filter_results/search/3", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
-  #   assert_equal 200, last_response.status
-  #   assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-  #   assert_includes last_response.body, "Page 1"
-  #   assert_includes last_response.body, "Page 2"
-  #   assert_includes last_response.body, "Page 3"
-  #   assert_includes last_response.body, "Half-Blood Prince"
-  #   assert_includes last_response.body, "Order of the Phoenix"
-  #   assert_includes last_response.body, "Philosopher's Stone"
-  #   refute_includes last_response.body, "Chamber of Secrets"
-  #   refute_includes last_response.body, "Deathly Hallows"
-  #   refute_includes last_response.body, "Goblet of Fire"
-  #   refute_includes last_response.body, "Prisoner of Azkaban"
-  #   refute_includes last_response.body, "Philosopher's Stone"
-  #   refute_includes last_response.body, "How to Train a Dragon"
-  # end
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Page 1"
+    assert_includes last_response.body, "Page 2"
+    assert_includes last_response.body, "Page 3"
+    assert_includes last_response.body, "Half-Blood Prince"
+    assert_includes last_response.body, "Order of the Phoenix"
+    assert_includes last_response.body, "Philosopher's Stone"
+    refute_includes last_response.body, "Chamber of Secrets"
+    refute_includes last_response.body, "Deathly Hallows"
+    refute_includes last_response.body, "Goblet of Fire"
+    refute_includes last_response.body, "Prisoner of Azkaban"
+    refute_includes last_response.body, "How to Train a Dragon"
+  end
 
   def test_filtered_by_title_and_author_books_list_signed_in
     get "/books//filter_results/search/0", {title: 'a', author: 'a'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
@@ -417,7 +416,6 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_title_and_availability_is_requested_and_onloan_books_list_signed_in
-    # There's something wrong - Prince Caspian doesn't have a t in the title
     get "/books//filter_results/search/0", {title: 't', author: '', available: '', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
