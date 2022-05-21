@@ -129,6 +129,8 @@ def heading(filter_type)
     'All Books'
   when 'available_to_borrow'
     'Books Available For You To Borrow'
+  when 'your_books'
+    'Your Books'
   end
 end
 
