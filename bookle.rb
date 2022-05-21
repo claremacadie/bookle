@@ -234,7 +234,7 @@ get "/books/filter_results/:filter_type/:offset" do
       session[:message] = "You don't own any books on Bookle."
       redirect "/"
     end
-    @books = @storage.user_owned_books(session[:user_id])
+    @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
   end
   @heading = heading(@filter_type)
   @number_of_pages = (books_count/ @limit.to_f).ceil
@@ -261,7 +261,8 @@ post "/book/add_new" do
   categories = selected_category_ids(params)
   @storage.add_book(title, author, owner_id, categories)
   session[:message] = "#{title} has been added."
-  redirect "/users/book_list"
+  redirect "/books/filter_results/your_books/0"
+  # redirect "/users/book_list"
 end
 
 get "/book/:book_id/edit" do
@@ -283,7 +284,8 @@ post "/book/:book_id/edit" do
   categories = selected_category_ids(params)
   @storage.update_book_data(book_id, title, author, categories)
   session[:message] = "Book details have been updated for #{title}."
-  redirect "/users/book_list"
+  redirect "/books/filter_results/your_books/0"
+  # redirect "/users/book_list"
 end
 
 get "/book/:book_id/delete" do
@@ -301,7 +303,8 @@ post "/book/:book_id/delete" do
   @book = @storage.book_data(book_id)
   @storage.delete_book(book_id, session[:user_id])
   session[:message] = "#{@book[:title]} has been deleted."
-  redirect "/users/book_list"
+  redirect "/books/filter_results/your_books/0"
+  # redirect "/users/book_list"
 end
 
 post "/book/:book_id/request" do

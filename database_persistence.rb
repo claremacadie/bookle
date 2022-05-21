@@ -108,9 +108,11 @@ class DatabasePersistence
     query(sql, user_id).first["count"].to_i
   end
   
-  def user_owned_books(user_id)    
+  def user_owned_books(user_id, limit, offset) 
     where_clause = "WHERE owners.id = $1"
-    sql = [select_clause, where_clause, group_clause, order_clause].join(' ')
+    limit_clause = "LIMIT #{limit}"
+    offset_clause = "OFFSET #{offset}"
+    sql = [select_clause, where_clause, group_clause, order_clause, limit_clause, offset_clause].join(' ')
     result = query(sql, user_id)
     
     result.map do |tuple|
