@@ -282,14 +282,6 @@ post "/book/:book_id/edit" do
   redirect "/books/filter_results/your_books/0"
 end
 
-get "/book/:book_id/delete" do
-  require_signed_in_user
-  book_id = params[:book_id].to_i
-  require_signed_in_as_book_owner(book_id)
-  @book = @storage.book_data(book_id)
-  erb :delete_book
-end
-
 post "/book/:book_id/delete" do
   require_signed_in_user
   book_id = params[:book_id].to_i
