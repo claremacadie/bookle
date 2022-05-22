@@ -146,7 +146,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "JK Rowling"
     assert_includes last_response.body, "Fantasy, Magic"
-    assert_includes last_response.body, %q(<button type=\"submit\" class=\"delete\">Delete Book</button>) 
+    assert_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>) 
   end
   
   def test_view_your_books_signed_out
@@ -461,7 +461,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "There are no books meeting your search criteria. Try again!", session[:message]
-    end
+  end
   
   def test_filtered_books_list_signed_out
     get "/books/filter_results/search/0"
