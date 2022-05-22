@@ -667,27 +667,17 @@ class CMSTest < Minitest::Test
   end
 
   def delete_book_not_signedin
-    get "/book/1/delete"
+    post "/book/7/delete"
     
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
   end
 
   def delete_book_not_signedin_not_as_book_owner
-    get "/book/1/delete", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "You must be the book owner to do that.", session[:message]
-  end
-  
-  def test_delete_book_signedin
-    get "/book/1/delete", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
-    
-    assert_equal 200, last_response.status
-    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "Are you sure you want to delete \"Philosopher's Stone\"?"
-    assert_includes last_response.body, %q(<button type="submit">Delete Philosopher's Stone</button>)
-    assert_includes last_response.body, %q(<button type="submit">Cancel</button>)
   end
 
   def test_delete_book
