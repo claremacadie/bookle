@@ -25,7 +25,11 @@
         <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
         <td> <%= book_availability(book) %></td>
-        <td><a href="/book/<%= book[:id] %>/delete">Delete book</a></td>
+        <td>
+          <form class="delete" action="/book/<%= book[:id] %>/delete" method="post">
+            <button type="submit" class="delete">Delete Book</button>
+          </form>
+        </td>
       </tr>
     <% end %>
   </tbody>
