@@ -28,7 +28,14 @@
         <td> <%= book_availability(book) %></td>
         <td>
           <% if book[:owner_id] == session[:user_id] %>
-            Action
+            <% if book[:requester_id] %>
+              <form action="/book/<%= book[:id] %>/loan" method="post">
+                <button>Loan book to <%= book[:requester_name] %></button>
+              </form>
+              <form action="/book/<%= book[:id] %>/reject_request" method="post">
+                <button>Reject request from <%= book[:requester_name] %></button>
+              </form>
+            <% end %>
           <% else %>
             <% if !book[:requester_id] && !book[:borrower_id] %>
               <form action="/book/<%= book[:id] %>/request" method="post">
