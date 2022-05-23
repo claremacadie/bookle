@@ -26,7 +26,13 @@
         <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
         <td> <%= book_availability(book) %></td>
-        <td> Action</td>
+        <td>
+          <% if book[:owner_id] == session[:user_id] %>
+            Action
+          <% else %>
+            Not Action
+          <% end %>
+        </td>
         <td>
           <form class="delete" action="/book/<%= book[:id] %>/delete" method="post">
             <button type="submit" class="delete">Delete Book</button>
