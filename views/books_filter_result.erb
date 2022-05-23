@@ -16,6 +16,7 @@
       <th scope = "col"> Categories </th>
       <th scope = "col"> Availability </th>
       <th scope = "col"> Action </th>
+      <th scope = "col"> Edit book details </th>
       <th scope = "col"> Delete? </th>
     </tr>
   </thead>
@@ -26,6 +27,7 @@
         <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
         <td> <%= book_availability(book) %></td>
+
         <td>
           <% if book[:owner_id] == session[:user_id] %>
             <% if book[:requester_id] %>
@@ -56,6 +58,15 @@
             <% end %>
           <% end %>
         </td>
+
+        <td> 
+          <% if book[:owner_id] == session[:user_id] %>
+            <a href="/book/<%= book[:id] %>/edit">Edit book details</a>
+          <% else %>
+            -
+          <% end %>
+        </td>
+
         <td>
           <form class="delete" action="/book/<%= book[:id] %>/delete" method="post">
             <button type="submit" class="delete">Delete Book</button>
