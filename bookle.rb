@@ -303,7 +303,7 @@ post "/book/:book_id/request" do
   @storage.book_add_request(book_id, session[:user_id])
   @book = @storage.book_data(book_id)
   session[:message] = "You have requested #{@book[:title]} from #{@book[:owner_name]}"
-  redirect :all_books_list
+  redirect "/books/filter_results/all_books/0"
 end
 
 post "/book/:book_id/cancel_request" do
@@ -313,7 +313,7 @@ post "/book/:book_id/cancel_request" do
   @storage.book_cancel_request(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "You have cancelled your request for #{@book[:title]} from #{@book[:owner_name]}"
-  redirect :all_books_list
+  redirect "/books/filter_results/all_books/0"
 end
 
 post "/book/:book_id/loan" do
@@ -323,7 +323,7 @@ post "/book/:book_id/loan" do
   @storage.book_loan(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "#{@book[:title]} has been loaned to #{@book[:borrower_name]}"
-  redirect :user_owned_book_list
+  redirect "/books/filter_results/your_books/0"
 end
 
 post "/book/:book_id/reject_request" do
@@ -333,7 +333,7 @@ post "/book/:book_id/reject_request" do
   @book = @storage.book_data(book_id)
   session[:message] = "You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}"
   @storage.book_reject_request(book_id)
-  redirect :user_owned_book_list
+  redirect "/books/filter_results/your_books/0"
 end
 
 post "/book/:book_id/return" do
@@ -343,7 +343,7 @@ post "/book/:book_id/return" do
   @storage.book_return(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "#{@book[:title]} has been returned"
-  redirect :user_owned_book_list
+  redirect "/books/filter_results/your_books/0"
 end
 
 get "/book/:book_id" do
