@@ -17,6 +17,9 @@
                 type="checkbox" 
                 value="<%= category[:id] %>" 
                 name="category_id_<%= category[:id] %>"
+                <% if params.include?("category_id_#{category[:id]}") %>
+                  checked
+                <% end %>
               />
               <%= category[:name] %>
             </label>
