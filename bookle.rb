@@ -249,7 +249,7 @@ end
 
 get "/book/add_new" do
   require_signed_in_user
-  @categories = @storage.categories_list
+  @categories_list = @storage.categories_list
   erb :add_book
 end
 
@@ -262,12 +262,12 @@ post "/book/add_new" do
   if title == ''
     session[:message] = "Title cannot be blank! Please enter a title."
     status 422
-    @categories = @storage.categories_list
+    @categories_list = @storage.categories_list
     erb :add_book
   elsif author == ''
     session[:message] = "Author cannot be blank! Please enter an author."
     status 422
-    @categories = @storage.categories_list
+    @categories_list = @storage.categories_list
     erb :add_book
   else 
     @storage.add_book(title, author, owner_id, categories)
