@@ -264,12 +264,7 @@ post "/book/add_new" do
   author = params[:author]
   owner_id = session[:user_id]
   categories_selected = selected_category_ids(params)
-  if title == ''
-    session[:message] = blank_field_message(title, author)
-    status 422
-    @categories_list = @storage.categories_list
-    erb :add_book
-  elsif author == ''
+  if title == '' || author == ''
     session[:message] = blank_field_message(title, author)
     status 422
     @categories_list = @storage.categories_list
