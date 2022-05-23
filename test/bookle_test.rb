@@ -679,8 +679,6 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Title and author cannot be blank! Please enter a title and an author."
   end
 
-  
-
   def delete_book_not_signedin
     post "/book/7/delete"
     assert_equal 302, last_response.status
