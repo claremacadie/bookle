@@ -3,9 +3,9 @@
 <form action="/book/add_new" method="post">
   <dl>
     <dt><label for="title">Title</label></dt>
-    <dd><input id="title" type="text" name="title" value=""></dd>
+    <dd><input id="title" type="text" name="title" value="<%= params[:title] %>"></dd>
     <dt><label for="authors">Author</label></dt>
-    <dd><input id="authors" type="text" name="author" value=""></dd>
+    <dd><input id="authors" type="text" name="author" value="<%= params[:author] %>"></dd>
     
     <dt><label for="categories">Categories</label></dt>
     <dd>
