@@ -293,9 +293,23 @@ post "/book/:book_id/edit" do
   title = params[:title]
   author = params[:author]
   categories = selected_category_ids(params)
-  @storage.update_book_data(book_id, title, author, categories)
-  session[:message] = "Book details have been updated for #{title}."
-  redirect "/books/filter_results/your_books/0"
+  if title == ''
+    session[:message] = "Title cannot be blank! Please enter a title."
+    status 422
+    @categories = @storage.categories_list
+    redirect '/'
+    # erb :edit_book
+  elsif author == ''
+    session[:message] = "Author cannot be blank! Please enter an author."
+    status 422
+    @categories = @storage.categories_list
+    redirect '/'
+    # erb :edit_book
+  else 
+    @storage.update_book_data(book_id, title, author, categories)
+    session[:message] = "Book details have been updated for #{title}."
+    redirect "/books/filter_results/your_books/0"
+  end
 end
 
 post "/book/:book_id/delete" do
