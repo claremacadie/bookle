@@ -116,11 +116,6 @@ def availability_array(params)
   availabilities.join(',')
 end
 
-def format_heading(string)
-  word_array = string.split('_')
-  word_array.map! {|word| word.capitalize}.join(' ')
-end
-
 def heading(filter_type)
   case filter_type
   when "search"
