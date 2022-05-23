@@ -203,25 +203,25 @@ get "/books/filter_results/:filter_type/:offset" do
   @filter_type = params[:filter_type]
   @title = params[:title]
   @author = params[:author]
-  @categories = selected_category_ids(params)
+  @categories_selected = selected_category_ids(params)
   @availabilities = availability_array(params)
   @limit = LIMIT
   @offset = params[:offset].to_i
   case 
   when @filter_type == 'search'
-    books_count = @storage.count_filter_books(@title, @author, @categories, @availabilities)
+    books_count = @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
     if books_count == 0
       session[:message] = "There are no books meeting your search criteria. Try again!"
       redirect "/books/filter_form"
     end
-    @books = @storage.filter_books(@title, @author, @categories, @availabilities, @limit, @offset)
+    @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
   when @filter_type == 'all_books'
-    books_count = @storage.count_filter_books(@title, @author, @categories, @availabilities)
+    books_count = @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
     if books_count == 0
       session[:message] = "There are no books on Bookle."
       redirect "/"
     end
-    @books = @storage.filter_books(@title, @author, @categories, @availabilities, @limit, @offset)
+    @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
   when @filter_type == 'available_to_borrow'
     books_count = @storage.count_available_books(session[:user_id])
     if books_count == 0
