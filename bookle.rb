@@ -194,7 +194,7 @@ end
 
 get "/books/filter_form" do
   require_signed_in_user
-  @categories = @storage.categories_list
+  @categories_list = @storage.categories_list
   erb :books_filter_form
 end
   
