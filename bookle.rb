@@ -292,7 +292,7 @@ post "/book/:book_id/edit" do
   require_signed_in_as_book_owner(book_id)
   title = params[:title]
   author = params[:author]
-  categories = selected_category_ids(params)
+  categories_selected = selected_category_ids(params)
   if title == ''
     session[:message] = "Title cannot be blank! Please enter a title."
     status 422
@@ -308,7 +308,7 @@ post "/book/:book_id/edit" do
     @book_category_ids = @storage.categories(book_id)
     erb :edit_book
   else 
-    @storage.update_book_data(book_id, title, author, categories)
+    @storage.update_book_data(book_id, title, author, categories_selected)
     session[:message] = "Book details have been updated for #{title}."
     redirect "/books/filter_results/your_books/0"
   end
