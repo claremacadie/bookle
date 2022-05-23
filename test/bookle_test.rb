@@ -497,7 +497,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Available"
     assert_includes last_response.body, %q(<button>Request book</button>)
     refute_includes last_response.body, "Edit book details"
-    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
+    refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
   end
 
   def test_view_requested_book_signed_in_as_book_owner
@@ -522,7 +522,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Requested by you"
     assert_includes last_response.body, %q(<button>Cancel request</button>)
     refute_includes last_response.body, "Edit book details"
-    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
+    refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
   end
   
   def test_view_requested_book_signed_in_as_not_book_owner_or_requester
@@ -534,7 +534,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Requested by Alice Allbright"
     refute_includes last_response.body, %q(<button>)
     refute_includes last_response.body, "Edit book details"
-    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
+    refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
   end
   
   def test_view_onloan_book_signed_in_as_book_owner
@@ -558,7 +558,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan to you"
     refute_includes last_response.body, %q(<button>)
     refute_includes last_response.body, "Edit book details"
-    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
+    refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
   end
   
   def test_view_onloan_book_signed_in_not_as_book_owner_or_borrower
@@ -570,7 +570,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "On loan to Alice Allbright"
     refute_includes last_response.body, %q(<button>)
     refute_includes last_response.body, "Edit book details"
-    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
+    refute_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>)
   end
    
   def test_request_book
