@@ -346,13 +346,6 @@ post "/book/:book_id/return" do
   redirect "/books/filter_results/your_books/0"
 end
 
-get "/book/:book_id" do
-  require_signed_in_user
-  book_id = params[:book_id].to_i
-  @book = @storage.book_data(book_id)
-  erb :book
-end
-
 not_found do
   redirect "/"
 end

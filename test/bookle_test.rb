@@ -579,7 +579,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "You have requested Philosopher's Stone from Clare MacAdie", session[:message]
     
-    get "/book/1", {}, {"rack.session" => { user_name: "Alice Allbright" } }
+    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Alice Allbright" } }
     assert_includes last_response.body, "Requested by you"
   end
    
@@ -605,7 +605,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "You have cancelled your request for Chamber of Secrets from Clare MacAdie", session[:message]
     
-    get "/book/2", {}, {"rack.session" => { user_name: "Alice Allbright" } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     assert_includes last_response.body, "Available"
   end
    
@@ -615,7 +615,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "Chamber of Secrets has been loaned to Alice Allbright", session[:message]
     
-    get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     assert_includes last_response.body, "On loan to Alice Allbright"
   end
    
@@ -625,7 +625,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "You have rejected a request for Chamber of Secrets from Alice Allbright", session[:message]
     
-    get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     assert_includes last_response.body, "Available"
   end
 
@@ -635,7 +635,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "Prisoner of Azkaban has been returned", session[:message]
     
-    get "/book/3", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     assert_includes last_response.body, "Available"
   end
 
