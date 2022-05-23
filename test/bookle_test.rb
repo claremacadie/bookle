@@ -465,32 +465,43 @@ class CMSTest < Minitest::Test
   
   def test_filtered_books_list_signed_out
     get "/books/filter_results/search/0"
-
+    
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
   end
-
-  def test_view_book_signed_out
-    get "/book/2"
-
-    assert_equal 302, last_response.status
-    assert_equal "You must be signed in to do that.", session[:message]
-  end
-
+  
+  # def test_view_book_signed_out
+  #   get "/book/2"
+  
+  #   assert_equal 302, last_response.status
+  #   assert_equal "You must be signed in to do that.", session[:message]
+  # end
+  
   def test_view_available_book_signed_in_as_book_owner
-    get "/book/1", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Philosopher's Stone"
     assert_includes last_response.body, "Available"
-    assert_includes last_response.body, "Edit book"
-    assert_includes last_response.body, "Delete book"
-    refute_includes last_response.body, %q(<button>)
+    # assert_includes last_response.body, "Edit book"
+    assert_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
   end
   
+  def test_view_available_book_signedin_as_not_book_owner
+    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Philosopher's Stone"
+    assert_includes last_response.body, "Available"
+    assert_includes last_response.body, %q(<button>Request book</button>)
+    # refute_includes last_response.body, "Edit book details"
+    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
+  end
+
   def test_view_requested_book_signed_in_as_book_owner
-    get "/book/2", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -498,68 +509,68 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Requested by Alice Allbright"
     assert_includes last_response.body, %q(<button>Loan book to Alice Allbright</button>)
     assert_includes last_response.body, %q(<button>Reject request from Alice Allbright</button>)
-    assert_includes last_response.body, "Edit book details"
-    assert_includes last_response.body, "Delete book"
+    # assert_includes last_response.body, "Edit book details"
+    assert_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
   end
   
   def test_view_requested_book_signed_in_as_book_requester
-    get "/book/2", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Requested by you"
     assert_includes last_response.body, %q(<button>Cancel request</button>)
-    refute_includes last_response.body, "Edit book details"
-    refute_includes last_response.body, "Delete book"
+    # refute_includes last_response.body, "Edit book details"
+    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
   end
   
   def test_view_requested_book_signed_in_as_not_book_owner_or_requester
-    get "/book/2", {}, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Requested by Alice Allbright"
     refute_includes last_response.body, %q(<button>)
-    refute_includes last_response.body, "Edit book details"
-    refute_includes last_response.body, "Delete book"
+    # refute_includes last_response.body, "Edit book details"
+    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
   end
   
   def test_view_onloan_book_signed_in_as_book_owner
-    get "/book/3", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "On loan to Alice Allbright"
     assert_includes last_response.body, %q(<button>Book Returned</button>)
-    assert_includes last_response.body, "Edit book details"
-    assert_includes last_response.body, "Delete book"
+    # assert_includes last_response.body, "Edit book details"
+    assert_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
   end
   
   def test_view_onloan_book_signed_in_as_book_borrower
-    get "/book/3", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "On loan to you"
     refute_includes last_response.body, %q(<button>)
-    refute_includes last_response.body, "Edit book details"
-    refute_includes last_response.body, "Delete book"
+    # refute_includes last_response.body, "Edit book details"
+    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
   end
   
   def test_view_onloan_book_signed_in_not_as_book_owner_or_borrower
-    get "/book/3", {}, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "On loan to Alice Allbright"
     refute_includes last_response.body, %q(<button>)
-    refute_includes last_response.body, "Edit book details"
-    refute_includes last_response.body, "Delete book"
+    # refute_includes last_response.body, "Edit book details"
+    # refute_includes last_response.body, %q(<button type="submit" class="delete">Delete Book</button>)
   end
    
   def test_request_book
@@ -579,6 +590,7 @@ class CMSTest < Minitest::Test
     
     # What assertions can confirm this error?
   end
+
   def test_loan_book_user_owns
     post "/book/1/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
@@ -625,16 +637,6 @@ class CMSTest < Minitest::Test
     
     get "/book/3", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     assert_includes last_response.body, "Available"
-  end
-  
-  def test_view_available_book_signedin_as_not_book_owner
-    get "/book/1", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
-    
-    assert_equal 200, last_response.status
-    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "Philosopher's Stone"
-    assert_includes last_response.body, "Available"
-    assert_includes last_response.body, %q(<button>Request book</button>)
   end
 
   def add_book_not_signedin
