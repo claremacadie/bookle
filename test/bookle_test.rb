@@ -640,7 +640,7 @@ class CMSTest < Minitest::Test
   end
 
   def add_book_not_signedin
-    get "/book/add"
+    get "/book/add_new"
     
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
