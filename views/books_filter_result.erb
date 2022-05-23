@@ -35,6 +35,12 @@
               <form action="/book/<%= book[:id] %>/reject_request" method="post">
                 <button>Reject request from <%= book[:requester_name] %></button>
               </form>
+            <% elsif book[:borrower_id] %>
+              <form action="/book/<%= book[:id] %>/return" method="post">
+                <button>Book Returned</button>
+              </form>
+            <% else %>
+              -
             <% end %>
           <% else %>
             <% if !book[:requester_id] && !book[:borrower_id] %>
