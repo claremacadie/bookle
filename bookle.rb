@@ -258,7 +258,7 @@ post "/book/add_new" do
   title = params[:title]
   author = params[:author]
   owner_id = session[:user_id]
-  categories = selected_category_ids(params)
+  categories_selected = selected_category_ids(params)
   if title == ''
     session[:message] = "Title cannot be blank! Please enter a title."
     status 422
@@ -270,7 +270,7 @@ post "/book/add_new" do
     @categories_list = @storage.categories_list
     erb :add_book
   else 
-    @storage.add_book(title, author, owner_id, categories)
+    @storage.add_book(title, author, owner_id, categories_selected)
     session[:message] = "#{title} has been added."
     redirect "/books/filter_results/your_books/0"
   end
