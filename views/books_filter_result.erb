@@ -68,9 +68,13 @@
         </td>
 
         <td>
-          <form class="delete" action="/book/<%= book[:id] %>/delete" method="post">
-            <button type="submit" class="delete">Delete book</button>
-          </form>
+          <% if book[:owner_id] == session[:user_id] %>
+            <form class="delete" action="/book/<%= book[:id] %>/delete" method="post">
+              <button type="submit" class="delete">Delete book</button>
+            </form>
+          <% else %>
+            -
+          <% end %>
         </td>
       </tr>
     <% end %>
