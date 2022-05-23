@@ -586,7 +586,7 @@ class CMSTest < Minitest::Test
   def test_request_book_user_owns
     post "/book/1/request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
-    output = StringIO.new
+    # output = StringIO.new
     
     # What assertions can confirm this error?
   end
@@ -594,7 +594,7 @@ class CMSTest < Minitest::Test
   def test_loan_book_user_owns
     post "/book/1/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
-    output = StringIO.new
+    # output = StringIO.new
     
     # What assertions can confirm this error?
   end
