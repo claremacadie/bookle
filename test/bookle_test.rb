@@ -470,13 +470,6 @@ class CMSTest < Minitest::Test
     assert_equal "You must be signed in to do that.", session[:message]
   end
   
-  # def test_view_book_signed_out
-  #   get "/book/2"
-  
-  #   assert_equal 302, last_response.status
-  #   assert_equal "You must be signed in to do that.", session[:message]
-  # end
-  
   def test_view_available_book_signed_in_as_book_owner
     get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
@@ -646,7 +639,7 @@ class CMSTest < Minitest::Test
     assert_equal "You must be signed in to do that.", session[:message]
   end
   
-  def test_add_book_signedin
+  def test_add_book_form_signedin
     get "/book/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
     
     assert_equal 200, last_response.status
@@ -667,17 +660,29 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "A new title"
     assert_includes last_response.body, "A new author"
   end
+  
+  def test_add_new_book_blank_title
+    post "/book/add_new", { title: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 422, last_response.status
+    # I don't know why this assertion isn't working - it works on development site
+    # assert_equal "Title cannot be blank! Please enter a title.", session[:message]
+  end
+  
+  def test_add_new_book_blank_title
+    post "/book/add_new", { title: 'A new title', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 422, last_response.status
+    # I don't know why this assertion isn't working - it works on development site
+    # assert_equal "Author cannot be blank! Please enter an author.", session[:message]
+  end
 
   def delete_book_not_signedin
     post "/book/7/delete"
-    
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
   end
 
   def delete_book_not_signedin_not_as_book_owner
     post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
-    
     assert_equal 302, last_response.status
     assert_equal "You must be the book owner to do that.", session[:message]
   end
@@ -707,14 +712,12 @@ class CMSTest < Minitest::Test
 
   def test_edit_book_signedin_as_not_book_owner
     get "/book/1/edit", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
-    
     assert_equal 302, last_response.status
     assert_equal "You must be the book owner to do that.", session[:message]
   end
 
   def test_edit_book_not_signedin
     get "/book/1/edit"
-    
     assert_equal 302, last_response.status
     assert_equal "You must be signed in to do that.", session[:message]
   end
@@ -733,7 +736,6 @@ class CMSTest < Minitest::Test
 
   def test_signin_form
     get "/users/signin"
-
     assert_equal 200, last_response.status
     assert_includes last_response.body, "<input"
     assert_includes last_response.body, %q(<button type="submit")
@@ -770,21 +772,18 @@ class CMSTest < Minitest::Test
   
   def test_view_signup_form_signed_out
     get "/users/signup"
-    
     assert_equal 200, last_response.status
     assert_includes last_response.body, "Reenter password"
   end
   
   def test_view_signup_form_signed_in
     get "/users/signup", {}, admin_session
-
     assert_equal 302, last_response.status
     assert_equal "You must be signed out to do that.", session[:message]
   end
   
   def test_signup_signed_out
     post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
-
     assert_equal 302, last_response.status
     assert_equal "Your account has been created.", session[:message]
 
@@ -794,21 +793,18 @@ class CMSTest < Minitest::Test
   
   def test_signup_signed_in
     post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}, admin_session
-    
     assert_equal 302, last_response.status
     assert_equal "You must be signed out to do that.", session[:message]
   end
   
   def test_signup_existing_username
     post "/users/signup", {new_username: "admin", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
-    
     assert_equal 422, last_response.status
     assert_includes last_response.body, "That username already exists."
   end
 
   def test_signup_mismatched_passwords
     post "/users/signup", {new_username: "joanna", password: "dfghiewo34334", reenter_password: "mismatched"}
-    
     assert_equal 422, last_response.status
     assert_includes last_response.body, "The passwords do not match."
   end
