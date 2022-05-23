@@ -664,15 +664,13 @@ class CMSTest < Minitest::Test
   def test_add_new_book_blank_title
     post "/book/add_new", { title: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 422, last_response.status
-    # I don't know why this assertion isn't working - it works on development site
-    # assert_equal "Title cannot be blank! Please enter a title.", session[:message]
+    assert_includes last_response.body, "Title cannot be blank! Please enter a title."
   end
   
   def test_add_new_book_blank_author
     post "/book/add_new", { title: 'A new title', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 422, last_response.status
-    # I don't know why this assertion isn't working - it works on development site
-    # assert_equal "Author cannot be blank! Please enter an author.", session[:message]
+    assert_includes last_response.body, "Author cannot be blank! Please enter an author."
   end
 
   def delete_book_not_signedin
