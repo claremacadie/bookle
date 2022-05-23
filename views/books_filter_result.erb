@@ -38,6 +38,8 @@
               <form action="/book/<%= book[:id] %>/cancel_request" method="post">
                 <button>Cancel request</button>
               </form>
+            <% else %>
+              -
             <% end %>
           <% end %>
         </td>
