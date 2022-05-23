@@ -16,7 +16,7 @@
       <th scope = "col"> Categories </th>
       <th scope = "col"> Availability </th>
       <th scope = "col"> Action </th>
-      <th scope = "col"> Edit book details </th>
+      <th scope = "col"> Edit? </th>
       <th scope = "col"> Delete? </th>
     </tr>
   </thead>
@@ -39,7 +39,7 @@
               </form>
             <% elsif book[:borrower_id] %>
               <form action="/book/<%= book[:id] %>/return" method="post">
-                <button>Book Returned</button>
+                <button>Book returned</button>
               </form>
             <% else %>
               -
@@ -69,7 +69,7 @@
 
         <td>
           <form class="delete" action="/book/<%= book[:id] %>/delete" method="post">
-            <button type="submit" class="delete">Delete Book</button>
+            <button type="submit" class="delete">Delete book</button>
           </form>
         </td>
       </tr>
