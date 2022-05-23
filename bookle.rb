@@ -129,6 +129,16 @@ def heading(filter_type)
   end
 end
 
+def blank_field_message(title, author)
+  if title == '' && author == ''
+    'Title and author cannot be blank! Please enter a title and an author.'
+  elsif title == ''
+    'Title cannot be blank! Please enter a title.'
+  elsif author == ''
+    'Author cannot be blank! Please enter an author.'
+  end
+end
+
 # Routes
 get "/" do
   erb :home
@@ -255,12 +265,12 @@ post "/book/add_new" do
   owner_id = session[:user_id]
   categories_selected = selected_category_ids(params)
   if title == ''
-    session[:message] = "Title cannot be blank! Please enter a title."
+    session[:message] = blank_field_message(title, author)
     status 422
     @categories_list = @storage.categories_list
     erb :add_book
   elsif author == ''
-    session[:message] = "Author cannot be blank! Please enter an author."
+    session[:message] = blank_field_message(title, author)
     status 422
     @categories_list = @storage.categories_list
     erb :add_book
@@ -289,15 +299,15 @@ post "/book/:book_id/edit" do
   author = params[:author]
   categories_selected = selected_category_ids(params)
   if title == ''
-    session[:message] = "Title cannot be blank! Please enter a title."
+    session[:message] = blank_field_message(title, author)
     status 422
     @book = @storage.book_data(book_id)
     @categories_list = @storage.categories_list
     @book_category_ids = @storage.categories(book_id)
     erb :edit_book
   elsif author == ''
-    session[:message] = "Author cannot be blank! Please enter an author."
     status 422
+    session[:message] = blank_field_message(title, author)
     @book = @storage.book_data(book_id)
     @categories_list = @storage.categories_list
     @book_category_ids = @storage.categories(book_id)
