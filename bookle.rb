@@ -281,7 +281,7 @@ get "/book/:book_id/edit" do
   book_id = params[:book_id].to_i
   require_signed_in_as_book_owner(book_id)
   @book = @storage.book_data(book_id)
-  @categories = @storage.categories_list
+  @categories_list = @storage.categories_list
   @book_category_ids = @storage.categories(book_id)
   erb :edit_book
 end
@@ -297,14 +297,14 @@ post "/book/:book_id/edit" do
     session[:message] = "Title cannot be blank! Please enter a title."
     status 422
     @book = @storage.book_data(book_id)
-    @categories = @storage.categories_list
+    @categories_list = @storage.categories_list
     @book_category_ids = @storage.categories(book_id)
     erb :edit_book
   elsif author == ''
     session[:message] = "Author cannot be blank! Please enter an author."
     status 422
     @book = @storage.book_data(book_id)
-    @categories = @storage.categories_list
+    @categories_list = @storage.categories_list
     @book_category_ids = @storage.categories(book_id)
     erb :edit_book
   else 
