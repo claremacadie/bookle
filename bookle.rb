@@ -113,7 +113,7 @@ def availability_array(params)
       availabilities << k
     end
   end
-  availabilities.join(', ')
+  availabilities.join(',')
 end
 
 def format_heading(string)
@@ -296,15 +296,17 @@ post "/book/:book_id/edit" do
   if title == ''
     session[:message] = "Title cannot be blank! Please enter a title."
     status 422
+    @book = @storage.book_data(book_id)
     @categories = @storage.categories_list
-    redirect '/'
-    # erb :edit_book
+    @book_category_ids = @storage.categories(book_id)
+    erb :edit_book
   elsif author == ''
     session[:message] = "Author cannot be blank! Please enter an author."
     status 422
+    @book = @storage.book_data(book_id)
     @categories = @storage.categories_list
-    redirect '/'
-    # erb :edit_book
+    @book_category_ids = @storage.categories(book_id)
+    erb :edit_book
   else 
     @storage.update_book_data(book_id, title, author, categories)
     session[:message] = "Book details have been updated for #{title}."
