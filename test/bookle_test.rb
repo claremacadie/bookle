@@ -732,6 +732,18 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "A new author"
   end
 
+  def test_change_book_details_blank_title
+    post "/book/1/edit", { title: "", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "Title cannot be blank! Please enter a title."
+  end
+
+  def test_change_book_details_blank_author
+    post "/book/1/edit", { title: "A new title", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "Author cannot be blank! Please enter an author."
+  end
+
   def test_signin_form
     get "/users/signin"
     assert_equal 200, last_response.status
