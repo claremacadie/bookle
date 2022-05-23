@@ -293,16 +293,9 @@ post "/book/:book_id/edit" do
   title = params[:title]
   author = params[:author]
   categories_selected = selected_category_ids(params)
-  if title == ''
+  if title == '' || author == ''
     session[:message] = blank_field_message(title, author)
     status 422
-    @book = @storage.book_data(book_id)
-    @categories_list = @storage.categories_list
-    @book_category_ids = @storage.categories(book_id)
-    erb :edit_book
-  elsif author == ''
-    status 422
-    session[:message] = blank_field_message(title, author)
     @book = @storage.book_data(book_id)
     @categories_list = @storage.categories_list
     @book_category_ids = @storage.categories(book_id)
