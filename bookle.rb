@@ -160,7 +160,11 @@ post "/users/signout" do
   session.delete(:user_name)
   session.delete(:user_id)
   session[:message] = "You have been signed out"
-  redirect "/"
+  if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
+	  "/"
+	else
+	  redirect "/"
+  end
 end
 
 get "/users/signup" do
