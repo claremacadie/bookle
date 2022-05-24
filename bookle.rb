@@ -270,39 +270,19 @@ get "/books/filter_results/:filter_type/:offset" do
   @availabilities = availability_array(params)
   @limit = LIMIT
   @offset = params[:offset].to_i
-  case 
-  when @filter_type == 'search'
-    books_count = number_of_books(@filter_type)
-    if books_count == 0
-      session[:message] = no_books_message(@filter_type)
+  books_count = number_of_books(@filter_type)
+  if books_count == 0
+    session[:message] = no_books_message(@filter_type)
+    if @filter_type == 'search'
       redirect "/books/filter_form"
-    end
-    @books = books_data(@filter_type)
-  when @filter_type == 'all_books'
-    books_count = number_of_books(@filter_type)
-    if books_count == 0
-      session[:message] = no_books_message(@filter_type)
+    else
       redirect "/"
     end
-    @books = books_data(@filter_type)
-  when @filter_type == 'available_to_borrow'
-    books_count = number_of_books(@filter_type)
-    if books_count == 0
-      session[:message] = no_books_message(@filter_type)
-      redirect "/"
-    end
-    @books = books_data(@filter_type)
-  when @filter_type == 'your_books'
-    books_count = number_of_books(@filter_type)
-    if books_count == 0
-      session[:message] = no_books_message(@filter_type)
-      redirect "/"
-    end
-    @books = books_data(@filter_type)
-    while @books.empty?
-      @offset -= LIMIT
-      @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
-    end
+  end
+  @books = books_data(@filter_type)
+  while @books.empty?
+    @offset -= LIMIT
+    @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
   end
   @heading = heading(@filter_type)
   @number_of_pages = (books_count/ @limit.to_f).ceil
