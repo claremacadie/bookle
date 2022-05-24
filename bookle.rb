@@ -164,7 +164,6 @@ def number_of_books(filter_type)
   when 'available_to_borrow'
     @storage.count_available_books(session[:user_id])
   when 'your_books'
-    require_signed_in_user
     @storage.count_user_books(session[:user_id])
   end
 end
@@ -257,14 +256,13 @@ post "/users/signup" do
 end
 
 get "/books/filter_form" do
-  # require_signed_in_user
   @categories_list = @storage.categories_list
   erb :books_filter_form
 end
   
 get "/books/filter_results/:filter_type/:offset" do
-  # require_signed_in_user
   @filter_type = params[:filter_type]
+  require_signed_in_user if (@filter_type == 'your_books' || @filter_type == 'available_books')
   @title = params[:title]
   @author = params[:author]
   @categories_selected = selected_category_ids(params)
