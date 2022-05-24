@@ -30,6 +30,8 @@
           <% if book[:owner_id] == session[:user_id] %>
             <% if book[:requester_id] %>
               <form action="/book/<%= book[:id] %>/loan" method="post">
+                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
+                <input type='hidden' name='offset' value='<%=@offset %>'/>
                 <button>Loan book to <%= book[:requester_name] %></button>
               </form>
               <form action="/book/<%= book[:id] %>/reject_request" method="post">

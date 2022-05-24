@@ -356,11 +356,12 @@ end
 post "/book/:book_id/loan" do
   require_signed_in_user
   book_id = params[:book_id].to_i
-  
+  filter_type = params[:filter_type]
+  offset = params[:offset]
   @storage.book_loan(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "#{@book[:title]} has been loaned to #{@book[:borrower_name]}"
-  redirect "/books/filter_results/your_books/0"
+  redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
 post "/book/:book_id/reject_request" do
