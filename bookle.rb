@@ -89,13 +89,17 @@ def valid_credentials?(user_name, password)
   end
 end
 
-def blank_field_signup_message(username, password)
-  if username == '' && password == ''
+def message_signup_input_error(new_username, new_password, reenter_password)
+  if new_username == '' && new_password == ''
     'Username and password cannot be blank! Please enter a username and password.'
-  elsif username == ''
+  elsif new_username == ''
     'Username cannot be blank! Please enter a username.'
-  elsif password == ''
+  elsif new_password == ''
     'Password cannot be blank! Please enter a password.'
+  elsif @storage.load_user_credentials.keys.include?(new_username)
+    'That username already exists.'
+  elsif new_password != reenter_password
+    'The passwords do not match.'
   end
 end
 
@@ -234,18 +238,8 @@ post "/users/signup" do
   new_username = params[:new_username]
   new_password = params[:password]
   reenter_password = params[:reenter_password]
-  @users = @storage.load_user_credentials
   
-  if @users.keys.include?(new_username)
-    session[:message] = "That username already exists."
-    status 422
-    erb :signup
-  elsif new_username == '' || new_password == ''
-    session[:message] = blank_field_signup_message(new_username, new_password)
-    status 422
-    erb :signup
-  elsif new_password != reenter_password
-    session[:message] = "The passwords do not match."
+  if session[:message] = message_signup_input_error(new_username, new_password, reenter_password)
     status 422
     erb :signup
   else
@@ -256,6 +250,8 @@ post "/users/signup" do
     redirect "/"
   end
 end
+
+
 
 get "/books/filter_form" do
   require_signed_in_user
