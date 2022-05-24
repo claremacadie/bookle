@@ -237,7 +237,7 @@ get "/books/filter_results/:filter_type/:offset" do
       redirect "/books/filter_form"
     end
     @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
-  when @filter_type == 'all_books'
+    when @filter_type == 'all_books'
     books_count = @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
     if books_count == 0
       session[:message] = "There are no books on Bookle."
@@ -258,6 +258,10 @@ get "/books/filter_results/:filter_type/:offset" do
       redirect "/"
     end
     @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
+    while @books.empty?
+      @offset -= LIMIT
+      @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
+    end
   end
   @heading = heading(@filter_type)
   @number_of_pages = (books_count/ @limit.to_f).ceil
