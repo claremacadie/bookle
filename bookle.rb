@@ -165,6 +165,19 @@ def no_books_message(filter_type)
   end
 end
 
+def books_data(filter_type)
+  case filter_type
+  when 'search'
+    @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
+  when 'all_books'
+    @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
+  when 'available_to_borrow'
+    @storage.available_books(session[:user_id], @limit, @offset)
+  when 'your_books'
+    @storage.user_owned_books(session[:user_id], @limit, @offset)
+  end
+end
+
 
 
 # Routes
@@ -264,28 +277,28 @@ get "/books/filter_results/:filter_type/:offset" do
       session[:message] = no_books_message(@filter_type)
       redirect "/books/filter_form"
     end
-    @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
+    @books = books_data(@filter_type)
   when @filter_type == 'all_books'
     books_count = number_of_books(@filter_type)
     if books_count == 0
       session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
-    @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
+    @books = books_data(@filter_type)
   when @filter_type == 'available_to_borrow'
     books_count = number_of_books(@filter_type)
     if books_count == 0
       session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
-    @books = @storage.available_books(session[:user_id], @limit, @offset)
+    @books = books_data(@filter_type)
   when @filter_type == 'your_books'
     books_count = number_of_books(@filter_type)
     if books_count == 0
       session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
-    @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
+    @books = books_data(@filter_type)
     while @books.empty?
       @offset -= LIMIT
       @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
