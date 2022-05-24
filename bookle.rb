@@ -139,6 +139,21 @@ def blank_field_message(title, author)
   end
 end
 
+def no_books_message(filter_type)
+  case filter_type
+  when 'search'
+    "There are no books meeting your search criteria. Try again!"
+  when 'all_books'
+    "There are no books on Bookle."
+  when 'available_books'
+    "There are no books available for you to borrow."
+  when 'your_books'
+    "You don't own any books on Bookle"
+  end
+end
+
+
+
 # Routes
 get "/" do
   erb :home
@@ -233,28 +248,28 @@ get "/books/filter_results/:filter_type/:offset" do
   when @filter_type == 'search'
     books_count = @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
     if books_count == 0
-      session[:message] = "There are no books meeting your search criteria. Try again!"
+      session[:message] = no_books_message(@filter_type)
       redirect "/books/filter_form"
     end
     @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
     when @filter_type == 'all_books'
     books_count = @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
     if books_count == 0
-      session[:message] = "There are no books on Bookle."
+      session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
     @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
   when @filter_type == 'available_to_borrow'
     books_count = @storage.count_available_books(session[:user_id])
     if books_count == 0
-      session[:message] = "There are no books available for you to borrow."
+      session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
     @books = @storage.available_books(session[:user_id], @limit, @offset)
   when @filter_type == 'your_books'
     books_count = @storage.count_user_books(session[:user_id])
     if books_count == 0
-      session[:message] = "You don't own any books on Bookle."
+      session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
     @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
