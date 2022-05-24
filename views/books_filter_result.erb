@@ -37,6 +37,8 @@
               </form>
             <% elsif book[:borrower_id] %>
               <form action="/book/<%= book[:id] %>/return" method="post">
+                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
+                <input type='hidden' name='offset' value='<%=@offset %>'/>
                 <button>Book returned</button>
               </form>
             <% else %>
