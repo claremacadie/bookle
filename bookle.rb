@@ -89,7 +89,7 @@ def valid_credentials?(user_name, password)
   end
 end
 
-def message_signup_input_error(new_username, new_password, reenter_password)
+def signup_input_error(new_username, new_password, reenter_password)
   if new_username == '' && new_password == ''
     'Username and password cannot be blank! Please enter a username and password.'
   elsif new_username == ''
@@ -239,7 +239,7 @@ post "/users/signup" do
   new_password = params[:password]
   reenter_password = params[:reenter_password]
   
-  if session[:message] = message_signup_input_error(new_username, new_password, reenter_password)
+  if session[:message] = signup_input_error(new_username, new_password, reenter_password)
     status 422
     erb :signup
   else
@@ -250,8 +250,6 @@ post "/users/signup" do
     redirect "/"
   end
 end
-
-
 
 get "/books/filter_form" do
   require_signed_in_user
