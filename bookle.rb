@@ -174,7 +174,7 @@ def no_books_message(filter_type)
     "There are no books meeting your search criteria. Try again!"
   when 'all_books'
     "There are no books on Bookle."
-  when 'available_books'
+  when 'available_to_borrow'
     "There are no books available for you to borrow."
   when 'your_books'
     "You don't own any books on Bookle"
@@ -262,7 +262,7 @@ end
   
 get "/books/filter_results/:filter_type/:offset" do
   @filter_type = params[:filter_type]
-  require_signed_in_user if (@filter_type == 'your_books' || @filter_type == 'available_books')
+  require_signed_in_user if (@filter_type == 'your_books' || @filter_type == 'available_to_borrow')
   @title = params[:title]
   @author = params[:author]
   @categories_selected = selected_category_ids(params)

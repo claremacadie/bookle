@@ -143,15 +143,14 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Page 3"
   end
   
-  ########################################################################################
-  # def test_available_books_list_signed_out
-  #   get "/books/filter_results/available_to_borrow/0"
-  #   assert_equal 302, last_response.status
-  #   assert_equal "You must be signed in to do that.", session[:message]
+  def test_available_books_list_signed_out
+    get "/books/filter_results/available_to_borrow/0"
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
   
-  #   get last_response["Location"]
-  #   assert_includes last_response.body, "Home"
-  # end
+    get last_response["Location"]
+    assert_includes last_response.body, "Home"
+  end
   
   def test_view_your_books_signed_in
     get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
