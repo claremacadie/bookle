@@ -53,8 +53,8 @@ def require_signed_in_user
   unless user_signed_in?
     @original_route = request.path_info
     session[:message] = "You must be signed in to do that."
-    # erb :signin
     redirect "/users/signin?original_route=#{@original_route}"
+    # erb :signin - I think this doesn't work because the rest of the route that invoked this method ends in an erb that overwrites it.
   end
 end
 
