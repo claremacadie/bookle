@@ -189,6 +189,14 @@ post "/users/signup" do
     session[:message] = "That username already exists."
     status 422
     erb :signup
+  elsif new_username == ''
+    session[:message] = "Username cannot be blank! Please try again."
+    status 422
+    erb :signup
+  elsif new_password == ''
+    session[:message] = "Password cannot be blank! Please try again."
+    status 422
+    erb :signup
   elsif new_password != reenter_password
     session[:message] = "The passwords do not match."
     status 422
