@@ -329,7 +329,7 @@ post "/book/:book_id/delete" do
   @storage.delete_book(book_id, session[:user_id])
   session[:message] = "#{@book[:title]} has been deleted."
   if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
-    "/books/filter_results/your_books/0"
+    "/books/filter_results/#{filter_type}/#{offset}"
   else
     redirect "/books/filter_results/your_books/0"
   end
