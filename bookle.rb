@@ -139,6 +139,19 @@ def blank_field_message(title, author)
   end
 end
 
+def select_books_count_method(filter_type)
+  case filter_type
+  when 'search'
+    @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
+  when 'all_books'
+    @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
+  when 'available_to_borrow'
+    @storage.count_available_books(session[:user_id])
+  when 'your_books'
+    @storage.count_user_books(session[:user_id])
+  end
+end
+
 def no_books_message(filter_type)
   case filter_type
   when 'search'
@@ -246,28 +259,28 @@ get "/books/filter_results/:filter_type/:offset" do
   @offset = params[:offset].to_i
   case 
   when @filter_type == 'search'
-    books_count = @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
+    books_count = select_books_count_method(@filter_type)
     if books_count == 0
       session[:message] = no_books_message(@filter_type)
       redirect "/books/filter_form"
     end
     @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
-    when @filter_type == 'all_books'
-    books_count = @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
+  when @filter_type == 'all_books'
+    books_count = select_books_count_method(@filter_type)
     if books_count == 0
       session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
     @books = @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
   when @filter_type == 'available_to_borrow'
-    books_count = @storage.count_available_books(session[:user_id])
+    books_count = select_books_count_method(@filter_type)
     if books_count == 0
       session[:message] = no_books_message(@filter_type)
       redirect "/"
     end
     @books = @storage.available_books(session[:user_id], @limit, @offset)
   when @filter_type == 'your_books'
-    books_count = @storage.count_user_books(session[:user_id])
+    books_count = select_books_count_method(@filter_type)
     if books_count == 0
       session[:message] = no_books_message(@filter_type)
       redirect "/"
