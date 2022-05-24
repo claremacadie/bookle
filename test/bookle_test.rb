@@ -52,19 +52,19 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "Create Account"
   end
   
-  # def test_homepage_signed_out
-  #   get "/"
+  def test_homepage_signed_out
+    get "/"
     
-  #   assert_equal 200, last_response.status
-  #   assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-  #   assert_includes last_response.body, "Welcome to Bookle."
-  #   assert_includes last_response.body, "Home"
-  #   assert_includes last_response.body, "Sign In"
-  #   assert_includes last_response.body, "Create Account"
-  #   refute_includes last_response.body, "View books"
-  #   refute_includes last_response.body, "Signed in as"
-  #   refute_includes last_response.body, %q(<button type="submit">Sign Out</button>)
-  # end
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Welcome to Bookle."
+    assert_includes last_response.body, "Home"
+    assert_includes last_response.body, "Sign In"
+    assert_includes last_response.body, "Create Account"
+    assert_includes last_response.body, "View books"
+    refute_includes last_response.body, "Signed in as"
+    refute_includes last_response.body, %q(<button type="submit">Sign Out</button>)
+  end
   
   def test_all_books_list_signed_in
     get "/books/filter_results/all_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
