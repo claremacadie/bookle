@@ -59,8 +59,10 @@ end
 
 def require_signed_in_user
   unless user_signed_in?
+    @original_route = request.path_info
     session[:message] = "You must be signed in to do that."
-    redirect "/"
+    # erb :signin
+    redirect "/users/signin?original_route=#{@original_route}"
   end
 end
 
@@ -162,6 +164,7 @@ def number_of_books(filter_type)
   when 'available_to_borrow'
     @storage.count_available_books(session[:user_id])
   when 'your_books'
+    require_signed_in_user
     @storage.count_user_books(session[:user_id])
   end
 end
@@ -200,15 +203,17 @@ get "/" do
 end
 
 get "/users/signin" do
+  @original_route = params[:original_route]
   erb :signin
 end
 
 post "/users/signin" do
+  @original_route = params["original_route"]
   if valid_credentials?(params[:user_name], params[:password])
     session[:user_name] = params[:user_name]
     session[:message] = "Welcome!"
     session[:user_id] = @storage.user_id(session[:user_name])
-    redirect "/"
+    redirect(@original_route)
   else
     session[:message] = "Invalid credentials"
     status 422
@@ -252,13 +257,13 @@ post "/users/signup" do
 end
 
 get "/books/filter_form" do
-  require_signed_in_user
+  # require_signed_in_user
   @categories_list = @storage.categories_list
   erb :books_filter_form
 end
   
 get "/books/filter_results/:filter_type/:offset" do
-  require_signed_in_user
+  # require_signed_in_user
   @filter_type = params[:filter_type]
   @title = params[:title]
   @author = params[:author]

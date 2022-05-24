@@ -12,8 +12,8 @@
     <header>
       <nav>
         <a href="/">Home</a>
-        <% if session[:user_id] %>
           <a href="/books/filter_results/all_books/0">View books</a>
+        <% if session[:user_id] %>
         <% end %>
       </nav>
       <% if session[:user_id] %>
