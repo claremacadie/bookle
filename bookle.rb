@@ -293,6 +293,8 @@ post "/book/add_new" do
   require_signed_in_user
   title = params[:title]
   author = params[:author]
+  @filter_type = params[:filter_type]
+  @offset = params[:offset].to_i
   owner_id = session[:user_id]
   categories_selected = selected_category_ids(params)
   if title == '' || author == ''
@@ -303,7 +305,7 @@ post "/book/add_new" do
   else 
     @storage.add_book(title, author, owner_id, categories_selected)
     session[:message] = "#{title} has been added."
-    redirect "/books/filter_results/your_books/0"
+    redirect "/books/filter_results/#{@filter_type}/#{@offset}"
   end
 end
 
