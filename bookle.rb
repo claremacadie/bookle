@@ -311,8 +311,10 @@ end
 
 get "/book/:book_id/edit" do
   require_signed_in_user
-  book_id = params[:book_id].to_i
+  book_id = params[:book_id].to_i 
   require_signed_in_as_book_owner(book_id)
+  @filter_type = params[:filter_type]
+  @offset = params[:offset]
   @book = @storage.book_data(book_id)
   @categories_list = @storage.categories_list
   @book_category_ids = @storage.categories(book_id)
@@ -325,6 +327,8 @@ post "/book/:book_id/edit" do
   require_signed_in_as_book_owner(book_id)
   title = params[:title]
   author = params[:author]
+  @filter_type = params[:filter_type]
+  @offset = params[:offset].to_i
   categories_selected = selected_category_ids(params)
   if title == '' || author == ''
     session[:message] = blank_field_message(title, author)
@@ -336,7 +340,7 @@ post "/book/:book_id/edit" do
   else 
     @storage.update_book_data(book_id, title, author, categories_selected)
     session[:message] = "Book details have been updated for #{title}."
-    redirect "/books/filter_results/your_books/0"
+    redirect "/books/filter_results/#{@filter_type}/#{@offset}"
   end
 end
 

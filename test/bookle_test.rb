@@ -780,7 +780,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "Book details have been updated for A new title.", session[:message]
     
-    get last_response["Location"]
+    get "/books/filter_results/search/0", {title: 'A new', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "A new title"

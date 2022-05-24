@@ -69,7 +69,7 @@
 
         <td> 
           <% if book[:owner_id] == session[:user_id] %>
-            <a href="/book/<%= book[:id] %>/edit">Edit book details</a>
+            <a href="/book/<%= book[:id] %>/edit?filter_type=<%= @filter_type %>&offset=<%=@offset %>">Edit book details</a>
           <% else %>
             -
           <% end %>
