@@ -75,8 +75,8 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "List your books"
     assert_includes last_response.body, "Search books"
     assert_includes last_response.body, "Chamber of Secrets"
+    assert_includes last_response.body, "Deathly Hallows"
     assert_includes last_response.body, "Goblet of Fire"
-    assert_includes last_response.body, "How to Train a Dragon"
     assert_includes last_response.body, "Page 1"
     assert_includes last_response.body, "Page 2"
     assert_includes last_response.body, "JK Rowling"
@@ -107,14 +107,18 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "How to Train a Dragon"
   end
   
-  # def test_all_books_list_signed_out
-  #   get "/books/filter_results/all_books/0"
-  #   assert_equal 302, last_response.status
-  #   assert_equal "You must be signed in to do that.", session[:message]
-    
-  #   get last_response["Location"]
-  #   assert_includes last_response.body, "Home"
-  # end
+  ########################################################################################
+  def test_all_books_list_signed_out
+    get "/books/filter_results/all_books/0"
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "List available books for you to borrow"
+    assert_includes last_response.body, "List your books"
+    assert_includes last_response.body, "Search books"
+    assert_includes last_response.body, "Chamber of Secrets"
+    assert_includes last_response.body, "Deathly Hallows"
+    assert_includes last_response.body, "Goblet of Fire"
+  end
   
   def test_available_books_list_signed_in
     get "/books/filter_results/available_to_borrow/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
