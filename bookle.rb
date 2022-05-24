@@ -283,6 +283,8 @@ end
 
 get "/book/add_new" do
   require_signed_in_user
+  @filter_type = params[:filter_type]
+  @offset = params[:offset]
   @categories_list = @storage.categories_list
   erb :add_book
 end
@@ -291,8 +293,6 @@ post "/book/add_new" do
   require_signed_in_user
   title = params[:title]
   author = params[:author]
-  @filter_type = params[:filter_type]
-  @offset = params[:offset]
   owner_id = session[:user_id]
   categories_selected = selected_category_ids(params)
   if title == '' || author == ''
