@@ -323,6 +323,8 @@ post "/book/:book_id/delete" do
   require_signed_in_user
   book_id = params[:book_id].to_i
   require_signed_in_as_book_owner(book_id)
+  filter_type = params[:filter_type]
+  offset = params[:offset]
   @book = @storage.book_data(book_id)
   @storage.delete_book(book_id, session[:user_id])
   session[:message] = "#{@book[:title]} has been deleted."

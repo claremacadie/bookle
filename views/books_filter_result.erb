@@ -78,6 +78,8 @@
         <td>
           <% if book[:owner_id] == session[:user_id] %>
             <form class="delete_book" action="/book/<%= book[:id] %>/delete" method="post">
+              <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
+              <input type='hidden' name='offset' value='<%=@offset %>'/>
               <button type="submit" class="delete">Delete book</button>
             </form>
           <% else %>
