@@ -701,6 +701,7 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     
     get "/books/filter_results/your_books/0"
+    # Can't use the book's name as this is in the flash message.
     refute_includes last_response.body, "/book/7"
   end
 
