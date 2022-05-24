@@ -89,6 +89,16 @@ def valid_credentials?(user_name, password)
   end
 end
 
+def blank_field_signup_message(username, password)
+  if username == '' && password == ''
+    'Username and password cannot be blank! Please enter a username and password.'
+  elsif username == ''
+    'Username cannot be blank! Please enter a username.'
+  elsif password == ''
+    'Password cannot be blank! Please enter a password.'
+  end
+end
+
 def selected_category_ids(params)
   if params.keys.include?('categories')
     # Convert "[1, 2, 3]" to [1, 2, 3]
@@ -230,16 +240,8 @@ post "/users/signup" do
     session[:message] = "That username already exists."
     status 422
     erb :signup
-  elsif new_username == '' && new_password == ''
-    session[:message] = "Username and password cannot be blank! Please enter a username and password."
-    status 422
-    erb :signup
-  elsif new_username == ''
-    session[:message] = "Username cannot be blank! Please enter a username."
-    status 422
-    erb :signup
-  elsif new_password == ''
-    session[:message] = "Password cannot be blank! Please enter a password."
+  elsif new_username == '' || new_password == ''
+    session[:message] = blank_field_signup_message(new_username, new_password)
     status 422
     erb :signup
   elsif new_password != reenter_password
