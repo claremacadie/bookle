@@ -273,11 +273,7 @@ get "/books/filter_results/:filter_type/:offset" do
   books_count = number_of_books(@filter_type)
   if books_count == 0
     session[:message] = no_books_message(@filter_type)
-    if @filter_type == 'search'
-      redirect "/books/filter_form"
-    else
-      redirect "/"
-    end
+    @filter_type == 'search' ? redirect("/books/filter_form") : redirect("/")
   end
   @books = books_data(@filter_type)
   while @books.empty?
