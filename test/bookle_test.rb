@@ -149,6 +149,18 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<button type="submit" class="delete">Delete book</button>) 
   end
   
+  def test_view_your_books_signed_in_invalid_offset
+    get "/books/filter_results/your_books/9", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Add new book"
+    assert_includes last_response.body, "Prisoner of Azkaban"
+    assert_includes last_response.body, "Page 1"
+    assert_includes last_response.body, "Page 2"
+    assert_includes last_response.body, "Page 3"
+  end
+  
   def test_view_your_books_signed_out
     get "/books/filter_results/your_books/0"
 
