@@ -331,7 +331,7 @@ post "/book/:book_id/delete" do
   if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
     "/books/filter_results/#{filter_type}/#{offset}"
   else
-    redirect "/books/filter_results/your_books/0"
+    redirect "/books/filter_results/#{filter_type}/0"
   end
 end
 

@@ -697,11 +697,11 @@ class CMSTest < Minitest::Test
     assert_equal "Deathly Hallows has been deleted.", session[:message]
     
     get last_response["Location"]
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     
     get "/books/filter_results/your_books/0"
-    refute_includes last_response.body, "Deathly Hallows"
+    refute_includes last_response.body, "/book/7"
   end
 
   def test_edit_book_signedin_as_book_owner
