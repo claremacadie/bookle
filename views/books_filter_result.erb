@@ -51,10 +51,14 @@
           <% else %>
             <% if !book[:requester_id] && !book[:borrower_id] %>
               <form action="/book/<%= book[:id] %>/request" method="post">
+                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
+                <input type='hidden' name='offset' value='<%=@offset %>'/>
                 <button>Request book</button>
               </form>
             <% elsif book[:requester_id] == session[:user_id] %>
               <form action="/book/<%= book[:id] %>/cancel_request" method="post">
+                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
+                <input type='hidden' name='offset' value='<%=@offset %>'/>
                 <button>Cancel request</button>
               </form>
             <% else %>

@@ -336,21 +336,23 @@ end
 post "/book/:book_id/request" do
   require_signed_in_user
   book_id = params[:book_id].to_i
-  
+  filter_type = params[:filter_type]
+  offset = params[:offset]
   @storage.book_add_request(book_id, session[:user_id])
   @book = @storage.book_data(book_id)
   session[:message] = "You have requested #{@book[:title]} from #{@book[:owner_name]}"
-  redirect "/books/filter_results/all_books/0"
+  redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
 post "/book/:book_id/cancel_request" do
   require_signed_in_user
   book_id = params[:book_id].to_i
-  
+  filter_type = params[:filter_type]
+  offset = params[:offset]
   @storage.book_cancel_request(book_id)
   @book = @storage.book_data(book_id)
   session[:message] = "You have cancelled your request for #{@book[:title]} from #{@book[:owner_name]}"
-  redirect "/books/filter_results/all_books/0"
+  redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
 post "/book/:book_id/loan" do
