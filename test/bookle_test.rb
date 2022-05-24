@@ -74,6 +74,8 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "List available books for you to borrow"
     assert_includes last_response.body, "List your books"
     assert_includes last_response.body, "Search books"
+    assert_includes last_response.body, "List all books"
+    assert_includes last_response.body, "Add book"
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Deathly Hallows"
     assert_includes last_response.body, "Goblet of Fire"
@@ -114,9 +116,11 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "List available books for you to borrow"
     assert_includes last_response.body, "List your books"
     assert_includes last_response.body, "Search books"
+    assert_includes last_response.body, "List all books"
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Deathly Hallows"
     assert_includes last_response.body, "Goblet of Fire"
+    refute_includes last_response.body, "Add book"
   end
   
   def test_available_books_list_signed_in
