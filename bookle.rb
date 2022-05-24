@@ -366,11 +366,12 @@ end
 post "/book/:book_id/reject_request" do
   require_signed_in_user
   book_id = params[:book_id].to_i
-  
+  filter_type = params[:filter_type]
+  offset = params[:offset]
   @book = @storage.book_data(book_id)
   session[:message] = "You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}"
   @storage.book_reject_request(book_id)
-  redirect "/books/filter_results/your_books/0"
+  redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
 post "/book/:book_id/return" do
