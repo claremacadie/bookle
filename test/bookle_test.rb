@@ -565,7 +565,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value="")
     assert_includes last_response.body, %q(<input type="checkbox")
     assert_includes last_response.body, %q(<button type="submit">See Results</button>)
- end
+  end
   
   def test_view_available_book_signed_in_as_book_owner
     get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
