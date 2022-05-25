@@ -51,6 +51,19 @@ helpers do
       nil
     end
   end
+
+  def total_books(filter_type, books_count)
+    case filter_type
+    when "search"
+      "There are #{books_count} books meeting your criteria."
+    when 'all_books'
+      "There are #{books_count} books on Bookle."
+    when 'available_to_borrow'
+      "There are #{books_count} books available for you to borrow."
+    when 'your_books'
+      "You have #{books_count} books on Bookle."
+    end
+  end
 end
 
 # Helper methods for routes
