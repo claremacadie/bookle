@@ -37,6 +37,10 @@ helpers do
       "Available"
     end
   end
+
+  def image_file(title)
+    title.downcase.gsub(" ", "_").gsub(/\W/, "")
+  end
 end
 
 # Helper methods for routes

@@ -7,9 +7,6 @@
 <% end %>
 
 <h1><%= @heading %></h1>
-
-
-
 <table>
   <thead>
     <tr>
@@ -25,7 +22,7 @@
   <tbody>
     <% @books.each do |book| %>
       <tr>
-        <td> <a href="/book/<%= book[:id] %>"><%= book[:title] %></a><img id="prince_caspian_cover" src="/images/prince_caspian.jpeg" alt /></td>
+        <td> <a href="/images/<%= image_file(book[:title]) %>.jpeg" target="blank"><%= book[:title] %></a></td>
         <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
         <td> <%= book_availability(book) %></td>
