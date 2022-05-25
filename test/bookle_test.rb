@@ -176,8 +176,8 @@ class CMSTest < Minitest::Test
   def test_available_books_list_signed_out
     get "/books/filter_results/available_to_borrow/0"
     assert_equal 302, last_response.status
-    assert_equal "You must be signed in to do that. Sign in below or <a href='/users/signup'>create a new account</a>", session[:message]
-  
+    assert_includes session[:message], "You must be signed in to do that. Sign in below or"
+
     get last_response["Location"]
     assert_includes last_response.body, "Home"
   end
@@ -229,7 +229,7 @@ class CMSTest < Minitest::Test
     get "/books/filter_results/your_books/0"
 
     assert_equal 302, last_response.status
-    assert_equal "You must be signed in to do that. Sign in below or <a href='/users/signup'>create a new account</a>", session[:message]
+    assert_includes session[:message], "You must be signed in to do that. Sign in below or"
   end
   
   def test_filter_books_form_signed_in
@@ -817,7 +817,7 @@ class CMSTest < Minitest::Test
   def test_edit_book_not_signedin
     get "/book/1/edit"
     assert_equal 302, last_response.status
-    assert_equal "You must be signed in to do that. Sign in below or <a href='/users/signup'>create a new account</a>", session[:message]
+    assert_includes session[:message], "You must be signed in to do that. Sign in below or"
   end
 
   def test_change_book_details
