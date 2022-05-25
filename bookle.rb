@@ -237,24 +237,24 @@ post '/users/signin' do
   end
 end
 
-post "/users/signout" do
+post '/users/signout' do
   session.delete(:user_name)
   session.delete(:user_id)
-  session[:message] = "You have been signed out"
-  if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
-	  "/"
+  session[:message] = 'You have been signed out'
+  if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+	  '/'
 	else
-	  redirect "/"
+	  redirect '/'
   end
 end
 
-get "/users/signup" do
+get '/users/signup' do
   require_signed_out_user
   @original_route = params[:original_route]
   erb :signup
 end
 
-post "/users/signup" do
+post '/users/signup' do
   require_signed_out_user
   @original_route = params[:original_route]
   
@@ -269,17 +269,17 @@ post "/users/signup" do
     @storage.upload_new_user_credentials(new_username, new_password)
     session[:user_name] = new_username
     session[:user_id] = @storage.user_id(new_username)
-    session[:message] = "Your account has been created."
+    session[:message] = 'Your account has been created.'
     redirect(@original_route)
   end
 end
 
-get "/books/filter_form" do
+get '/books/filter_form' do
   @categories_list = @storage.categories_list
   erb :books_filter_form
 end
   
-get "/books/filter_results/:filter_type/:offset" do
+get '/books/filter_results/:filter_type/:offset' do
   @filter_type = params[:filter_type]
   require_signed_in_user if (@filter_type == 'your_books' || @filter_type == 'available_to_borrow')
   @title = params[:title]
@@ -291,7 +291,7 @@ get "/books/filter_results/:filter_type/:offset" do
   @books_count = number_of_books(@filter_type)
   if @books_count == 0
     session[:message] = no_books_message(@filter_type)
-    @filter_type == 'search' ? redirect("/books/filter_form") : redirect("/")
+    @filter_type == 'search' ? redirect('/books/filter_form') : redirect('/')
   end
   @books = books_data(@filter_type)
   while @books.empty?
@@ -303,7 +303,7 @@ get "/books/filter_results/:filter_type/:offset" do
   erb :books_filter_result
 end
 
-get "/book/add_new" do
+get '/book/add_new' do
   require_signed_in_user
   @filter_type = params[:filter_type]
   @offset = params[:offset]
@@ -311,7 +311,7 @@ get "/book/add_new" do
   erb :add_book
 end
 
-post "/book/add_new" do
+post '/book/add_new' do
   require_signed_in_user
   title = params[:title]
   author = params[:author]
@@ -331,7 +331,7 @@ post "/book/add_new" do
   end
 end
 
-get "/book/:book_id/edit" do
+get '/book/:book_id/edit' do
   require_signed_in_user
   book_id = params[:book_id].to_i 
   require_signed_in_as_book_owner(book_id)
@@ -343,7 +343,7 @@ get "/book/:book_id/edit" do
   erb :edit_book
 end
 
-post "/book/:book_id/edit" do
+post '/book/:book_id/edit' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   require_signed_in_as_book_owner(book_id)
@@ -366,7 +366,7 @@ post "/book/:book_id/edit" do
   end
 end
 
-post "/book/:book_id/delete" do
+post '/book/:book_id/delete' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   require_signed_in_as_book_owner(book_id)
@@ -375,14 +375,14 @@ post "/book/:book_id/delete" do
   @book = @storage.book_data(book_id)
   @storage.delete_book(book_id, session[:user_id])
   session[:message] = "#{@book[:title]} has been deleted."
-  if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
+  if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     "/books/filter_results/#{filter_type}/#{offset}"
   else
     redirect "/books/filter_results/#{filter_type}/#{offset}"
   end
 end
 
-post "/book/:book_id/request" do
+post '/book/:book_id/request' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   filter_type = params[:filter_type]
@@ -393,7 +393,7 @@ post "/book/:book_id/request" do
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
-post "/book/:book_id/cancel_request" do
+post '/book/:book_id/cancel_request' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   filter_type = params[:filter_type]
@@ -404,7 +404,7 @@ post "/book/:book_id/cancel_request" do
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
-post "/book/:book_id/loan" do
+post '/book/:book_id/loan' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   filter_type = params[:filter_type]
@@ -415,7 +415,7 @@ post "/book/:book_id/loan" do
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
-post "/book/:book_id/reject_request" do
+post '/book/:book_id/reject_request' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   filter_type = params[:filter_type]
@@ -426,7 +426,7 @@ post "/book/:book_id/reject_request" do
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
-post "/book/:book_id/return" do
+post '/book/:book_id/return' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   filter_type = params[:filter_type]
@@ -438,5 +438,5 @@ post "/book/:book_id/return" do
 end
 
 not_found do
-  redirect "/"
+  redirect '/'
 end
