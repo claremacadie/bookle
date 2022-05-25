@@ -532,12 +532,16 @@ class CMSTest < Minitest::Test
     assert_equal "There are no books meeting your search criteria. Try again!", session[:message]
   end
   
-  # def test_filtered_books_list_signed_out
-  #   get "/books/filter_results/search/0"
-    
-  #   assert_equal 302, last_response.status
-  #   assert_equal "You must be signed in to do that.", session[:message]
-  # end
+  def test_filtered_books_list_signed_out
+    get "/books/filter_form"
+   
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, %q(<input id="title" type="text" name="title" value="")
+    assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value="")
+    assert_includes last_response.body, %q(<input type="checkbox")
+    assert_includes last_response.body, %q(<button type="submit">See Results</button>)
+ end
   
   def test_view_available_book_signed_in_as_book_owner
     get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
