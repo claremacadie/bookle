@@ -17,7 +17,7 @@ class CMSTest < Minitest::Test
 
   def setup
     sql = File.read('test/data_test.sql')
-    PG.connect(dbname: "bookle_test").exec(sql)
+    @db_test = PG.connect(dbname: "bookle_test").exec(sql)
   end
 
   def teardown
@@ -38,6 +38,15 @@ class CMSTest < Minitest::Test
 
 
   ####### Integration (Route) tests
+  def no_books_on_bookle_message
+    @db_test.exec("DELETE FROM books;")
+
+    get "/books/filter_resultall_books/0"
+    assert_equal 302, last_response.status
+    assert_equal "There are no books on Bookle.", session[:message]
+end
+
+
   def test_homepage_signed_in
     get "/", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
@@ -226,7 +235,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<input type="checkbox")
     assert_includes last_response.body, %q(<button type="submit">See Results</button>)
   end
-  #######################################################################################
+  
   def test_filter_books_form_signed_in_no_books_on_bookle
     get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Beth Bloom" , user_id: 3 } }
     
