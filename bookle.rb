@@ -275,8 +275,8 @@ get "/books/filter_results/:filter_type/:offset" do
   @availabilities = availability_array(params)
   @limit = LIMIT
   @offset = params[:offset].to_i
-  books_count = number_of_books(@filter_type)
-  if books_count == 0
+  @books_count = number_of_books(@filter_type)
+  if @books_count == 0
     session[:message] = no_books_message(@filter_type)
     @filter_type == 'search' ? redirect("/books/filter_form") : redirect("/")
   end
@@ -286,7 +286,7 @@ get "/books/filter_results/:filter_type/:offset" do
     @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
   end
   @heading = heading(@filter_type)
-  @number_of_pages = (books_count/ @limit.to_f).ceil
+  @number_of_pages = (@books_count/ @limit.to_f).ceil
   erb :books_filter_result
 end
 
