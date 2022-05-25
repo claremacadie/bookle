@@ -7,12 +7,12 @@ require_relative 'database_persistence'
 
 configure do
   enable :sessions
-  set :session_secret, "secret"
+  set :session_secret, 'secret'
 end
 
 configure(:development) do
-  require "sinatra/reloader"
-  also_reload "database_persistence.rb"
+  require 'sinatra/reloader'
+  also_reload 'database_persistence.rb'
 end
 
 # Define constants
@@ -30,21 +30,21 @@ end
 helpers do
   def book_availability(book)
     if book[:borrower_id] 
-      book[:borrower_id] == session[:user_id] ? "On loan to you" : "On loan to #{book[:borrower_name]}"
+      book[:borrower_id] == session[:user_id] ? 'On loan to you' : "On loan to #{book[:borrower_name]}"
     elsif book[:requester_id]
-      book[:requester_id] == session[:user_id] ? "Requested by you" : "Requested by #{book[:requester_name]}"
+      book[:requester_id] == session[:user_id] ? 'Requested by you' : "Requested by #{book[:requester_name]}"
     else
-      "Available"
+      'Available'
     end
   end
 
   def image_file(title)
-    image_files = Dir.glob("public/images/*")
+    image_files = Dir.glob('public/images/*')
     image_files.map! do |file|
       File.basename(file).split('.')[0]
     end
     
-    format_title = title.downcase.gsub(" ", "_").gsub(/\W/, "")
+    format_title = title.downcase.gsub(' ', '_').gsub(/\W/, '')
     if image_files.include?(format_title)
       format_title
     else
@@ -54,7 +54,7 @@ helpers do
 
   def total_books(filter_type, books_count)
     case filter_type
-    when "search"
+    when 'search'
       "There are #{books_count} books meeting your criteria."
     when 'all_books'
       "There are #{books_count} books on Bookle."
@@ -87,15 +87,15 @@ end
 
 def require_signed_in_as_book_owner(book_id)
   unless user_is_book_owner?(book_id)
-    session[:message] = "You must be the book owner to do that."
-    redirect "/"
+    session[:message] = 'You must be the book owner to do that.'
+    redirect '/'
   end
 end
 
 def require_signed_out_user
   if user_signed_in?
-    session[:message] = "You must be signed out to do that."
-    redirect "/"
+    session[:message] = 'You must be signed out to do that.'
+    redirect '/'
   end
 end
 
@@ -131,7 +131,7 @@ def selected_category_ids(params)
   end
   categories = []
   params.each do |k, v|
-    if k.include?("category_id")
+    if k.include?('category_id')
       categories << v.to_i
     end
   end
@@ -144,7 +144,7 @@ def availability_array(params)
   end
   availabilities = []
   params.each do |k, v|
-    if v == "availability"
+    if v =='availability'
       availabilities << k
     end
   end
@@ -153,8 +153,8 @@ end
 
 def heading(filter_type)
   case filter_type
-  when "search"
-    "Search Results"
+  when 'search'
+    'Search Results'
   when 'all_books'
     'All Books'
   when 'available_to_borrow'
@@ -190,11 +190,11 @@ end
 def no_books_message(filter_type)
   case filter_type
   when 'search'
-    "There are no books meeting your search criteria. Try again!"
+    'There are no books meeting your search criteria. Try again!'
   when 'all_books'
-    "There are no books on Bookle."
+    'There are no books on Bookle.'
   when 'available_to_borrow'
-    "There are no books available for you to borrow."
+    'There are no books available for you to borrow.'
   when 'your_books'
     "You don't own any books on Bookle"
   end
@@ -218,13 +218,13 @@ get "/" do
   erb :home
 end
 
-get "/users/signin" do
+get '/users/signin' do
   @original_route = params[:original_route]
   erb :signin
 end
 
-post "/users/signin" do
-  @original_route = params["original_route"]
+post '/users/signin' do
+  @original_route = params['original_route']
   if valid_credentials?(params[:user_name], params[:password])
     session[:user_name] = params[:user_name]
     session[:user_id] = @storage.user_id(session[:user_name])
