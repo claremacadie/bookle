@@ -237,11 +237,13 @@ end
 
 get "/users/signup" do
   require_signed_out_user
+  @original_route = params[:original_route]
   erb :signup
 end
 
 post "/users/signup" do
   require_signed_out_user
+  @original_route = params[:original_route]
   
   new_username = params[:new_username]
   new_password = params[:password]
@@ -255,7 +257,7 @@ post "/users/signup" do
     session[:user_name] = new_username
     session[:user_id] = @storage.user_id(new_username)
     session[:message] = "Your account has been created."
-    redirect "/"
+    redirect(@original_route)
   end
 end
 
