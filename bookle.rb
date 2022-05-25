@@ -66,7 +66,7 @@ end
 def require_signed_in_user
   unless user_signed_in?
     @original_route = request.path_info
-    session[:message] = "You must be signed in to do that."
+    session[:message] = "You must be signed in to do that. Sign in below or <a href='/users/signup'>create a new account</a>"
     redirect "/users/signin?original_route=#{@original_route}"
     # erb :signin - I think this doesn't work because the rest of the route that invoked this method ends in an erb that overwrites it.
   end
@@ -214,8 +214,8 @@ post "/users/signin" do
   @original_route = params["original_route"]
   if valid_credentials?(params[:user_name], params[:password])
     session[:user_name] = params[:user_name]
-    session[:message] = "Welcome!"
     session[:user_id] = @storage.user_id(session[:user_name])
+    session[:message] = "Welcome!"
     redirect(@original_route)
   else
     session[:message] = "Invalid credentials"
