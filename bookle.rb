@@ -200,8 +200,6 @@ def books_data(filter_type)
   end
 end
 
-
-
 # Routes
 get "/" do
   erb :home
