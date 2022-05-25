@@ -94,6 +94,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Search books"
     assert_includes last_response.body, "List all books"
     assert_includes last_response.body, "Add book"
+    assert_includes last_response.body, "There are 18 books on Bookle."
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "Deathly Hallows"
     assert_includes last_response.body, "Goblet of Fire"
@@ -154,6 +155,7 @@ class CMSTest < Minitest::Test
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "There are 8 books available for you to borrow."
     assert_includes last_response.body, "How to Be a Pirate"
     assert_includes last_response.body, "How to Cheat a Dragon's Curse"
     assert_includes last_response.body, "How to Speak Dragonese"
@@ -188,6 +190,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Add new book"
+    assert_includes last_response.body, "You have 7 books on Bookle."
     assert_includes last_response.body, "Chamber of Secrets"
     assert_includes last_response.body, "JK Rowling"
     assert_includes last_response.body, "Fantasy, Magic"
@@ -257,6 +260,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Add new book"
+    assert_includes last_response.body, "There are 7 books meeting your criteria."
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "Page 1"
     assert_includes last_response.body, "Page 2"
