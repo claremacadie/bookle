@@ -38,15 +38,6 @@ class CMSTest < Minitest::Test
 
 
   ####### Integration (Route) tests
-  def no_books_on_bookle_message
-    @db_test.exec("DELETE FROM books;")
-
-    get "/books/filter_resultall_books/0"
-    assert_equal 302, last_response.status
-    assert_equal "There are no books on Bookle.", session[:message]
-end
-
-
   def test_homepage_signed_in
     get "/", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
@@ -84,7 +75,15 @@ end
     assert_includes last_response.body, "How to Be a Pirate"
     refute_includes last_response.body, '<a href="/images/how_to_be_a_pirate.jpeg" target="blank">'
   end
-  
+
+  def no_books_on_bookle_message
+    @db_test.exec("DELETE FROM books;")
+
+    get "/books/filter_result/all_books/0"
+    assert_equal 302, last_response.status
+    assert_equal "There are no books on Bookle.", session[:message]
+  end
+
   def test_all_books_list_signed_in
     get "/books/filter_results/all_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
     
@@ -140,6 +139,14 @@ end
     assert_includes last_response.body, "Deathly Hallows"
     assert_includes last_response.body, "Goblet of Fire"
     refute_includes last_response.body, "Add book"
+  end
+  
+  def no_books_to_borrow_message
+    @db_test.exec("DELETE FROM books;")
+
+    get "/books/filter_result/available_books/0"
+    assert_equal 302, last_response.status
+    assert_equal "There are no books available for you to borrow.", session[:message]
   end
   
   def test_available_books_list_signed_in
