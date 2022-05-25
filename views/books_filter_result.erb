@@ -22,7 +22,13 @@
   <tbody>
     <% @books.each do |book| %>
       <tr>
-        <td> <a href="/images/<%= image_file(book[:title]) %>.jpeg" target="blank"><%= book[:title] %></a></td>
+        <td> 
+          <% if image_file(book[:title]) %>
+            <a href="/images/<%= image_file(book[:title]) %>.jpeg" target="blank"><%= book[:title] %></a>
+          <% else %>
+            <%= book[:title] %>
+          <% end %>
+        </td>
         <td> <%= book[:author] %></td>
         <td> <%= book[:categories] %></td>
         <td> <%= book_availability(book) %></td>

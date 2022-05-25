@@ -39,7 +39,17 @@ helpers do
   end
 
   def image_file(title)
-    title.downcase.gsub(" ", "_").gsub(/\W/, "")
+    image_files = Dir.glob("public/images/*")
+    image_files.map! do |file|
+      File.basename(file).split('.')[0]
+    end
+    
+    format_title = title.downcase.gsub(" ", "_").gsub(/\W/, "")
+    if image_files.include?(format_title)
+      format_title
+    else
+      nil
+    end
   end
 end
 
