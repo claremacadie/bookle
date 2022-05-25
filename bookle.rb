@@ -148,16 +148,13 @@ def availability_array(params)
 end
 
 def heading(filter_type)
-  case filter_type
-  when 'search'
-    'Search Results'
-  when 'all_books'
-    'All Books'
-  when 'available_to_borrow'
-    'Books Available For You To Borrow'
-  when 'your_books'
-    'Your Books'
-  end
+  heading_hash = {
+    'search' => 'Search Results',
+    'all_books' => 'All Books',
+    'available_to_borrow' => 'Books Available For You To Borrow',
+    'your_books' => 'Your Books'
+  }
+  heading_hash[filter_type]
 end
 
 def blank_field_message(title, author)
@@ -171,29 +168,23 @@ def blank_field_message(title, author)
 end
 
 def number_of_books(filter_type)
-  case filter_type
-  when 'search'
-    @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
-  when 'all_books'
-    @storage.count_filter_books(@title, @author, @categories_selected, @availabilities)
-  when 'available_to_borrow'
-    @storage.count_available_books(session[:user_id])
-  when 'your_books'
-    @storage.count_user_books(session[:user_id])
-  end
+  method_hash = {
+    'search' => @storage.count_filter_books(@title, @author, @categories_selected, @availabilities),
+    'all_books' => @storage.count_filter_books(@title, @author, @categories_selected, @availabilities),
+    'available_to_borrow' => @storage.count_available_books(session[:user_id]),
+    'your_books' => @storage.count_user_books(session[:user_id])
+  }
+  method_hash[filter_type]
 end
 
 def no_books_message(filter_type)
-  case filter_type
-  when 'search'
-    'There are no books meeting your search criteria. Try again!'
-  when 'all_books'
-    'There are no books on Bookle.'
-  when 'available_to_borrow'
-    'There are no books available for you to borrow.'
-  when 'your_books'
-    "You don't own any books on Bookle"
-  end
+  message_hash = {
+    'search' => 'There are no books meeting your search criteria. Try again!',
+    'all_books' => 'There are no books on Bookle.',
+    'available_to_borrow' => 'There are no books available for you to borrow.',
+    'your_books' => "You don't own any books on Bookle"
+  }
+  message_hash[filter_type]
 end
 
 def books_data(filter_type)
