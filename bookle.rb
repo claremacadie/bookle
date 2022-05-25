@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bcrypt'
 require 'sinatra'
 require 'tilt/erubis'
@@ -29,7 +31,7 @@ end
 # Helper methods for views (erb files)
 helpers do
   def book_availability(book)
-    if book[:borrower_id] 
+    if book[:borrower_id]
       book[:borrower_id] == session[:user_id] ? 'On loan to you' : "On loan to #{book[:borrower_name]}"
     elsif book[:requester_id]
       book[:requester_id] == session[:user_id] ? 'Requested by you' : "Requested by #{book[:requester_name]}"
@@ -43,13 +45,9 @@ helpers do
     image_files.map! do |file|
       File.basename(file).split('.')[0]
     end
-    
+
     format_title = title.downcase.gsub(' ', '_').gsub(/\W/, '')
-    if image_files.include?(format_title)
-      format_title
-    else
-      nil
-    end
+    format_title if image_files.include?(format_title)
   end
 
   def total_books(filter_type, books_count)
@@ -77,26 +75,28 @@ def user_is_book_owner?(book_id)
 end
 
 def require_signed_in_user
-  unless user_signed_in?
-    @original_route = request.path_info
-    session[:message] = "You must be signed in to do that. Sign in below or <a href='/users/signup?original_route=#{@original_route}'>create a new account</a>"
-    redirect "/users/signin?original_route=#{@original_route}"
-    # erb :signin - I think this doesn't work because the rest of the route that invoked this method ends in an erb that overwrites it.
-  end
+  return if user_signed_in?
+
+  @original_route = request.path_info
+  session[:message] = 'You must be signed in to do that.' \
+    " Sign in below or <a href='/users/signup?original_route=#{@original_route}'>create a new account</a>"
+  redirect "/users/signin?original_route=#{@original_route}"
+  # erb :signin - I think this doesn't work because the rest of the route that invoked this method
+  # ends in an erb that overwrites it.
 end
 
 def require_signed_in_as_book_owner(book_id)
-  unless user_is_book_owner?(book_id)
-    session[:message] = 'You must be the book owner to do that.'
-    redirect '/'
-  end
+  return if user_is_book_owner?(book_id)
+
+  session[:message] = 'You must be the book owner to do that.'
+  redirect '/'
 end
 
 def require_signed_out_user
-  if user_signed_in?
-    session[:message] = 'You must be signed out to do that.'
-    redirect '/'
-  end
+  return unless user_signed_in?
+
+  session[:message] = 'You must be signed out to do that.'
+  redirect '/'
 end
 
 def valid_credentials?(user_name, password)
@@ -127,26 +127,22 @@ end
 def selected_category_ids(params)
   if params.keys.include?('categories')
     # Convert "[1, 2, 3]" to [1, 2, 3]
-    return params['categories'].delete('[' ']').split(', ').map(&:to_i)
+    return params['categories'].delete('[', ']').split(', ').map(&:to_i)
   end
+
   categories = []
   params.each do |k, v|
-    if k.include?('category_id')
-      categories << v.to_i
-    end
+    categories << v.to_i if k.include?('category_id')
   end
   categories
 end
 
 def availability_array(params)
-  if params.keys.include?('availabilities')
-    return params['availabilities']
-  end
+  return params['availabilities'] if params.keys.include?('availabilities')
+
   availabilities = []
   params.each do |k, v|
-    if v =='availability'
-      availabilities << k
-    end
+    availabilities << k if v == 'availability'
   end
   availabilities.join(',')
 end
@@ -214,7 +210,7 @@ def books_data(filter_type)
 end
 
 # Routes
-get "/" do
+get '/' do
   erb :home
 end
 
@@ -228,10 +224,10 @@ post '/users/signin' do
   if valid_credentials?(params[:user_name], params[:password])
     session[:user_name] = params[:user_name]
     session[:user_id] = @storage.user_id(session[:user_name])
-    session[:message] = "Welcome!"
+    session[:message] = 'Welcome!'
     redirect(@original_route)
   else
-    session[:message] = "Invalid credentials"
+    session[:message] = 'Invalid credentials'
     status 422
     erb :signin
   end
@@ -242,9 +238,9 @@ post '/users/signout' do
   session.delete(:user_id)
   session[:message] = 'You have been signed out'
   if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
-	  '/'
-	else
-	  redirect '/'
+    '/'
+  else
+    redirect '/'
   end
 end
 
@@ -257,12 +253,12 @@ end
 post '/users/signup' do
   require_signed_out_user
   @original_route = params[:original_route]
-  
+
   new_username = params[:new_username]
   new_password = params[:password]
   reenter_password = params[:reenter_password]
-  
-  if session[:message] = signup_input_error(new_username, new_password, reenter_password)
+
+  if (session[:message] = signup_input_error(new_username, new_password, reenter_password))
     status 422
     erb :signup
   else
@@ -278,10 +274,10 @@ get '/books/filter_form' do
   @categories_list = @storage.categories_list
   erb :books_filter_form
 end
-  
+
 get '/books/filter_results/:filter_type/:offset' do
   @filter_type = params[:filter_type]
-  require_signed_in_user if (@filter_type == 'your_books' || @filter_type == 'available_to_borrow')
+  require_signed_in_user if @filter_type == 'your_books' || @filter_type == 'available_to_borrow'
   @title = params[:title]
   @author = params[:author]
   @categories_selected = selected_category_ids(params)
@@ -289,7 +285,7 @@ get '/books/filter_results/:filter_type/:offset' do
   @limit = LIMIT
   @offset = params[:offset].to_i
   @books_count = number_of_books(@filter_type)
-  if @books_count == 0
+  if @books_count.zero?
     session[:message] = no_books_message(@filter_type)
     @filter_type == 'search' ? redirect('/books/filter_form') : redirect('/')
   end
@@ -299,7 +295,7 @@ get '/books/filter_results/:filter_type/:offset' do
     @books = @storage.user_owned_books(session[:user_id], @limit, @offset)
   end
   @heading = heading(@filter_type)
-  @number_of_pages = (@books_count/ @limit.to_f).ceil
+  @number_of_pages = (@books_count / @limit.to_f).ceil
   erb :books_filter_result
 end
 
@@ -324,7 +320,7 @@ post '/book/add_new' do
     status 422
     @categories_list = @storage.categories_list
     erb :add_book
-  else 
+  else
     @storage.add_book(title, author, owner_id, categories_selected)
     session[:message] = "#{title} has been added."
     redirect "/books/filter_results/#{@filter_type}/#{@offset}"
@@ -333,7 +329,7 @@ end
 
 get '/book/:book_id/edit' do
   require_signed_in_user
-  book_id = params[:book_id].to_i 
+  book_id = params[:book_id].to_i
   require_signed_in_as_book_owner(book_id)
   @filter_type = params[:filter_type]
   @offset = params[:offset]
@@ -359,7 +355,7 @@ post '/book/:book_id/edit' do
     @categories_list = @storage.categories_list
     @book_category_ids = @storage.categories(book_id)
     erb :edit_book
-  else 
+  else
     @storage.update_book_data(book_id, title, author, categories_selected)
     session[:message] = "Book details have been updated for #{title}."
     redirect "/books/filter_results/#{@filter_type}/#{@offset}"
