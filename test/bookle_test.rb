@@ -209,6 +209,13 @@ class CMSTest < Minitest::Test
     assert_equal "You must be signed in to do that.", session[:message]
   end
   
+  def test_view_your_books_signed_out
+    get "/books/filter_results/your_books/0"
+
+    assert_equal 302, last_response.status
+    assert_equal "You must be signed in to do that.", session[:message]
+  end
+  
   def test_filter_books_form_signed_in
     get "/books/filter_form", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
 
@@ -219,16 +226,13 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, %q(<input type="checkbox")
     assert_includes last_response.body, %q(<button type="submit">See Results</button>)
   end
-  
-  def test_filter_books_form_signed_out
-    get "/books/filter_form"
+  #######################################################################################
+  def test_filter_books_form_signed_in_no_books_on_bookle
+    get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Beth Bloom" , user_id: 3 } }
     
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, %q(<input id="title" type="text" name="title" value="")
-    assert_includes last_response.body, %q(<input id="authors" type="text" name="author" value="")
-    assert_includes last_response.body, %q(<input type="checkbox")
-    assert_includes last_response.body, %q(<button type="submit">See Results</button>)
+    assert_equal "You don't own any books on Bookle", session[:message]
   end
 
   def test_filter_books_signed_in_invalid_offset
