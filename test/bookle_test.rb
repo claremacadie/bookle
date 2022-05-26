@@ -918,7 +918,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_signup_existing_username
-    post "/users/signup", {new_username: "admin", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+    post "/users/signup", {new_username: "Clare MacAdie", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
     assert_equal 422, last_response.status
     assert_includes last_response.body, "That username already exists."
   end
@@ -927,6 +927,12 @@ class CMSTest < Minitest::Test
     post "/users/signup", {new_username: "", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Username cannot be blank! Please enter a username."
+  end
+  
+  def test_signup_admin_username
+    post "/users/signup", {new_username: "admin", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "Username cannot be 'admin'! Please choose a different username."
   end
   
   def test_signup_blank_password
