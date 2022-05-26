@@ -1,8 +1,8 @@
 $(function() {
-  $("form.delete").submit(function(event) {
+  $("form.reset_password").submit(function(event) {
     event.preventDefault();
     event.stopPropagation();
-    var ok = confirm("Are you sure? This cannot be undone!");
+    var ok = confirm("Are you sure you want to reset the password? This cannot be undone!");
     if (ok) {
       this.submit();
     }
@@ -13,7 +13,7 @@ $(function() {
   $("form.delete_book").submit(function(event) {
     event.preventDefault();
     event.stopPropagation();
-    var ok = confirm("Are you sure you want to delete this book? This cannot be undone!");
+    var ok = confirm("Are you sure you want to delete this book? This cannot be undone! Mwah-ha-ha!!!!");
     if (ok) {
       this.submit();
     }

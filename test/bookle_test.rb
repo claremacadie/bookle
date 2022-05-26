@@ -32,12 +32,6 @@ class CMSTest < Minitest::Test
     { "rack.session" => { user_name: "admin", user_id: 1 } }
   end
 
-  ####### Unit (Method) tests
-
-
-
-
-  ####### Integration (Route) tests
   def test_homepage_signed_in
     get "/", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
@@ -672,23 +666,7 @@ class CMSTest < Minitest::Test
     get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Alice Allbright" } }
     assert_includes last_response.body, "Requested by you"
   end
-   
-  def test_request_book_user_owns
-    post "/book/1/request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
-    
-    # output = StringIO.new
-    
-    # What assertions can confirm this error?
-  end
 
-  def test_loan_book_user_owns
-    post "/book/1/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
-    
-    # output = StringIO.new
-    
-    # What assertions can confirm this error?
-  end
-   
   def test_cancel_request_book
     post "/book/2/cancel_request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     
@@ -887,10 +865,9 @@ class CMSTest < Minitest::Test
   
   def test_reset_password_admin
     post "/users/reset_password", {user_name: "Clare MacAdie"}, admin_session
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "The password has been reset to 'bookle' for Clare MacAdie."
-    # assert_equal "The password has been reset to 'bookle' for Clare MacAdie.", session[:message]
+    assert_equal "The password has been reset to 'bookle' for Clare MacAdie.", session[:message]
   
     post "/users/signin", {user_name: "Clare MacAdie", password: "bookle"}, {}
     assert_equal 302, last_response.status
@@ -908,7 +885,6 @@ class CMSTest < Minitest::Test
     post "/users/signin", {user_name: "Clare MacAdie", password: "bookle"}, {}
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Invalid credentials"
-    # assert_equal "Invalid credentials.", session[:message]
   end
   
   def test_reset_password_signed_out
@@ -921,7 +897,6 @@ class CMSTest < Minitest::Test
     post "/users/signin", {user_name: "Clare MacAdie", password: "bookle"}, {}
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Invalid credentials"
-    # assert_equal "Invalid credentials.", session[:message]
   end
 
   def test_signin_form

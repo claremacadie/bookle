@@ -228,7 +228,11 @@ post '/users/reset_password' do
   user_name = params[:user_name]
   @storage.reset_password(user_name)
   session[:message] = "The password has been reset to 'bookle' for #{user_name}."
-  erb :home
+  if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+	  '/'
+	else
+	  redirect '/'
+  end
 end
 
 get '/users/signin' do
