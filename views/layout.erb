@@ -17,6 +17,9 @@
           <a href="/categories">Administer categories</a>
           <a href="/users">Administer users</a>
         <% end %>
+        <% if session[:user_id] %>
+          <a href="/user">Administer account</a>
+        <% end %>
       </nav>
       <% if session[:user_id] %>
         <p>

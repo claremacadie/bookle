@@ -40,8 +40,28 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Welcome to Bookle."
     assert_includes last_response.body, "Home"
     assert_includes last_response.body, "View books"
+    assert_includes last_response.body, "Administer account"
     assert_includes last_response.body, "Signed in as Clare MacAdie"
     assert_includes last_response.body, %q(<button type="submit">Sign Out</button>)
+    refute_includes last_response.body, "Administer categories"
+    refute_includes last_response.body, "Administer users"
+    refute_includes last_response.body, "Sign In"
+    refute_includes last_response.body, "Create Account"
+  end
+  
+  def test_homepage_signed_in_as_admin
+    get "/", {}, admin_session
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Welcome to Bookle."
+    assert_includes last_response.body, "Home"
+    assert_includes last_response.body, "View books"
+    assert_includes last_response.body, "Administer account"
+    assert_includes last_response.body, "Signed in as admin"
+    assert_includes last_response.body, %q(<button type="submit">Sign Out</button>)
+    assert_includes last_response.body, "Administer categories"
+    assert_includes last_response.body, "Administer users"
     refute_includes last_response.body, "Sign In"
     refute_includes last_response.body, "Create Account"
   end
@@ -56,6 +76,9 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Sign In"
     assert_includes last_response.body, "Create Account"
     assert_includes last_response.body, "View books"
+    refute_includes last_response.body, "Administer account"
+    refute_includes last_response.body, "Administer categories"
+    refute_includes last_response.body, "Administer users"
     refute_includes last_response.body, "Signed in as"
     refute_includes last_response.body, %q(<button type="submit">Sign Out</button>)
   end
