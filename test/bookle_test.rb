@@ -855,7 +855,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_admin_links
-    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 1} }
+    get "/", {}, admin_session
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Administer categories"
@@ -863,11 +863,26 @@ class CMSTest < Minitest::Test
   end
   
   def test_admin_users_page
-    get "/users", {}, {"rack.session" => { user_name: "admin", user_id: 1} }
+    get "/users", {}, admin_session
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Administer users"
+  end
+  
+  def test_users_page_not_admin
+    get "/users", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Administer users"
+  end
 
+  def test_users_page_signed_out
+    get "/users"
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Administer users"
   end
 
   def test_signin_form
@@ -895,7 +910,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_signout
-    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 1 } }
+    get "/", {}, admin_session
     assert_includes last_response.body, "Signed in as admin"
 
     post "/users/signout"

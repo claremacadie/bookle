@@ -78,7 +78,7 @@ def require_admin_signed_in
   return if session[:user_name] == 'admin'
 
   @original_route = request.path_info
-  session[:message] = 'You must be an adimistrator to do that.'
+  session[:message] = 'You must be an administrator to do that.'
   redirect "/users/signin?original_route=#{@original_route}"
   # erb :signin - I think this doesn't work because the rest of the route that invoked this method
   # ends in an erb that overwrites it.
