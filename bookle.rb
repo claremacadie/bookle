@@ -223,6 +223,14 @@ get '/users' do
   erb :users
 end
 
+post '/users/reset_password' do
+  require_admin_signed_in
+  username = params[:username]
+  # @storage.reset_password(username)
+  session[:message] = "The password has been reset to 'bookle' for #{username}."
+  erb :home
+end
+
 get '/users/signin' do
   @original_route = params[:original_route]
   erb :signin

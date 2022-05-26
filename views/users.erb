@@ -9,7 +9,12 @@
     <% @users.each do |user, password| %>
       <tr>
         <td><%= user %>
-        <td>Reset Password</td>
+        <td>
+          <form class="reset_password" action="/users/reset_password" method="post">
+            <input type="hidden" name="username" value="<%= user %>"/>
+            <button type="submit">Reset password</button>
+          </form>
+        </td>
       </tr>
     <% end %>
   </tbody>
