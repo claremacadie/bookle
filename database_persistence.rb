@@ -20,6 +20,12 @@ class DatabasePersistence
     query(sql, user_name, hashed_password)
   end
 
+  def reset_password(username)
+    new_password = BCrypt::Password.create('bookle').to_s
+    sql = "UPDATE users SET password = $1 WHERE name = $2"
+    query(sql, new_password, username)
+  end
+
   def load_user_credentials
     sql = "SELECT name, password FROM users"
     result = query(sql)
