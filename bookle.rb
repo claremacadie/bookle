@@ -74,6 +74,16 @@ def user_is_book_owner?(book_id)
   session[:user_id] == book_owner_id
 end
 
+def require_admin_signed_in
+  return if session[:user_name] == 'admin'
+
+  @original_route = request.path_info
+  session[:message] = 'You must be an adimistrator to do that.'
+  redirect "/users/signin?original_route=#{@original_route}"
+  # erb :signin - I think this doesn't work because the rest of the route that invoked this method
+  # ends in an erb that overwrites it.
+end
+
 def require_signed_in_user
   return if user_signed_in?
 
@@ -205,6 +215,11 @@ end
 # Routes
 get '/' do
   erb :home
+end
+
+get '/users' do
+  require_admin_signed_in
+  erb :users
 end
 
 get '/users/signin' do
