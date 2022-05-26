@@ -1,1 +1,16 @@
 <h1>Administer users</h1>
+
+<table>
+  <thead>
+    <th>Username</th>
+    <th>Reset Password?</th>
+  </thead>
+  <tbody>
+    <% @users.each do |user, password| %>
+      <tr>
+        <td><%= user %>
+        <td>Reset Password</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

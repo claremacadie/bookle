@@ -219,6 +219,7 @@ end
 
 get '/users' do
   require_admin_signed_in
+  @users = @storage.load_user_credentials
   erb :users
 end
 
