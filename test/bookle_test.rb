@@ -824,7 +824,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_includes session[:message], "You must be signed in to do that. Sign in below or"
   end
-
+  
   def test_change_book_details
     post "/book/1/edit", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
@@ -855,14 +855,6 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Title and author cannot be blank! Please enter a title and an author."
   end
   
-  def test_admin_links
-    get "/", {}, admin_session
-    assert_equal 200, last_response.status
-    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "Administer categories"
-    assert_includes last_response.body, "Administer users"
-  end
-  
   def test_admin_users_page
     get "/users", {}, admin_session
     assert_equal 200, last_response.status
@@ -891,7 +883,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "The password has been reset to 'bookle' for Clare MacAdie.", session[:message]
-  
+    
     post "/users/signin", {user_name: "Clare MacAdie", password: "bookle"}, {}
     assert_equal 302, last_response.status
     assert_equal "Welcome!", session[:message]
@@ -921,38 +913,38 @@ class CMSTest < Minitest::Test
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Invalid credentials"
   end
-
+  
   def test_signin_form
     get "/users/signin"
     assert_equal 200, last_response.status
     assert_includes last_response.body, "<input"
     assert_includes last_response.body, %q(<button type="submit")
   end
-
+  
   def test_signin
     post "/users/signin", {user_name: "admin", password: "a"}, {}
     assert_equal 302, last_response.status
     assert_equal "Welcome!", session[:message]
     assert_equal "admin", session[:user_name]
-
+    
     get last_response["Location"]
     assert_includes last_response.body, "Signed in as admin"
   end
-
+  
   def test_signin_with_bad_credentials
     post "/users/signin", {user_name: "guest", password: "shhhh"}, {}
     assert_equal 422, last_response.status
     assert_nil session[:user_name]
     assert_includes last_response.body, "Invalid credentials"
   end
-
+  
   def test_signout
     get "/", {}, admin_session
     assert_includes last_response.body, "Signed in as admin"
-
+    
     post "/users/signout"
     assert_equal "You have been signed out", session[:message]
-
+    
     get last_response["Location"]
     assert_nil session[:user_name]
     assert_includes last_response.body, "Sign In"
@@ -974,7 +966,7 @@ class CMSTest < Minitest::Test
     post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
     assert_equal 302, last_response.status
     assert_equal "Your account has been created.", session[:message]
-
+    
     get "/"
     assert_includes last_response.body, "Signed in as joe."
   end
@@ -1014,10 +1006,76 @@ class CMSTest < Minitest::Test
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Username and password cannot be blank! Please enter a username and password."
   end
-
+  
   def test_signup_mismatched_passwords
     post "/users/signup", {new_username: "joanna", password: "dfghiewo34334", reenter_password: "mismatched"}
     assert_equal 422, last_response.status
     assert_includes last_response.body, "The passwords do not match."
   end
+  
+  def test_view_administer_account_form_signed_out
+    get "/user"
+    assert_equal 302, last_response.status
+    assert_includes session[:message], "You must be signed in to do that. Sign in below or"
+  end
+  
+  def test_view_administer_account_form_signed_in
+    get "/user", {}, admin_session
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, "Enter a username"
+    assert_includes last_response.body, "Enter current password"
+    assert_includes last_response.body, "Enter new password"
+    assert_includes last_response.body, "Reenter new password"
+  end
+  
+  # def test_signup_signed_out
+  #   post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+  #   assert_equal 302, last_response.status
+  #   assert_equal "Your account has been created.", session[:message]
+
+  #   get "/"
+  #   assert_includes last_response.body, "Signed in as joe."
+  # end
+  
+  # def test_signup_signed_in
+  #   post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}, admin_session
+  #   assert_equal 302, last_response.status
+  #   assert_equal "You must be signed out to do that.", session[:message]
+  # end
+  
+  # def test_signup_existing_username
+  #   post "/users/signup", {new_username: "Clare MacAdie", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+  #   assert_equal 422, last_response.status
+  #   assert_includes last_response.body, "That username already exists."
+  # end
+  
+  # def test_signup_blank_username
+  #   post "/users/signup", {new_username: "", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+  #   assert_equal 422, last_response.status
+  #   assert_includes last_response.body, "Username cannot be blank! Please enter a username."
+  # end
+  
+  # def test_signup_admin_username
+  #   post "/users/signup", {new_username: "admin", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+  #   assert_equal 422, last_response.status
+  #   assert_includes last_response.body, "Username cannot be 'admin'! Please choose a different username."
+  # end
+  
+  # def test_signup_blank_password
+  #   post "/users/signup", {new_username: "joanna", password: "", reenter_password: ""}
+  #   assert_equal 422, last_response.status
+  #   assert_includes last_response.body, "Password cannot be blank! Please enter a password."
+  # end
+  
+  # def test_signup_blank_username_and_password
+  #   post "/users/signup", {new_username: "", password: "", reenter_password: ""}
+  #   assert_equal 422, last_response.status
+  #   assert_includes last_response.body, "Username and password cannot be blank! Please enter a username and password."
+  # end
+
+  # def test_signup_mismatched_passwords
+  #   post "/users/signup", {new_username: "joanna", password: "dfghiewo34334", reenter_password: "mismatched"}
+  #   assert_equal 422, last_response.status
+  #   assert_includes last_response.body, "The passwords do not match."
+  # end
 end
