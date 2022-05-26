@@ -39,7 +39,7 @@ class CMSTest < Minitest::Test
 
   ####### Integration (Route) tests
   def test_homepage_signed_in
-    get "/", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -67,7 +67,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_appropriate_hyperlinks_for_book_titles
-    get "/books/filter_results/all_books/3", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/all_books/3", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -85,7 +85,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_all_books_list_signed_in
-    get "/books/filter_results/all_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/all_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -107,7 +107,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_all_books_list_signed_in
-    get "/books/filter_results/all_books/3", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/all_books/3", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -151,7 +151,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_available_books_list_signed_in
-    get "/books/filter_results/available_to_borrow/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/available_to_borrow/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -164,7 +164,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_available_books_list_signed_in_invalid_offset
-    get "/books/filter_results/available_to_borrow/9", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/available_to_borrow/9", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -185,7 +185,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_your_books_signed_in
-    get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -198,7 +198,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_your_books_signed_in_invalid_offset
-    get "/books/filter_results/your_books/9", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/your_books/9", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -210,7 +210,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_your_books_signed_in_invalid_offset
-    get "/books/filter_results/your_books/9", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/your_books/9", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -236,7 +236,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filter_books_form_signed_in
-    get "/books/filter_form", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_form", {}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -247,7 +247,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filter_books_form_signed_in_no_books_on_bookle
-    get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Beth Bloom" , user_id: 3 } }
+    get "/books/filter_results/your_books/0", {}, {"rack.session" => { user_name: "Beth Bloom" , user_id: 4 } }
     
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -255,7 +255,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filter_books_signed_in_invalid_offset
-    get "/books/filter_results/search/9", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/9", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -268,7 +268,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_title_books_list_signed_in_pagination_test
-    get "/books/filter_results/search/0", {title: 'k', author: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'k', author: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -278,7 +278,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_author_books_list_signed_in_pagination_test
-    get "/books/filter_results/search/0", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -295,7 +295,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_author_books_list_signed_in_pagination_test
-    get "/books/filter_results/search/3", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/3", {title: '', author: 'k'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -313,7 +313,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_title_and_author_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 'a', author: 'a'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'a', author: 'a'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -324,7 +324,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_category_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -336,7 +336,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_title_and_category_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 'k', author: '', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'k', author: '', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -345,7 +345,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_author_and_category_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: 'k', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: 'k', category_id_1: '1'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -357,7 +357,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_availability_is_available_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: '', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: '', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -370,7 +370,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_availability_is_requested_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', available: '', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', available: '', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -382,7 +382,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_availability_is_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', available: '', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', available: '', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -394,7 +394,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_availability_is_available_and_requested_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -407,7 +407,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_availability_is_available_and_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -422,7 +422,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_availability_is_requested_and_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', available: '', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', available: '', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -435,7 +435,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_availability_is_available_requested_and_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: '', available: 'availability', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -447,7 +447,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_filtered_by_title_and_availability_is_available_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: '', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: '', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -460,7 +460,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_author_and_availability_is_requested_books_list_signed_in
-    get "/books/filter_results/search/0", {title: '', author: 'k', available: '', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: '', author: 'k', available: '', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -472,7 +472,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_title_and_availability_is_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 'k', author: '', available: '', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'k', author: '', available: '', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -484,7 +484,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_title_and_availability_is_available_and_requested_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: 'availability', on_loan: ''}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -497,7 +497,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_title_and_availability_is_available_and_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: '', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -510,7 +510,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_title_and_availability_is_requested_and_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 't', author: '', available: '', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 't', author: '', available: '', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -524,7 +524,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_availability_is_available_requested_and_onloan_books_list_signed_in
-    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 't', author: '', available: 'availability', requested: 'availability', on_loan: 'availability'}, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -537,7 +537,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_by_title_author_category_and_availability_list_signed_in
-    get "/books/filter_results/search/0", {title: 'o', author: 'o', category_id_1: '1', available: 'availability' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'o', author: 'o', category_id_1: '1', available: 'availability' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -549,7 +549,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_filtered_books_no_book_found_list_signed_in
-    get "/books/filter_results/search/0", {title: 'q', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'q', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -568,7 +568,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_available_book_signed_in_as_book_owner
-    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -579,7 +579,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_available_book_signedin_as_not_book_owner
-    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -591,7 +591,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_view_requested_book_signed_in_as_book_owner
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -604,7 +604,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_requested_book_signed_in_as_book_requester
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -616,7 +616,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_requested_book_signed_in_as_not_book_owner_or_requester
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -628,7 +628,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_onloan_book_signed_in_as_book_owner
-    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -640,7 +640,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_onloan_book_signed_in_as_book_borrower
-    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -652,7 +652,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_onloan_book_signed_in_not_as_book_owner_or_borrower
-    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -664,7 +664,7 @@ class CMSTest < Minitest::Test
   end
    
   def test_request_book
-    post "/book/1/request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    post "/book/1/request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have requested Philosopher's Stone from Clare MacAdie", session[:message]
@@ -674,7 +674,7 @@ class CMSTest < Minitest::Test
   end
    
   def test_request_book_user_owns
-    post "/book/1/request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/1/request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
     
     # output = StringIO.new
     
@@ -682,7 +682,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_loan_book_user_owns
-    post "/book/1/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/1/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
     
     # output = StringIO.new
     
@@ -690,42 +690,42 @@ class CMSTest < Minitest::Test
   end
    
   def test_cancel_request_book
-    post "/book/2/cancel_request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    post "/book/2/cancel_request", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have cancelled your request for Chamber of Secrets from Clare MacAdie", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
     assert_includes last_response.body, "Available"
   end
    
   def test_loan_book
-    post "/book/2/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/2/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "Chamber of Secrets has been loaned to Alice Allbright", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
     assert_includes last_response.body, "On loan to Alice Allbright"
   end
    
   def test_reject_request_book
-    post "/book/2/reject_request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/2/reject_request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "You have rejected a request for Chamber of Secrets from Alice Allbright", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
     assert_includes last_response.body, "Available"
   end
 
   def test_return_book
-    post "/book/3/return", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    post "/book/3/return", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
     
     assert_equal 302, last_response.status
     assert_equal "Prisoner of Azkaban has been returned", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 3 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
     assert_includes last_response.body, "Available"
   end
 
@@ -737,7 +737,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_add_book_form_signedin
-    get "/book/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/book/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -747,11 +747,11 @@ class CMSTest < Minitest::Test
   end
 
   def test_add_new_book
-    post "/book/add_new", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/add_new", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
     assert_equal "A new title has been added.", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'A new', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'A new', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "A new title"
@@ -759,19 +759,19 @@ class CMSTest < Minitest::Test
   end
   
   def test_add_new_book_blank_title
-    post "/book/add_new", { title: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/add_new", { title: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title cannot be blank! Please enter a title."
   end
   
   def test_add_new_book_blank_author
-    post "/book/add_new", { title: 'A new title', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/add_new", { title: 'A new title', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Author cannot be blank! Please enter an author."
   end
   
   def test_add_new_book_blank_title_and_author
-    post "/book/add_new", { title: '', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/add_new", { title: '', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title and author cannot be blank! Please enter a title and an author."
   end
@@ -783,13 +783,13 @@ class CMSTest < Minitest::Test
   end
 
   def delete_book_not_signedin_not_as_book_owner
-    post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     assert_equal 302, last_response.status
     assert_equal "You must be the book owner to do that.", session[:message]
   end
 
   def test_delete_book
-    post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
     assert_equal "Deathly Hallows has been deleted.", session[:message]
     
@@ -803,7 +803,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_edit_book_signedin_as_book_owner
-    get "/book/1/edit", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1 } }
+    get "/book/1/edit", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -813,7 +813,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_edit_book_signedin_as_not_book_owner
-    get "/book/1/edit", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 2 } }
+    get "/book/1/edit", {}, {"rack.session" => { user_name: "Alice Allbright", user_id: 3 } }
     assert_equal 302, last_response.status
     assert_equal "You must be the book owner to do that.", session[:message]
   end
@@ -825,11 +825,11 @@ class CMSTest < Minitest::Test
   end
 
   def test_change_book_details
-    post "/book/1/edit", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/1/edit", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
     assert_equal "Book details have been updated for A new title.", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'A new', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 1 } }
+    get "/books/filter_results/search/0", {title: 'A new', author: '' }, {"rack.session" => { user_name: "Clare MacAdie" , user_id: 2 } }
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "A new title"
@@ -837,25 +837,25 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_book_details_blank_title
-    post "/book/1/edit", { title: "", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/1/edit", { title: "", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title cannot be blank! Please enter a title."
   end
   
   def test_change_book_details_blank_author
-    post "/book/1/edit", { title: "A new title", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/1/edit", { title: "A new title", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Author cannot be blank! Please enter an author."
   end
   
   def test_change_book_details_blank_title_and_author
-    post "/book/1/edit", { title: "", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
+    post "/book/1/edit", { title: "", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title and author cannot be blank! Please enter a title and an author."
   end
   
   def test_admin_links
-    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 4} }
+    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 2} }
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Administer categories"
@@ -887,7 +887,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_signout
-    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 4 } }
+    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 2 } }
     assert_includes last_response.body, "Signed in as admin"
 
     post "/users/signout"
