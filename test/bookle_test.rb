@@ -876,13 +876,52 @@ class CMSTest < Minitest::Test
     assert_equal "You must be an administrator to do that.", session[:message]
     refute_includes last_response.body, "Administer users"
   end
-
+  
   def test_users_page_signed_out
     get "/users"
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
     refute_includes last_response.body, "Administer users"
+  end
+  
+  def test_reset_password_admin
+    post "/users/reset_password", {user_name: "Clare MacAdie"}, admin_session
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "The password has been reset to 'bookle' for Clare MacAdie."
+    # assert_equal "The password has been reset to 'bookle' for Clare MacAdie.", session[:message]
+  
+    post "/users/signin", {user_name: "Clare MacAdie", password: "bookle"}, {}
+    assert_equal 302, last_response.status
+    assert_equal "Welcome!", session[:message]
+    assert_equal "Clare MacAdie", session[:user_name]
+  end
+  
+  def test_reset_password_not_admin
+    post "/users/reset_password", {user_name: "Beth Broom"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "The password has been reset to 'bookle' for Clare MacAdie."
+    
+    post "/users/signin", {user_name: "Clare MacAdie", password: "bookle"}, {}
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "Invalid credentials"
+    # assert_equal "Invalid credentials.", session[:message]
+  end
+  
+  def test_reset_password_signed_out
+    post "/users/reset_password", {user_name: "Beth Broom"}
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "The password has been reset to 'bookle' for Clare MacAdie."
+    
+    post "/users/signin", {user_name: "Clare MacAdie", password: "bookle"}, {}
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, "Invalid credentials"
+    # assert_equal "Invalid credentials.", session[:message]
   end
 
   def test_signin_form

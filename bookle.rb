@@ -225,9 +225,9 @@ end
 
 post '/users/reset_password' do
   require_admin_signed_in
-  username = params[:username]
-  @storage.reset_password(username)
-  session[:message] = "The password has been reset to 'bookle' for #{username}."
+  user_name = params[:user_name]
+  @storage.reset_password(user_name)
+  session[:message] = "The password has been reset to 'bookle' for #{user_name}."
   erb :home
 end
 
