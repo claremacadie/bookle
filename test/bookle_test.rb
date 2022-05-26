@@ -1022,7 +1022,7 @@ class CMSTest < Minitest::Test
   def test_view_administer_account_form_signed_in
     get "/user", {}, admin_session
     assert_equal 200, last_response.status
-    assert_includes last_response.body, "Enter a username"
+    assert_includes last_response.body, "Enter new username"
     assert_includes last_response.body, "Enter current password"
     assert_includes last_response.body, "Enter new password"
     assert_includes last_response.body, "Reenter new password"

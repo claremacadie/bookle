@@ -136,6 +136,24 @@ def signup_input_error(new_username, new_password, reenter_password)
   end
 end
 
+def edit_login_error(new_username, current_password, new_password, reenter_password)
+  if new_username == '' && new_password == ''
+    'Username and password cannot be blank! Please enter a username and password.'
+  elsif new_username == ''
+    'Username cannot be blank! Please enter a username.'
+  elsif new_username == 'admin'
+    "Username cannot be 'admin'! Please choose a different username."
+  elsif new_password == ''
+    'Password cannot be blank! Please enter a password.'
+  elsif @storage.load_user_credentials.keys.include?(new_username) && session[:user_name] != new_username
+    'That username already exists.'
+  elsif new_password != reenter_password
+    'The passwords do not match.'
+  elsif !valid_credentials?(session[:user_name], current_password)
+    'That is not the correct current password. Try again!'
+  end
+end
+
 def selected_category_ids(params)
   if params.keys.include?('categories')
     # Convert "[1, 2, 3]" to [1, 2, 3]
@@ -220,6 +238,25 @@ end
 get '/user' do
   require_signed_in_user
   erb :user
+end
+
+post "/user/edit_login" do
+  require_signed_in_user
+  new_username = params[:new_username]
+  current_password = params[:current_password]
+  new_password = params[:new_password]
+  reenter_password = params[:reenter_password]
+
+  if (session[:message] = edit_login_error(new_username, current_password, new_password, reenter_password))
+    status 422
+    erb :user
+  else
+    @storage.change_user_credentials(session[:user_name], new_username, new_password)
+    session[:user_name] = new_username
+    session[:user_id] = @storage.user_id(new_username)
+    session[:message] = 'Your account has been updated'
+    redirect '/'
+  end
 end
 
 get '/users' do
