@@ -13,6 +13,10 @@
       <nav>
         <a href="/">Home</a>
         <a href="/books/filter_results/all_books/0">View books</a>
+        <% if session[:user_name] == 'admin' %>
+          <a href="/categories">Administer categories</a>
+          <a href="/users">Administer users</a>
+        <% end %>
       </nav>
       <% if session[:user_id] %>
         <p>

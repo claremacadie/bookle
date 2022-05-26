@@ -835,23 +835,31 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "A new title"
     assert_includes last_response.body, "A new author"
   end
-
+  
   def test_change_book_details_blank_title
     post "/book/1/edit", { title: "", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title cannot be blank! Please enter a title."
   end
-
+  
   def test_change_book_details_blank_author
     post "/book/1/edit", { title: "A new title", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Author cannot be blank! Please enter an author."
   end
-
+  
   def test_change_book_details_blank_title_and_author
     post "/book/1/edit", { title: "", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 1} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title and author cannot be blank! Please enter a title and an author."
+  end
+  
+  def test_admin_links
+    get "/", {}, {"rack.session" => { user_name: "admin", user_id: 4} }
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Administer categories"
+    assert_includes last_response.body, "Administer users"
   end
 
   def test_signin_form
@@ -862,7 +870,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_signin
-    post "/users/signin", user_name: "admin", password: "secret"
+    post "/users/signin", {user_name: "admin", password: "a"}, {}
     assert_equal 302, last_response.status
     assert_equal "Welcome!", session[:message]
     assert_equal "admin", session[:user_name]
@@ -872,7 +880,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_signin_with_bad_credentials
-    post "/users/signin", user_name: "guest", password: "shhhh"
+    post "/users/signin", {user_name: "guest", password: "shhhh"}, {}
     assert_equal 422, last_response.status
     assert_nil session[:user_name]
     assert_includes last_response.body, "Invalid credentials"
