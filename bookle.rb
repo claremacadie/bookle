@@ -115,6 +115,8 @@ def signup_input_error(new_username, new_password, reenter_password)
     'Username and password cannot be blank! Please enter a username and password.'
   elsif new_username == ''
     'Username cannot be blank! Please enter a username.'
+  elsif new_username == 'admin'
+    "Username cannot be 'admin'! Please choose a different username."
   elsif new_password == ''
     'Password cannot be blank! Please enter a password.'
   elsif @storage.load_user_credentials.keys.include?(new_username)
@@ -244,7 +246,6 @@ end
 post '/users/signup' do
   require_signed_out_user
   @original_route = params[:original_route]
-
   new_username = params[:new_username]
   new_password = params[:password]
   reenter_password = params[:reenter_password]
