@@ -233,6 +233,11 @@ class DatabasePersistence
     query(sql, name)
   end
 
+  def delete_category(name)
+    sql = "DELETE FROM categories WHERE name = $1;"
+    query(sql, name)
+  end
+
   private
 
   def count_clause

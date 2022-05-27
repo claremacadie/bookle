@@ -278,6 +278,18 @@ else
   end
 end
 
+post '/category/:name/delete' do
+  require_signed_in_as_admin
+  name = params[:name]
+  @storage.delete_category(name)
+  session[:message] = "Category '#{name}' has been deleted."
+  if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+    "/categories/#{filter_type}/#{offset}"
+  else
+    redirect "/categories"
+  end
+end
+
 get '/' do
   erb :home
 end
