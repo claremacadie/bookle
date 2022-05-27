@@ -242,6 +242,11 @@ def books_data(filter_type)
 end
 
 # Routes
+get '/categories' do
+  require_signed_in_as_admin
+  @categories_list = @storage.categories_list
+  erb :categories
+end
 get '/' do
   erb :home
 end

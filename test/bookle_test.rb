@@ -1090,10 +1090,33 @@ class CMSTest < Minitest::Test
     assert_equal "joe", session[:user_name]
   end
   
- def test_change_user_credentials_password_mismatched
-   post "/user/edit_login", {new_username: "joe", current_password: "wrong_password", new_password: "b", reenter_password: "b"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
-   assert_equal 422, last_response.status
-   assert_equal "Clare MacAdie", session[:user_name]
-   assert_includes last_response.body, "That is not the correct current password. Try again!"
- end
+  def test_change_user_credentials_password_mismatched
+    post "/user/edit_login", {new_username: "joe", current_password: "wrong_password", new_password: "b", reenter_password: "b"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 422, last_response.status
+    assert_equal "Clare MacAdie", session[:user_name]
+    assert_includes last_response.body, "That is not the correct current password. Try again!"
+  end
+
+  def test_admin_categories_page
+    get "/categories", {}, admin_session
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Administer categories"
+  end
+
+  def test_users_page_not_admin
+    get "/categories", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Administer categories"
+  end
+
+  def test_users_page_signed_out
+    get "/categories"
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Administer categories"
+  end
 end
