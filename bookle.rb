@@ -142,7 +142,7 @@ def edit_login_error(new_username, current_password, new_password, reenter_passw
   elsif new_username == 'admin'
     "New username cannot be 'admin'! Please choose a different username."
   elsif @storage.load_user_credentials.keys.include?(new_username) && session[:user_name] != new_username
-    'That username already exists.'
+    'That username already exists. Please choose a different username.'
   elsif new_password != reenter_password
     'The passwords do not match.'
   elsif !valid_credentials?(session[:user_name], current_password)

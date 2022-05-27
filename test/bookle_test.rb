@@ -1038,6 +1038,27 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Signed in as joe."
   end
   
+  def test_change_username_to_blank
+    post "/user/edit_login", {new_username: "", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 422, last_response.status
+    assert_equal "Clare MacAdie", session[:user_name]
+    assert_includes last_response.body, "New username cannot be blank! Please enter a username."
+  end
+  
+  def test_change_username_to_admin
+    post "/user/edit_login", {new_username: "admin", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 422, last_response.status
+    assert_equal "Clare MacAdie", session[:user_name]
+    assert_includes last_response.body, "New username cannot be 'admin'! Please choose a different username."
+  end
+  
+  def test_change_username_to_existing_username
+    post "/user/edit_login", {new_username: "Alice Allbright", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 422, last_response.status
+    assert_equal "Clare MacAdie", session[:user_name]
+    assert_includes last_response.body, "That username already exists. Please choose a different username."
+  end
+  
   def test_change_password
     post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "b", reenter_password: "b"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
@@ -1048,6 +1069,13 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "Welcome!", session[:message]
     assert_equal "Clare MacAdie", session[:user_name]
+  end
+   
+  def test_change_password_mismatched
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "b", reenter_password: "c"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 422, last_response.status
+    assert_equal "Clare MacAdie", session[:user_name]
+    assert_includes last_response.body, "The passwords do not match."
   end
   
   def test_change_username_and_password
@@ -1061,4 +1089,11 @@ class CMSTest < Minitest::Test
     assert_equal "Welcome!", session[:message]
     assert_equal "joe", session[:user_name]
   end
+  
+ def test_change_user_credentials_password_mismatched
+   post "/user/edit_login", {new_username: "joe", current_password: "wrong_password", new_password: "b", reenter_password: "b"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+   assert_equal 422, last_response.status
+   assert_equal "Clare MacAdie", session[:user_name]
+   assert_includes last_response.body, "That is not the correct current password. Try again!"
+ end
 end
