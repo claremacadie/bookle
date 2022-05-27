@@ -1128,7 +1128,7 @@ class CMSTest < Minitest::Test
     get "/categories/add_new", {}, admin_session
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "Add new category"
+    assert_includes last_response.body, "Add a new category"
   end
   
   def test_add_category_page_not_admin
@@ -1136,7 +1136,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
-    refute_includes last_response.body, "Add new category"
+    refute_includes last_response.body, "Add a new category"
   end
   
   def test_add_category_page_signed_out
