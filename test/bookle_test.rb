@@ -1102,6 +1102,9 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Administer categories"
+    assert_includes last_response.body, "Add new category"
+    assert_includes last_response.body, "Edit"
+    assert_includes last_response.body, "Delete category</button>"
   end
 
   def test_categories_page_not_admin
