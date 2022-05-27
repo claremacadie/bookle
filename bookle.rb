@@ -74,7 +74,7 @@ def user_is_book_owner?(book_id)
   session[:user_id] == book_owner_id
 end
 
-def require_admin_signed_in
+def require_signed_in_as_admin
   return if session[:user_name] == 'admin'
 
   @original_route = request.path_info
@@ -268,13 +268,13 @@ post "/user/edit_login" do
 end
 
 get '/users' do
-  require_admin_signed_in
+  require_signed_in_as_admin
   @users = @storage.load_user_credentials
   erb :users
 end
 
 post '/users/reset_password' do
-  require_admin_signed_in
+  require_signed_in_as_admin
   user_name = params[:user_name]
   @storage.reset_password(user_name)
   session[:message] = "The password has been reset to 'bookle' for #{user_name}."
