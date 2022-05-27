@@ -137,20 +137,33 @@ def signup_input_error(new_username, new_password, reenter_password)
 end
 
 def edit_login_error(new_username, current_password, new_password, reenter_password)
-  if new_username == '' && new_password == ''
-    'Username and password cannot be blank! Please enter a username and password.'
-  elsif new_username == ''
-    'Username cannot be blank! Please enter a username.'
+  if new_username == ''
+    'New username cannot be blank! Please enter a username.'
   elsif new_username == 'admin'
-    "Username cannot be 'admin'! Please choose a different username."
-  elsif new_password == ''
-    'Password cannot be blank! Please enter a password.'
+    "New username cannot be 'admin'! Please choose a different username."
   elsif @storage.load_user_credentials.keys.include?(new_username) && session[:user_name] != new_username
     'That username already exists.'
   elsif new_password != reenter_password
     'The passwords do not match.'
   elsif !valid_credentials?(session[:user_name], current_password)
     'That is not the correct current password. Try again!'
+  end
+end
+
+def update_user_credentials(new_username, current_password, new_password, reenter_password)
+  if session[:user_name] != new_username && current_password != new_password && new_password != ''
+    @storage.change_username_and_password(session[:user_name], new_username, new_password)
+    session[:user_name] = new_username
+    # session[:user_id] = @storage.user_id(new_username)
+    session[:message] = 'Your username and password have been updated'
+  elsif session[:user_name] != new_username && new_password == ''
+    @storage.change_username(session[:user_name], new_username)
+    session[:user_name] = new_username
+    # session[:user_id] = @storage.user_id(new_username)
+    session[:message] = 'Your username has been updated'
+  elsif session[:user_name] == new_username && current_password != new_password
+    @storage.change_password(session[:user_name], new_password)
+    session[:message] = 'Your password has been updated'
   end
 end
 
@@ -251,10 +264,7 @@ post "/user/edit_login" do
     status 422
     erb :user
   else
-    @storage.change_user_credentials(session[:user_name], new_username, new_password)
-    session[:user_name] = new_username
-    session[:user_id] = @storage.user_id(new_username)
-    session[:message] = 'Your account has been updated'
+    update_user_credentials(new_username, current_password, new_password, reenter_password)
     redirect '/'
   end
 end
