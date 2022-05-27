@@ -12,7 +12,9 @@
     <% @categories_list.each do |category| %>
       <tr>
         <td><%= category[:name] %></td>
-        <td>Edit</td>
+        <td>
+          <a href="/category/<%= category[:name] %>/edit">Edit</a>
+        </td>
         <td>
           <form class="delete_category" action="/category/<%= category[:name] %>/delete" method="post">
             <button type="submit" class="delete">Delete category</button>

@@ -290,6 +290,12 @@ post '/category/:name/delete' do
   end
 end
 
+get '/category/:name/edit' do
+  require_signed_in_as_admin
+  @name = params[:name]
+  erb :edit_category
+end
+
 get '/' do
   erb :home
 end

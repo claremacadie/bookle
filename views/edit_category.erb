@@ -1,0 +1,9 @@
+<h1>Edit category name</h1>
+
+<form action="/category/<%= @name %>/edit" method="post">
+  <dl>
+    <dt><label for="name">Category name</label></dt>
+    <dd><input id="name" type="text" name="name" value="<%= @name %>"></dd>
+  </dl>
+  <button type="submit">Submit</button>
+</form>
