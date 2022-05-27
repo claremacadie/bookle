@@ -1191,4 +1191,27 @@ class CMSTest < Minitest::Test
     get "/books/filter_results/all_books/0"
     assert_includes last_response.body, "Fantasy"
   end
+
+  def test_admin_edit_category_page
+    get "/category/Fantasy/edit", {}, admin_session
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Edit category name"
+  end
+
+  def test_edit_category_page_not_admin
+    get "/category/Fantasy/edit", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Edit category name"
+  end
+
+  def test_edit_category_page_signed_out
+    get "/category/Fantasy/edit"
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Edit category name"
+  end
 end
