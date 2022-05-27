@@ -1214,4 +1214,25 @@ class CMSTest < Minitest::Test
     assert_equal "You must be an administrator to do that.", session[:message]
     refute_includes last_response.body, "Edit category name"
   end
+    
+  def test_change_category
+    post "/category/Fantasy/edit", {new_name: 'sport'}, admin_session
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "The 'Fantasy' category has been renamed to 'Sport'.", session[:message]
+  end
+    
+  def test_change_category_already_exists
+    post "/category/Fantasy/edit", {new_name: 'magic'}, admin_session
+    assert_equal 422, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "That category name already exists. Please choose another name."
+  end
+    
+  def test_change_category_blank
+    post "/category/Fantasy/edit", {new_name: ''}, admin_session
+    assert_equal 422, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "The category name cannot be blank. Please try again."
+  end
 end

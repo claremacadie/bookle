@@ -238,6 +238,11 @@ class DatabasePersistence
     query(sql, name)
   end
 
+  def change_category(old_name, new_name)
+    sql = "UPDATE categories SET name = $1 WHERE name = $2"
+    query(sql, new_name, old_name)
+  end
+
   private
 
   def count_clause

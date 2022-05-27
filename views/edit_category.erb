@@ -1,9 +1,10 @@
 <h1>Edit category name</h1>
 
-<form action="/category/<%= @name %>/edit" method="post">
+<form action="/category/<%= @old_name %>/edit" method="post">
   <dl>
     <dt><label for="name">Category name</label></dt>
-    <dd><input id="name" type="text" name="name" value="<%= @name %>"></dd>
+    <dd><input id="name" type="text" name="new_name" value="<%= @old_name %>"></dd>
   </dl>
   <button type="submit">Submit</button>
+  <a href='/categories'>Cancel</a>
 </form>
