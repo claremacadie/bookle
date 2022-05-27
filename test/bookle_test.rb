@@ -1163,4 +1163,32 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "The category name cannot be blank. Please try again."
   end
+
+  def test_delete_category
+    post "/category/Fantasy/delete", { name: "Fantasy" }, admin_session
+    assert_equal 302, last_response.status
+    assert_equal "Category 'Fantasy' has been deleted.", session[:message]
+    
+    get "/categories"
+    # Can't use the book's name as this is in the flash message.
+    refute_includes last_response.body, "<td>Fantasy</td>"
+  end
+
+  def test_delete_category_not_admin
+    post "/category/Fantasy/delete", { name: "Fantasy" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "You must be an administrator to do that.", session[:message]
+    
+    get "/books/filter_results/all_books/0"
+    assert_includes last_response.body, "Fantasy"
+  end
+
+  def test_delete_category_signed_out
+    post "/category/Fantasy/delete", { name: "Fantasy" }, {}
+    assert_equal 302, last_response.status
+    assert_equal "You must be an administrator to do that.", session[:message]
+    
+    get "/books/filter_results/all_books/0"
+    assert_includes last_response.body, "Fantasy"
+  end
 end
