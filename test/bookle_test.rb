@@ -860,6 +860,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Administer users"
+    assert_includes last_response.body, "Reset password"
   end
   
   def test_users_page_not_admin
