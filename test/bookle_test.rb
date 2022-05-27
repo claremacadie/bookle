@@ -1104,7 +1104,7 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Administer categories"
   end
 
-  def test_users_page_not_admin
+  def test_categories_page_not_admin
     get "/categories", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -1112,11 +1112,34 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "Administer categories"
   end
 
-  def test_users_page_signed_out
+  def test_categories_page_signed_out
     get "/categories"
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
     refute_includes last_response.body, "Administer categories"
+  end
+
+  def test_admin_add_category_page
+    get "/categories?add_new", {}, admin_session
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "Add new category"
+  end
+
+  def test_add_category_page_not_admin
+    get "/categories/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Add new category"
+  end
+  
+  def test_add_category_page_signed_out
+    get "/categories/add_new"
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "You must be an administrator to do that.", session[:message]
+    refute_includes last_response.body, "Add new category"
   end
 end

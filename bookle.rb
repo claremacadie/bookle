@@ -247,6 +247,12 @@ get '/categories' do
   @categories_list = @storage.categories_list
   erb :categories
 end
+
+get '/categories/add_new' do
+  require_signed_in_as_admin
+  erb :add_category
+end
+
 get '/' do
   erb :home
 end

@@ -1,0 +1,9 @@
+<h1>Add a new category</h1>
+
+<form action="/book/add_new" method="post">
+  <dl>
+    <dt><label for="name">Name</label></dt>
+    <dd><input id="name" type="text" name="name" value="<%= params[:name] %>"></dd>
+ </dl>
+  <button type="submit">Add new category</button>
+</form>
