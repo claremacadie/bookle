@@ -228,6 +228,11 @@ class DatabasePersistence
     query(sql, book_id, owner_id)
   end
 
+  def add_category(name)
+    sql = "INSERT INTO categories (name) VALUES ($1);"
+    query(sql, name)
+  end
+
   private
 
   def count_clause

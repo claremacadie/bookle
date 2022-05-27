@@ -241,6 +241,13 @@ def books_data(filter_type)
   end
 end
 
+def valid_category?(name)
+  categories_list = @storage.categories_list
+  category_names = categories_list.each_with_object([]) { |category, arr| arr << category[:name] }
+  category_names.map!(&:downcase)
+  !category_names.include?(name.downcase)
+end
+
 # Routes
 get '/categories' do
   require_signed_in_as_admin
@@ -251,6 +258,19 @@ end
 get '/categories/add_new' do
   require_signed_in_as_admin
   erb :add_category
+end
+
+post '/categories/add_new' do
+  require_signed_in_as_admin
+  name = params[:name]
+  if valid_category?(name)
+    @storage.add_category(name.capitalize)
+    session[:message] = "A new category of #{name} has been added."
+    redirect '/categories'
+  else
+    session[:message] = 'That category name already exists. Please choose another name.'
+    erb :add_category
+  end
 end
 
 get '/' do
