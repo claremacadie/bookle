@@ -263,13 +263,16 @@ end
 post '/categories/add_new' do
   require_signed_in_as_admin
   name = params[:name]
-  if valid_category?(name)
+if !valid_category?(name)
+  session[:message] = 'That category name already exists. Please choose another name.'
+  erb :add_category
+elsif name == ''
+  session[:message] = 'That category name cannot be blank. Please try again.'
+  erb :add_category
+else 
     @storage.add_category(name.capitalize)
     session[:message] = "A new category of #{name} has been added."
     redirect '/categories'
-  else
-    session[:message] = 'That category name already exists. Please choose another name.'
-    erb :add_category
   end
 end
 
