@@ -1,1 +1,18 @@
 <h1>Administer categories</h1>
+
+<table>
+  <thead>
+    <th>Category name</th>
+    <th>Edit category?</th>
+    <th>Delete category</th>
+  </thead>
+  <tbody>
+    <% @categories_list.each do |category| %>
+      <tr>
+        <td><%= category[:name] %></td>
+        <td>Edit</td>
+        <td>Delete</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
