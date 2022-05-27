@@ -154,16 +154,14 @@ def update_user_credentials(new_username, current_password, new_password, reente
   if session[:user_name] != new_username && current_password != new_password && new_password != ''
     @storage.change_username_and_password(session[:user_name], new_username, new_password)
     session[:user_name] = new_username
-    # session[:user_id] = @storage.user_id(new_username)
-    session[:message] = 'Your username and password have been updated'
+    session[:message] = 'Your username and password have been updated.'
   elsif session[:user_name] != new_username && new_password == ''
     @storage.change_username(session[:user_name], new_username)
     session[:user_name] = new_username
-    # session[:user_id] = @storage.user_id(new_username)
-    session[:message] = 'Your username has been updated'
+    session[:message] = 'Your username has been updated.'
   elsif session[:user_name] == new_username && current_password != new_password
     @storage.change_password(session[:user_name], new_password)
-    session[:message] = 'Your password has been updated'
+    session[:message] = 'Your password has been updated.'
   end
 end
 
