@@ -1121,12 +1121,12 @@ class CMSTest < Minitest::Test
   end
 
   def test_admin_add_category_page
-    get "/categories?add_new", {}, admin_session
+    get "/categories/add_new", {}, admin_session
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Add new category"
   end
-
+  
   def test_add_category_page_not_admin
     get "/categories/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
@@ -1141,5 +1141,26 @@ class CMSTest < Minitest::Test
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
     refute_includes last_response.body, "Add new category"
+  end
+  
+  def test_add_category
+    post "/categories/add_new", {name: 'sport'}, admin_session
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "A new category of 'Sport' has been added.", session[:message]
+  end
+  
+  def test_add_category_already_exists
+    post "/categories/add_new", {name: 'magic'}, admin_session
+    assert_equal 422, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "That category name already exists. Please choose another name."
+  end
+  
+  def test_add_category_blank
+    post "/categories/add_new", {name: ''}, admin_session
+    assert_equal 422, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "The category name cannot be blank. Please try again."
   end
 end
