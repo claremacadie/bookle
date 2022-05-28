@@ -6,14 +6,15 @@ DROP TABLE users;
 CREATE TABLE users (
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL UNIQUE,
-  password text NOT NULL UNIQUE,
+  password text NOT NULL,
   CHECK (name != ''),
   CHECK (password != '')
 );
 
 CREATE TABLE categories (
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name text NOT NULL
+  name text NOT NULL UNIQUE,
+  CHECK (name != '')
 );
 
 CREATE TABLE books (
