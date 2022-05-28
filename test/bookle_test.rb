@@ -923,7 +923,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_signin
-    post "/users/signin", {user_name: "admin", password: "a"}, {}
+    post "/users/signin", {user_name: "admin", password: "secret"}, {}
     assert_equal 302, last_response.status
     assert_equal "Welcome!", session[:message]
     assert_equal "admin", session[:user_name]

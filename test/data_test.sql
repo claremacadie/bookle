@@ -2,7 +2,7 @@ TRUNCATE TABLE books, categories, books_categories, users
   RESTART IDENTITY;
 
 INSERT INTO users (name, password) VALUES
-  ('admin', '$2a$12$mV.4Z9KYQ/tAU1w0J2PC5u0W.szDKIog9/vjLKfObclLGtEOBWmgu'),
+  ('admin', '$2a$12$RDlwS.8sAOWA74qZYYe4yO2rHsO3ZKx2JohYcx5Ectd.Kul2JtGQi'),
   ('Clare MacAdie', '$2a$12$bEpZUdqQkgZpNe2wKL3vkO1xsCJzjTDNwolKVSMpKHMhtV6xm4vD6'),
   ('Alice Allbright', '$2a$12$ujZUWGjRsLNXJkz8RsYooeGc1gfR/TCn.nBui99y0sSnkg9Soi2D.'),
   ('Beth Broom', '$2a$12$sUdn9PHhPRKc2AVvRZj/r.uTGNh0Hu1Ell0yVdQKSXo6dyBGo0Rjm')
