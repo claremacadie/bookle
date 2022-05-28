@@ -260,10 +260,10 @@ end
 
 post '/user/edit_login' do
   require_signed_in_user
-  new_username = params[:new_username]
-  current_password = params[:current_password]
-  new_password = params[:new_password]
-  reenter_password = params[:reenter_password]
+  new_username = params[:new_username].strip
+  current_password = params[:current_password].strip
+  new_password = params[:new_password].strip
+  reenter_password = params[:reenter_password].strip
 
   if (session[:message] = edit_login_error(new_username, current_password, new_password, reenter_password))
     status 422
@@ -282,7 +282,7 @@ end
 
 post '/users/reset_password' do
   require_signed_in_as_admin
-  user_name = params[:user_name]
+  user_name = params[:user_name].strip
   @storage.reset_password(user_name)
   session[:message] = "The password has been reset to 'bookle' for #{user_name}."
   if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
@@ -299,9 +299,11 @@ end
 
 post '/users/signin' do
   @original_route = params['original_route']
-  if valid_credentials?(params[:user_name], params[:password])
-    session[:user_name] = params[:user_name]
-    session[:user_id] = @storage.user_id(session[:user_name])
+  user_name = params[:user_name].strip
+  password = params[:password].strip
+  if valid_credentials?(user_name, password)
+    session[:user_name] = user_name
+    session[:user_id] = @storage.user_id(user_name)
     session[:message] = 'Welcome!'
     redirect(@original_route)
   else
@@ -331,9 +333,9 @@ end
 post '/users/signup' do
   require_signed_out_user
   @original_route = params[:original_route]
-  new_username = params[:new_username]
-  new_password = params[:password]
-  reenter_password = params[:reenter_password]
+  new_username = params[:new_username].strip
+  new_password = params[:password].strip
+  reenter_password = params[:reenter_password].strip
 
   if (session[:message] = signup_input_error(new_username, new_password, reenter_password))
     status 422
@@ -360,7 +362,7 @@ end
 
 post '/categories/add_new' do
   require_signed_in_as_admin
-  name = params[:name].capitalize
+  name = params[:name].strip.capitalize
   if !valid_category?(name)
     session[:message] = 'That category name already exists. Please choose another name.'
     status 422
@@ -397,7 +399,7 @@ end
 post '/category/edit' do
   require_signed_in_as_admin
   @old_name = params[:old_name]
-  new_name = params[:new_name].capitalize
+  new_name = params[:new_name].strip.capitalize
 
   if !valid_category?(new_name)
     session[:message] = 'That category name already exists. Please choose another name.'
@@ -453,8 +455,8 @@ end
 
 post '/book/add_new' do
   require_signed_in_user
-  title = params[:title]
-  author = params[:author]
+  title = params[:title] #strip
+  author = params[:author] #strip
   @filter_type = params[:filter_type]
   @offset = params[:offset].to_i
   owner_id = session[:user_id]
@@ -487,8 +489,8 @@ post '/book/:book_id/edit' do
   require_signed_in_user
   book_id = params[:book_id].to_i
   require_signed_in_as_book_owner(book_id)
-  title = params[:title]
-  author = params[:author]
+  title = params[:title].strip
+  author = params[:author].strip
   @filter_type = params[:filter_type]
   @offset = params[:offset].to_i
   categories_selected = selected_category_ids(params)
