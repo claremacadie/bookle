@@ -150,7 +150,7 @@ def edit_login_error(new_username, current_password, new_password, reenter_passw
   end
 end
 
-def update_user_credentials(new_username, current_password, new_password, reenter_password)
+def update_user_credentials(new_username, current_password, new_password)
   if session[:user_name] != new_username && current_password != new_password && new_password != ''
     @storage.change_username_and_password(session[:user_name], new_username, new_password)
     session[:user_name] = new_username
@@ -258,7 +258,7 @@ get '/user' do
   erb :user
 end
 
-post "/user/edit_login" do
+post '/user/edit_login' do
   require_signed_in_user
   new_username = params[:new_username]
   current_password = params[:current_password]
@@ -269,7 +269,7 @@ post "/user/edit_login" do
     status 422
     erb :user
   else
-    update_user_credentials(new_username, current_password, new_password, reenter_password)
+    update_user_credentials(new_username, current_password, new_password)
     redirect '/'
   end
 end
@@ -286,9 +286,9 @@ post '/users/reset_password' do
   @storage.reset_password(user_name)
   session[:message] = "The password has been reset to 'bookle' for #{user_name}."
   if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
-	  '/'
-	else
-	  redirect '/'
+    '/'
+  else
+    redirect '/'
   end
 end
 
@@ -369,7 +369,7 @@ post '/categories/add_new' do
     session[:message] = 'The category name cannot be blank. Please try again.'
     status 422
     erb :add_category
-  else 
+  else
     @storage.add_category(name)
     session[:message] = "A new category of '#{name}' has been added."
     redirect '/categories'
@@ -382,9 +382,9 @@ post '/category/:name/delete' do
   @storage.delete_category(name)
   session[:message] = "Category '#{name}' has been deleted."
   if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
-    "/categories"
+    '/categories'
   else
-    redirect "/categories"
+    redirect '/categories'
   end
 end
 
@@ -394,7 +394,7 @@ get '/category/:name/edit' do
   erb :edit_category
 end
 
-post'/category/:old_name/edit' do
+post '/category/:old_name/edit' do
   require_signed_in_as_admin
   @old_name = params[:old_name]
   new_name = params[:new_name].capitalize
@@ -407,10 +407,10 @@ post'/category/:old_name/edit' do
     session[:message] = 'The category name cannot be blank. Please try again.'
     status 422
     erb :edit_category
-  else 
+  else
     @storage.change_category(@old_name, new_name)
     session[:message] = "The '#{@old_name}' category has been renamed to '#{new_name}'."
-    redirect "/categories"
+    redirect '/categories'
   end
 end
 
