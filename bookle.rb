@@ -249,73 +249,6 @@ def valid_category?(name)
 end
 
 # Routes
-get '/categories' do
-  require_signed_in_as_admin
-  @categories_list = @storage.categories_list
-  erb :categories
-end
-
-get '/categories/add_new' do
-  require_signed_in_as_admin
-  erb :add_category
-end
-
-post '/categories/add_new' do
-  require_signed_in_as_admin
-  name = params[:name].capitalize
-  if !valid_category?(name)
-    session[:message] = 'That category name already exists. Please choose another name.'
-    status 422
-    erb :add_category
-  elsif name == ''
-    session[:message] = 'The category name cannot be blank. Please try again.'
-    status 422
-    erb :add_category
-  else 
-    @storage.add_category(name)
-    session[:message] = "A new category of '#{name}' has been added."
-    redirect '/categories'
-  end
-end
-
-post '/category/:name/delete' do
-  require_signed_in_as_admin
-  name = params[:name]
-  @storage.delete_category(name)
-  session[:message] = "Category '#{name}' has been deleted."
-  if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
-    "/categories"
-  else
-    redirect "/categories"
-  end
-end
-
-get '/category/:name/edit' do
-  require_signed_in_as_admin
-  @old_name = params[:name]
-  erb :edit_category
-end
-
-post'/category/:old_name/edit' do
-  require_signed_in_as_admin
-  @old_name = params[:old_name]
-  new_name = params[:new_name].capitalize
-
-  if !valid_category?(new_name)
-    session[:message] = 'That category name already exists. Please choose another name.'
-    status 422
-    erb :edit_category
-  elsif new_name == ''
-    session[:message] = 'The category name cannot be blank. Please try again.'
-    status 422
-    erb :edit_category
-  else 
-    @storage.change_category(@old_name, new_name)
-    session[:message] = "The '#{@old_name}' category has been renamed to '#{new_name}'."
-    redirect "/categories"
-  end
-end
-
 get '/' do
   erb :home
 end
@@ -411,6 +344,73 @@ post '/users/signup' do
     session[:user_id] = @storage.user_id(new_username)
     session[:message] = 'Your account has been created.'
     redirect(@original_route)
+  end
+end
+
+get '/categories' do
+  require_signed_in_as_admin
+  @categories_list = @storage.categories_list
+  erb :categories
+end
+
+get '/categories/add_new' do
+  require_signed_in_as_admin
+  erb :add_category
+end
+
+post '/categories/add_new' do
+  require_signed_in_as_admin
+  name = params[:name].capitalize
+  if !valid_category?(name)
+    session[:message] = 'That category name already exists. Please choose another name.'
+    status 422
+    erb :add_category
+  elsif name == ''
+    session[:message] = 'The category name cannot be blank. Please try again.'
+    status 422
+    erb :add_category
+  else 
+    @storage.add_category(name)
+    session[:message] = "A new category of '#{name}' has been added."
+    redirect '/categories'
+  end
+end
+
+post '/category/:name/delete' do
+  require_signed_in_as_admin
+  name = params[:name]
+  @storage.delete_category(name)
+  session[:message] = "Category '#{name}' has been deleted."
+  if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+    "/categories"
+  else
+    redirect "/categories"
+  end
+end
+
+get '/category/:name/edit' do
+  require_signed_in_as_admin
+  @old_name = params[:name]
+  erb :edit_category
+end
+
+post'/category/:old_name/edit' do
+  require_signed_in_as_admin
+  @old_name = params[:old_name]
+  new_name = params[:new_name].capitalize
+
+  if !valid_category?(new_name)
+    session[:message] = 'That category name already exists. Please choose another name.'
+    status 422
+    erb :edit_category
+  elsif new_name == ''
+    session[:message] = 'The category name cannot be blank. Please try again.'
+    status 422
+    erb :edit_category
+  else 
+    @storage.change_category(@old_name, new_name)
+    session[:message] = "The '#{@old_name}' category has been renamed to '#{new_name}'."
+    redirect "/categories"
   end
 end
 
