@@ -376,7 +376,7 @@ post '/categories/add_new' do
   end
 end
 
-post '/category/:name/delete' do
+post '/category/delete' do
   require_signed_in_as_admin
   name = params[:name]
   @storage.delete_category(name)
@@ -394,7 +394,7 @@ get '/category/:name/edit' do
   erb :edit_category
 end
 
-post '/category/:old_name/edit' do
+post '/category/edit' do
   require_signed_in_as_admin
   @old_name = params[:old_name]
   new_name = params[:new_name].capitalize

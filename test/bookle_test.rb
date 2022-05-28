@@ -1181,7 +1181,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_delete_category
-    post "/category/Fantasy/delete", { name: "Fantasy" }, admin_session
+    post "/category/delete", { name: "Fantasy" }, admin_session
     assert_equal 302, last_response.status
     assert_equal "Category 'Fantasy' has been deleted.", session[:message]
     
@@ -1191,7 +1191,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_delete_category_not_admin
-    post "/category/Fantasy/delete", { name: "Fantasy" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/category/delete", { name: "Fantasy" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
     assert_equal "You must be an administrator to do that.", session[:message]
     
@@ -1200,7 +1200,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_delete_category_signed_out
-    post "/category/Fantasy/delete", { name: "Fantasy" }, {}
+    post "/category/delete", { name: "Fantasy" }, {}
     assert_equal 302, last_response.status
     assert_equal "You must be an administrator to do that.", session[:message]
     
@@ -1232,21 +1232,21 @@ class CMSTest < Minitest::Test
   end
     
   def test_change_category
-    post "/category/Fantasy/edit", {new_name: 'sport'}, admin_session
+    post "/category/edit", {old_name: 'Fantasy', new_name: 'sport'}, admin_session
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "The 'Fantasy' category has been renamed to 'Sport'.", session[:message]
   end
     
   def test_change_category_already_exists
-    post "/category/Fantasy/edit", {new_name: 'magic'}, admin_session
+    post "/category/edit", {old_name: 'Fantasy', new_name: 'magic'}, admin_session
     assert_equal 422, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "That category name already exists. Please choose another name."
   end
     
   def test_change_category_blank
-    post "/category/Fantasy/edit", {new_name: ''}, admin_session
+    post "/category/edit", {old_name: 'Fantasy', new_name: ''}, admin_session
     assert_equal 422, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "The category name cannot be blank. Please try again."

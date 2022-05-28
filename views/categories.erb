@@ -16,7 +16,8 @@
           <a href="/category/<%= category[:name] %>/edit">Edit</a>
         </td>
         <td>
-          <form class="delete_category" action="/category/<%= category[:name] %>/delete" method="post">
+          <form class="delete_category" action="/category/delete" method="post">
+            <input type="hidden" name="name" value="<%= category[:name] %>"/>
             <button type="submit" class="delete">Delete category</button>
           </form>
         </td>
