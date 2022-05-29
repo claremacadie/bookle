@@ -770,9 +770,9 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "A new title"
     assert_includes last_response.body, "A new author"
   end
-  
+  ##################################################
   def test_add_new_book_blank_title
-    post "/book/add_new", { title: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/add_new", { title: '', author: 'A new author'}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title cannot be blank! Please enter a title."
   end
