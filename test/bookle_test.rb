@@ -770,7 +770,19 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "A new title"
     assert_includes last_response.body, "A new author"
   end
-  ##################################################
+
+  def test_add_new_book_strip_input
+    post "/book/add_new", { title: "    A new title  ", author: "  A new author   ", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "A new title has been added.", session[:message]
+    
+    get "/books/filter_results/search/0", {title: 'A new', author: '' }, user_2_session
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "A new title"
+    assert_includes last_response.body, "A new author"
+  end
+  
   def test_add_new_book_blank_title
     post "/book/add_new", { title: '', author: 'A new author'}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
@@ -839,6 +851,18 @@ class CMSTest < Minitest::Test
   
   def test_change_book_details
     post "/book/1/edit", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "Book details have been updated for A new title.", session[:message]
+    
+    get "/books/filter_results/search/0", {title: 'A new', author: '' }, user_2_session
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "A new title"
+    assert_includes last_response.body, "A new author"
+  end
+  
+  def test_change_book_details_strip_input
+    post "/book/1/edit", { title: "   A new title   ", author: "   A new author   ", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
     assert_equal "Book details have been updated for A new title.", session[:message]
     
@@ -944,6 +968,16 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Signed in as admin"
   end
   
+  def test_signin_strip_input
+    post "/users/signin", {user_name: "   admin  ", password: " secret "}, {}
+    assert_equal 302, last_response.status
+    assert_equal "Welcome!", session[:message]
+    assert_equal "admin", session[:user_name]
+    
+    get last_response["Location"]
+    assert_includes last_response.body, "Signed in as admin"
+  end
+  
   def test_signin_with_bad_credentials
     post "/users/signin", {user_name: "guest", password: "shhhh"}, {}
     assert_equal 422, last_response.status
@@ -977,6 +1011,15 @@ class CMSTest < Minitest::Test
   
   def test_signup_signed_out
     post "/users/signup", {new_username: "joe", password: "dfghiewo34334", reenter_password: "dfghiewo34334"}
+    assert_equal 302, last_response.status
+    assert_equal "Your account has been created.", session[:message]
+    
+    get "/"
+    assert_includes last_response.body, "Signed in as joe."
+  end
+  
+  def test_signup_signed_out_strip_input
+    post "/users/signup", {new_username: "   joe  ", password: " dfghiewo34334    ", reenter_password: "  dfghiewo34334 "}
     assert_equal 302, last_response.status
     assert_equal "Your account has been created.", session[:message]
     
@@ -1051,6 +1094,16 @@ class CMSTest < Minitest::Test
     assert_includes last_response.body, "Signed in as joe."
   end
   
+  def test_change_username_strip_input
+    post "/user/edit_login", {new_username: "   joe ", current_password: "   a ", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "joe", session[:user_name]
+    assert_equal "Your username has been updated.", session[:message]
+    
+    get "/"
+    assert_includes last_response.body, "Signed in as joe."
+  end
+  
   def test_change_username_to_blank
     post "/user/edit_login", {new_username: "", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 422, last_response.status
@@ -1074,6 +1127,18 @@ class CMSTest < Minitest::Test
   
   def test_change_password
     post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "b", reenter_password: "b"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    assert_equal 302, last_response.status
+    assert_equal "Clare MacAdie", session[:user_name]
+    assert_equal "Your password has been updated.", session[:message]
+    
+    post "/users/signin", {user_name: "Clare MacAdie", password: "b"}, {}
+    assert_equal 302, last_response.status
+    assert_equal "Welcome!", session[:message]
+    assert_equal "Clare MacAdie", session[:user_name]
+  end
+  
+  def test_change_password_strip_input
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: " a   ", new_password: " b ", reenter_password: "   b "}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
     assert_equal 302, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_equal "Your password has been updated.", session[:message]
@@ -1166,6 +1231,13 @@ class CMSTest < Minitest::Test
     assert_equal "A new category of 'Sport' has been added.", session[:message]
   end
   
+  def test_add_category_strip_input
+    post "/categories/add_new", {name: '   sport  '}, admin_session
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "A new category of 'Sport' has been added.", session[:message]
+  end
+  
   def test_add_category_already_exists
     post "/categories/add_new", {name: 'magic'}, admin_session
     assert_equal 422, last_response.status
@@ -1233,6 +1305,13 @@ class CMSTest < Minitest::Test
     
   def test_change_category
     post "/category/edit", {old_name: 'Fantasy', new_name: 'sport'}, admin_session
+    assert_equal 302, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_equal "The 'Fantasy' category has been renamed to 'Sport'.", session[:message]
+  end
+    
+  def test_change_category_strip_input
+    post "/category/edit", {old_name: 'Fantasy', new_name: '   sport  '}, admin_session
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "The 'Fantasy' category has been renamed to 'Sport'.", session[:message]
