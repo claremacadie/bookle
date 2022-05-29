@@ -455,7 +455,7 @@ end
 
 post '/book/add_new' do
   require_signed_in_user
-  title = params[:title] #strip
+  title = params[:title].strip
   author = params[:author] #strip
   @filter_type = params[:filter_type]
   @offset = params[:offset].to_i
