@@ -80,19 +80,15 @@ def require_signed_in_as_admin
   @original_route = request.path_info
   session[:message] = 'You must be an administrator to do that.'
   redirect "/users/signin?original_route=#{@original_route}"
-  # erb :signin - I think this doesn't work because the rest of the route that invoked this method
-  # ends in an erb that overwrites it.
 end
 
 def require_signed_in_user
   return if user_signed_in?
 
-  @original_route = request.path_info
+  session[:intended_route] = request.path_info
   session[:message] = 'You must be signed in to do that.' \
-    " Sign in below or <a href='/users/signup?original_route=#{@original_route}'>create a new account</a>"
-  redirect "/users/signin?original_route=#{@original_route}"
-  # erb :signin - I think this doesn't work because the rest of the route that invoked this method
-  # ends in an erb that overwrites it.
+    " Sign in below or <a href='/users/signup'>create a new account</a>"
+  redirect '/users/signin'
 end
 
 def require_signed_in_as_book_owner(book_id)
@@ -293,19 +289,18 @@ post '/users/reset_password' do
 end
 
 get '/users/signin' do
-  @original_route = params[:original_route]
   erb :signin
 end
 
 post '/users/signin' do
-  @original_route = params['original_route']
+  session[:intended_route] = params['intended_route']
   user_name = params[:user_name].strip
   password = params[:password].strip
   if valid_credentials?(user_name, password)
     session[:user_name] = user_name
     session[:user_id] = @storage.user_id(user_name)
     session[:message] = 'Welcome!'
-    redirect(@original_route)
+    redirect(session[:intended_route])
   else
     session[:message] = 'Invalid credentials'
     status 422
@@ -326,13 +321,12 @@ end
 
 get '/users/signup' do
   require_signed_out_user
-  @original_route = params[:original_route]
   erb :signup
 end
 
 post '/users/signup' do
   require_signed_out_user
-  @original_route = params[:original_route]
+  session[:intended_route] = params[:intended_route]
   new_username = params[:new_username].strip
   new_password = params[:password].strip
   reenter_password = params[:reenter_password].strip
@@ -345,7 +339,7 @@ post '/users/signup' do
     session[:user_name] = new_username
     session[:user_id] = @storage.user_id(new_username)
     session[:message] = 'Your account has been created.'
-    redirect(@original_route)
+    redirect(session[:intended_route])
   end
 end
 

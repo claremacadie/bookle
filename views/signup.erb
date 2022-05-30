@@ -15,7 +15,7 @@
       <input type="password" id="reenter_password" name="reenter_password" />
     </label>
   </div>
-  <input type='hidden' name='original_route' value='<%= @original_route %>'/>
+  <input type='hidden' name='intended_route' value='<%= session[:intended_route] %>'/>
   <button type="submit">Sign Up</button>
-  <a href='/<%=@original_route %>'>Cancel</a>
+  <a href='/<%= session[:intended_route] %>'>Cancel</a>
 </form>
