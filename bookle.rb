@@ -77,9 +77,9 @@ end
 def require_signed_in_as_admin
   return if session[:user_name] == 'admin'
 
-  @original_route = request.path_info
+  session[:intended_route] = request.path_info
   session[:message] = 'You must be an administrator to do that.'
-  redirect "/users/signin?original_route=#{@original_route}"
+  redirect "/users/signin"
 end
 
 def require_signed_in_user
