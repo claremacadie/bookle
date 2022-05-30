@@ -51,16 +51,32 @@ helpers do
     format_title if image_files.include?(format_title)
   end
 
+  def middle_phrase(books_count)
+    if books_count == 1
+      "is #{books_count} book"
+    else
+      "are #{books_count} books"
+    end
+  end
+
+  def book_phrase(books_count)
+    if books_count == 1
+      "#{books_count} book"
+    else
+      "#{books_count} books"
+    end
+  end
+
   def total_books(filter_type, books_count)
     case filter_type
     when 'search'
-      "There are #{books_count} books meeting your criteria."
+      "There #{middle_phrase(books_count)} meeting your criteria."
     when 'all_books'
-      "There are #{books_count} books on Bookle."
+      "There #{middle_phrase(books_count)} on Bookle."
     when 'available_to_borrow'
-      "There are #{books_count} books available for you to borrow."
+      "There #{middle_phrase(books_count)} available for you to borrow."
     when 'your_books'
-      "You have #{books_count} books on Bookle."
+      "You have #{book_phrase(books_count)} on Bookle."
     end
   end
 end
