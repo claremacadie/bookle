@@ -151,17 +151,17 @@ def edit_login_error(new_username, current_password, new_password, reenter_passw
 end
 
 def update_user_credentials(new_username, current_password, new_password)
-  if session[:user_name] != new_username && current_password != new_password && new_password != ''
-    @storage.change_username_and_password(session[:user_name], new_username, new_password)
-    session[:user_name] = new_username
-    session[:message] = 'Your username and password have been updated.'
-  elsif session[:user_name] != new_username && new_password == ''
+  if session[:user_name] != new_username && new_password == ''
     @storage.change_username(session[:user_name], new_username)
     session[:user_name] = new_username
     session[:message] = 'Your username has been updated.'
   elsif session[:user_name] == new_username && current_password != new_password
     @storage.change_password(session[:user_name], new_password)
     session[:message] = 'Your password has been updated.'
+  else
+    @storage.change_username_and_password(session[:user_name], new_username, new_password)
+    session[:user_name] = new_username
+    session[:message] = 'Your username and password have been updated.'
   end
 end
 
