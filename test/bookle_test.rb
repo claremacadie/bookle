@@ -289,7 +289,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "Add new book"
-    assert_includes last_response.body, "There are 7 books meeting your criteria."
+    assert_includes last_response.body, "There are 7 books meeting your search criteria."
     assert_includes last_response.body, "Prisoner of Azkaban"
     assert_includes last_response.body, "Page 1"
     assert_includes last_response.body, "Page 2"
@@ -1329,5 +1329,21 @@ class CMSTest < Minitest::Test
     assert_equal 422, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "The category name cannot be blank. Please try again."
+  end
+
+  def test_filter_result_single_book
+    get "/books/filter_results/search/0", {title: 'silver'}, user_2_session
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "There is 1 book meeting your search criteria."
+  end
+
+  def test_filter_result_several_books
+    get "/books/filter_results/search/0", {title: 's'}, user_2_session
+    
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "There are 11 books meeting your search criteria."
   end
 end

@@ -10,7 +10,7 @@ require_relative 'database_persistence'
 configure do
   enable :sessions
   set :session_secret, 'secret'
-  set :erb, :escape_html => true
+  set :erb, escape_html: true
 end
 
 configure(:development) do
@@ -70,7 +70,7 @@ helpers do
   def total_books(filter_type, books_count)
     case filter_type
     when 'search'
-      "There #{middle_phrase(books_count)} meeting your criteria."
+      "There #{middle_phrase(books_count)} meeting your search criteria."
     when 'all_books'
       "There #{middle_phrase(books_count)} on Bookle."
     when 'available_to_borrow'
@@ -96,7 +96,7 @@ def require_signed_in_as_admin
 
   session[:intended_route] = request.path_info
   session[:message] = 'You must be an administrator to do that.'
-  redirect "/users/signin"
+  redirect '/users/signin'
 end
 
 def require_signed_in_user
