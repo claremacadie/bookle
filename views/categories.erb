@@ -11,13 +11,13 @@
   <tbody>
     <% @categories_list.each do |category| %>
       <tr>
-        <td><%= category[:name] %></td>
+        <td><%== category[:name] %></td>
         <td>
-          <a href="/category/<%= category[:name] %>/edit">Edit</a>
+          <a href="/category/<%== category[:name] %>/edit">Edit</a>
         </td>
         <td>
           <form class="delete_category" action="/category/delete" method="post">
-            <input type="hidden" name="name" value="<%= category[:name] %>"/>
+            <input type="hidden" name="name" value="<%== category[:name] %>"/>
             <button type="submit" class="delete">Delete category</button>
           </form>
         </td>

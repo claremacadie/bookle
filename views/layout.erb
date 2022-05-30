@@ -24,7 +24,7 @@
       <% if session[:user_id] %>
         <p>
           <form class="signout" method="post" action="/users/signout">
-            Signed in as <%= session[:user_name] %>.
+            Signed in as <%== session[:user_name] %>.
             <button type="submit">Sign Out</button>
           </form>
         </p>
@@ -40,9 +40,9 @@
 
     <main>
       <% if session[:message] %>
-        <p class="message"><%= session.delete(:message) %></p>
+        <p class="message"><%== session.delete(:message) %></p>
       <% end %>
-      <%= yield %>
+      <%== yield %>
     </main>
   </body>
 </html>

@@ -2,7 +2,7 @@
 <form method="post" action="/users/signup">
   <div>
     <label for="new_username"> Enter a username:
-      <input name="new_username" id="new_username" value="<%= params[:new_username] %>"/>
+      <input name="new_username" id="new_username" value="<%== params[:new_username] %>"/>
     </label>
   </div>
   <div>
@@ -15,7 +15,7 @@
       <input type="password" id="reenter_password" name="reenter_password" />
     </label>
   </div>
-  <input type='hidden' name='intended_route' value='<%= session[:intended_route] %>'/>
+  <input type='hidden' name='intended_route' value='<%== session[:intended_route] %>'/>
   <button type="submit">Sign Up</button>
-  <a href='/<%= session[:intended_route] %>'>Cancel</a>
+  <a href='/<%== session[:intended_route] %>'>Cancel</a>
 </form>

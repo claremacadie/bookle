@@ -1,7 +1,7 @@
 <form method="post" action="/users/signin">
   <div>
     <label for="user_name"> Username:
-      <input name="user_name" id="user_name" value="<%= params[:user_name] %>"/>
+      <input name="user_name" id="user_name" value="<%== params[:user_name] %>"/>
     </label>
   </div>
   <div>
@@ -9,7 +9,7 @@
       <input type="password" id="password" name="password" />
     </label>
   </div>
-  <input type='hidden' name='intended_route' value='<%= session[:intended_route] %>'/>
+  <input type='hidden' name='intended_route' value='<%== session[:intended_route] %>'/>
   <button type="submit">Sign In</button>
-  <a href='/<%= session[:intended_route] %>'>Cancel</a>
+  <a href='/<%== session[:intended_route] %>'>Cancel</a>
 </form>

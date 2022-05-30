@@ -3,11 +3,11 @@
 <p><a href="/books/filter_form">Search books</a></p>
 <p><a href="/books/filter_results/all_books/0">List all books</a></p>
 <% if session[:user_id] %>
-  <a href="/book/add_new?filter_type=<%= @filter_type %>&offset=<%=@offset %>">Add new book</a>
+  <a href="/book/add_new?filter_type=<%== @filter_type %>&offset=<%== @offset %>">Add new book</a>
 <% end %>
 
-<h1><%= @heading %></h1>
-<p><%= total_books(@filter_type, @books_count) %></p>
+<h1><%== @heading %></h1>
+<p><%== total_books(@filter_type, @books_count) %></p>
 <table>
   <thead>
     <tr>
@@ -25,32 +25,32 @@
       <tr>
         <td> 
           <% if image_file(book[:title]) %>
-            <a href="/images/<%= image_file(book[:title]) %>.jpeg" target="blank"><%= book[:title] %></a>
+            <a href="/images/<%== image_file(book[:title]) %>.jpeg" target="blank"><%== book[:title] %></a>
           <% else %>
-            <%= book[:title] %>
+            <%== book[:title] %>
           <% end %>
         </td>
-        <td> <%= book[:author] %></td>
-        <td> <%= book[:categories] %></td>
-        <td> <%= book_availability(book) %></td>
+        <td> <%== book[:author] %></td>
+        <td> <%== book[:categories] %></td>
+        <td> <%== book_availability(book) %></td>
 
         <td>
           <% if book[:owner_id] == session[:user_id] %>
             <% if book[:requester_id] %>
-              <form action="/book/<%= book[:id] %>/loan" method="post">
-                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
-                <input type='hidden' name='offset' value='<%=@offset %>'/>
-                <button>Loan book to <%= book[:requester_name] %></button>
+              <form action="/book/<%== book[:id] %>/loan" method="post">
+                <input type='hidden' name='filter_type' value='<%== @filter_type %>'/>
+                <input type='hidden' name='offset' value='<%== @offset %>'/>
+                <button>Loan book to <%== book[:requester_name] %></button>
               </form>
-              <form action="/book/<%= book[:id] %>/reject_request" method="post">
-                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
-                <input type='hidden' name='offset' value='<%=@offset %>'/>
-                <button>Reject request from <%= book[:requester_name] %></button>
+              <form action="/book/<%== book[:id] %>/reject_request" method="post">
+                <input type='hidden' name='filter_type' value='<%== @filter_type %>'/>
+                <input type='hidden' name='offset' value='<%== @offset %>'/>
+                <button>Reject request from <%== book[:requester_name] %></button>
               </form>
             <% elsif book[:borrower_id] %>
-              <form action="/book/<%= book[:id] %>/return" method="post">
-                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
-                <input type='hidden' name='offset' value='<%=@offset %>'/>
+              <form action="/book/<%== book[:id] %>/return" method="post">
+                <input type='hidden' name='filter_type' value='<%== @filter_type %>'/>
+                <input type='hidden' name='offset' value='<%== @offset %>'/>
                 <button>Book returned</button>
               </form>
             <% else %>
@@ -58,15 +58,15 @@
             <% end %>
           <% else %>
             <% if !book[:requester_id] && !book[:borrower_id] %>
-              <form action="/book/<%= book[:id] %>/request" method="post">
-                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
-                <input type='hidden' name='offset' value='<%=@offset %>'/>
+              <form action="/book/<%== book[:id] %>/request" method="post">
+                <input type='hidden' name='filter_type' value='<%== @filter_type %>'/>
+                <input type='hidden' name='offset' value='<%== @offset %>'/>
                 <button>Request book</button>
               </form>
             <% elsif book[:requester_id] == session[:user_id] %>
-              <form action="/book/<%= book[:id] %>/cancel_request" method="post">
-                <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
-                <input type='hidden' name='offset' value='<%=@offset %>'/>
+              <form action="/book/<%== book[:id] %>/cancel_request" method="post">
+                <input type='hidden' name='filter_type' value='<%== @filter_type %>'/>
+                <input type='hidden' name='offset' value='<%== @offset %>'/>
                 <button>Cancel request</button>
               </form>
             <% else %>
@@ -77,7 +77,7 @@
 
         <td> 
           <% if book[:owner_id] == session[:user_id] %>
-            <a href="/book/<%= book[:id] %>/edit?filter_type=<%= @filter_type %>&offset=<%=@offset %>">Edit book details</a>
+            <a href="/book/<%== book[:id] %>/edit?filter_type=<%== @filter_type %>&offset=<%== @offset %>">Edit book details</a>
           <% else %>
             -
           <% end %>
@@ -85,9 +85,9 @@
 
         <td>
           <% if book[:owner_id] == session[:user_id] %>
-            <form class="delete_book" action="/book/<%= book[:id] %>/delete" method="post">
-              <input type='hidden' name='filter_type' value='<%=@filter_type %>'/>
-              <input type='hidden' name='offset' value='<%=@offset %>'/>
+            <form class="delete_book" action="/book/<%== book[:id] %>/delete" method="post">
+              <input type='hidden' name='filter_type' value='<%== @filter_type %>'/>
+              <input type='hidden' name='offset' value='<%== @offset %>'/>
               <button type="submit" class="delete">Delete book</button>
             </form>
           <% else %>
@@ -104,9 +104,9 @@
     <% 1.upto(@number_of_pages) do |page| %>
       <% page_offset = @limit * (page - 1) %>
       <% if page_offset == @offset %>
-        Page <%= page %>
+        Page <%== page %>
       <% else %>
-        <a href="/books/filter_results/<%= @filter_type %>/<%= page_offset %>?title=<%= @title %>&author=<%= @author %>&categories=<%= @categories %>&availabilities=<%= @availabilities %>">Page <%= page %></a>
+        <a href="/books/filter_results/<%== @filter_type %>/<%== page_offset %>?title=<%== @title %>&author=<%== @author %>&categories=<%== @categories %>&availabilities=<%== @availabilities %>">Page <%== page %></a>
       <% end %>
     <% end %>
   </ul>

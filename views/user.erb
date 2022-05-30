@@ -2,7 +2,7 @@
 <form method="post" action="/user/edit_login">
   <div>
     <label for="new_username"> Enter new username:
-      <input name="new_username" id="new_username" value="<%= session[:user_name] %>"/>*Leave unchanged if you don't wish to alter your username.
+      <input name="new_username" id="new_username" value="<%== session[:user_name] %>"/>*Leave unchanged if you don't wish to alter your username.
     </label>
   </div>
   <div>
