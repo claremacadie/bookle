@@ -18,9 +18,6 @@ configure(:development) do
   also_reload 'database_persistence.rb'
 end
 
-# Define constants
-LIMIT = 3
-
 before do
   @storage = DatabasePersistence.new(logger)
 end
@@ -28,6 +25,9 @@ end
 after do
   @storage.disconnect
 end
+
+# Define constants
+LIMIT = 3
 
 # Helper methods for views (erb files)
 helpers do
