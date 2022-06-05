@@ -134,7 +134,7 @@ def valid_credentials?(user_name, password)
 end
 
 def weak_password?(password)
-  password.size < 9 ||
+  password.size < 8 ||
   !password.match?(/[a-z]/) ||
   !password.match?(/[A-Z]/) ||
   !password.match?(/[0-9]/) 
@@ -165,12 +165,12 @@ def edit_login_error(new_username, current_password, new_password, reenter_passw
     "New username cannot be 'admin'! Please choose a different username."
   elsif @storage.load_user_credentials.keys.include?(new_username) && session[:user_name] != new_username
     'That username already exists. Please choose a different username.'
+  elsif !valid_credentials?(session[:user_name], current_password)
+    'That is not the correct current password. Try again!'
   elsif new_password != reenter_password
     'The passwords do not match.'
   elsif weak_password?(new_password) && new_password != ''
     'Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number.'
-  elsif !valid_credentials?(session[:user_name], current_password)
-    'That is not the correct current password. Try again!'
   end
 end
 
