@@ -135,9 +135,9 @@ end
 
 def weak_password?(password)
   password.size < 8 ||
-  !password.match?(/[a-z]/) ||
-  !password.match?(/[A-Z]/) ||
-  !password.match?(/[0-9]/) 
+    !password.match?(/[a-z]/) ||
+    !password.match?(/[A-Z]/) ||
+    !password.match?(/[0-9]/)
 end
 
 def signup_input_error(new_username, new_password, reenter_password)
