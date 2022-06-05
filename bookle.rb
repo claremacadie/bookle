@@ -167,7 +167,7 @@ def edit_login_error(new_username, current_password, new_password, reenter_passw
     'That username already exists. Please choose a different username.'
   elsif new_password != reenter_password
     'The passwords do not match.'
-  elsif weak_password?(new_password) && !new_password == ''
+  elsif weak_password?(new_password) && new_password != ''
     'Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number.'
   elsif !valid_credentials?(session[:user_name], current_password)
     'That is not the correct current password. Try again!'
