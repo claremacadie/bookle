@@ -133,6 +133,13 @@ def valid_credentials?(user_name, password)
   end
 end
 
+def weak_password?(password)
+  password.size < 9 ||
+  !password.match?(/[a-z]/) ||
+  !password.match?(/[A-Z]/) ||
+  !password.match?(/[0-9]/) 
+end
+
 def signup_input_error(new_username, new_password, reenter_password)
   if new_username == '' && new_password == ''
     'Username and password cannot be blank! Please enter a username and password.'
@@ -140,12 +147,14 @@ def signup_input_error(new_username, new_password, reenter_password)
     'Username cannot be blank! Please enter a username.'
   elsif new_username == 'admin'
     "Username cannot be 'admin'! Please choose a different username."
-  elsif new_password == ''
-    'Password cannot be blank! Please enter a password.'
-  elsif @storage.load_user_credentials.keys.include?(new_username)
-    'That username already exists.'
   elsif new_password != reenter_password
     'The passwords do not match.'
+  elsif new_password == ''
+    'Password cannot be blank! Please enter a password.'
+  elsif weak_password?(new_password)
+    'Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number.'
+  elsif @storage.load_user_credentials.keys.include?(new_username)
+    'That username already exists.'
   end
 end
 
@@ -158,6 +167,8 @@ def edit_login_error(new_username, current_password, new_password, reenter_passw
     'That username already exists. Please choose a different username.'
   elsif new_password != reenter_password
     'The passwords do not match.'
+  elsif weak_password?(new_password)
+    'Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number.'
   elsif !valid_credentials?(session[:user_name], current_password)
     'That is not the correct current password. Try again!'
   end
