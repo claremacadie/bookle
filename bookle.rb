@@ -51,32 +51,32 @@ helpers do
     format_title if image_files.include?(format_title)
   end
 
-  def middle_phrase(books_count)
+  def others_books(books_count)
     if books_count == 1
-      "is #{books_count} book"
+      "There is #{books_count} book"
     else
-      "are #{books_count} books"
+      "There are #{books_count} books"
     end
   end
 
-  def book_phrase(books_count)
+  def own_books(books_count)
     if books_count == 1
-      "#{books_count} book"
+      "You have #{books_count} book on Bookle."
     else
-      "#{books_count} books"
+      "You have #{books_count} books on Bookle."
     end
   end
 
   def total_books(filter_type, books_count)
     case filter_type
     when 'search'
-      "There #{middle_phrase(books_count)} meeting your search criteria."
+      "#{others_books(books_count)} meeting your search criteria."
     when 'all_books'
-      "There #{middle_phrase(books_count)} on Bookle."
+      "#{others_books(books_count)} on Bookle."
     when 'available_to_borrow'
-      "There #{middle_phrase(books_count)} available for you to borrow."
+      "#{others_books(books_count)} available for you to borrow."
     when 'your_books'
-      "You have #{book_phrase(books_count)} on Bookle."
+      own_books(books_count)
     end
   end
 end
@@ -195,21 +195,17 @@ def selected_category_ids(params)
     return params['categories'].delete('[', ']').split(', ').map(&:to_i)
   end
 
-  categories = []
-  params.each do |k, v|
+  params.each_with_object([]) do |(k, v), categories|
     categories << v.to_i if k.include?('category_id')
   end
-  categories
 end
 
 def availability_array(params)
   return params['availabilities'] if params.keys.include?('availabilities')
 
-  availabilities = []
-  params.each do |k, v|
+  params.each_with_object([]) do |(k, v), availabilities|
     availabilities << k if v == 'availability'
-  end
-  availabilities.join(',')
+  end.join(',')
 end
 
 def heading(filter_type)
@@ -253,16 +249,13 @@ def no_books_message(filter_type)
 end
 
 def books_data(filter_type)
-  case filter_type
-  when 'search'
-    @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
-  when 'all_books'
-    @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset)
-  when 'available_to_borrow'
-    @storage.available_books(session[:user_id], @limit, @offset)
-  when 'your_books'
-    @storage.user_owned_books(session[:user_id], @limit, @offset)
-  end
+  method_hash = {
+    'search' => @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset),
+    'all_books' => @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset),
+    'available_to_borrow' => @storage.available_books(session[:user_id], @limit, @offset),
+    'your_books' => @storage.user_owned_books(session[:user_id], @limit, @offset)
+  }
+  method_hash[filter_type]
 end
 
 def valid_category?(name)
