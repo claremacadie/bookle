@@ -25,7 +25,7 @@ class DatabasePersistence
     sql = 'UPDATE users SET name = $1, password = $2 WHERE name = $3'
     query(sql, new_username, hashed_password, old_username)
   end
-  
+
   def change_username(old_username, new_username)
     sql = 'UPDATE users SET name = $1 WHERE name = $2'
     query(sql, new_username, old_username)
@@ -111,7 +111,7 @@ class DatabasePersistence
     result.nil? ? 0 : convert_string_to_integer(result['count'])
   end
 
-  def filter_books(title = '', author = '', categories = [], availabilities = [], limit, offset)
+  def filter_books(title, author, categories, availabilities, limit, offset)
     limit_clause = "LIMIT #{limit}"
     offset_clause = "OFFSET #{offset}"
     sql = [
