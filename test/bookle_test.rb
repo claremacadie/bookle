@@ -645,7 +645,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_requested_book_signed_in_as_not_book_owner_or_requester
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, user_4_session
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -681,7 +681,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_view_onloan_book_signed_in_not_as_book_owner_or_borrower
-    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, user_4_session
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -698,7 +698,7 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "You have requested Philosopher's Stone from Clare MacAdie", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, {"rack.session" => { user_name: "Alice Allbright" } }
+    get "/books/filter_results/search/0", {title: 'Philosopher', author: '' }, user_3_session
     assert_includes last_response.body, "Requested by you"
   end
 
@@ -708,37 +708,37 @@ class CMSTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal "You have cancelled your request for Chamber of Secrets from Clare MacAdie", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, user_4_session
     assert_includes last_response.body, "Available"
   end
    
   def test_loan_book
-    post "/book/2/loan", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
+    post "/book/2/loan", {}, user_2_session
     
     assert_equal 302, last_response.status
     assert_equal "Chamber of Secrets has been loaned to Alice Allbright", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, user_4_session
     assert_includes last_response.body, "On loan to Alice Allbright"
   end
    
   def test_reject_request_book
-    post "/book/2/reject_request", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
+    post "/book/2/reject_request", {}, user_2_session
     
     assert_equal 302, last_response.status
     assert_equal "You have rejected a request for Chamber of Secrets from Alice Allbright", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
+    get "/books/filter_results/search/0", {title: 'Chamber', author: '' }, user_4_session
     assert_includes last_response.body, "Available"
   end
 
   def test_return_book
-    post "/book/3/return", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
+    post "/book/3/return", {}, user_2_session
     
     assert_equal 302, last_response.status
     assert_equal "Prisoner of Azkaban has been returned", session[:message]
     
-    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, {"rack.session" => { user_name: "Beth Broom", user_id: 4 } }
+    get "/books/filter_results/search/0", {title: 'Prisoner', author: '' }, user_4_session
     assert_includes last_response.body, "Available"
   end
 
@@ -750,7 +750,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_add_book_form_signedin
-    get "/book/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
+    get "/book/add_new", {}, user_2_session
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -760,7 +760,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_add_new_book
-    post "/book/add_new", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/add_new", { title: "A new title", author: "A new author", category_id_3: "3" }, user_2_session
     assert_equal 302, last_response.status
     assert_equal "A new title has been added.", session[:message]
     
@@ -772,7 +772,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_add_new_book_strip_input
-    post "/book/add_new", { title: "    A new title  ", author: "  A new author   ", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/add_new", { title: "    A new title  ", author: "  A new author   ", category_id_3: "3" }, user_2_session
     assert_equal 302, last_response.status
     assert_equal "A new title has been added.", session[:message]
     
@@ -784,19 +784,19 @@ class CMSTest < Minitest::Test
   end
   
   def test_add_new_book_blank_title
-    post "/book/add_new", { title: '', author: 'A new author'}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/add_new", { title: '', author: 'A new author'}, user_2_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title cannot be blank! Please enter a title."
   end
   
   def test_add_new_book_blank_author
-    post "/book/add_new", { title: 'A new title', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/add_new", { title: 'A new title', author: ''}, user_2_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Author cannot be blank! Please enter an author."
   end
   
   def test_add_new_book_blank_title_and_author
-    post "/book/add_new", { title: '', author: ''}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/add_new", { title: '', author: ''}, user_2_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title and author cannot be blank! Please enter a title and an author."
   end
@@ -814,7 +814,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_delete_book
-    post "/book/7/delete", { book_id: "7" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/7/delete", { book_id: "7" }, user_2_session
     assert_equal 302, last_response.status
     assert_equal "Deathly Hallows has been deleted.", session[:message]
     
@@ -828,7 +828,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_edit_book_signedin_as_book_owner
-    get "/book/1/edit", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2 } }
+    get "/book/1/edit", {}, user_2_session
     
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
@@ -850,7 +850,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_book_details
-    post "/book/1/edit", { title: "A new title", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/1/edit", { title: "A new title", author: "A new author", category_id_3: "3" }, user_2_session
     assert_equal 302, last_response.status
     assert_equal "Book details have been updated for A new title.", session[:message]
     
@@ -862,7 +862,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_book_details_strip_input
-    post "/book/1/edit", { title: "   A new title   ", author: "   A new author   ", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/1/edit", { title: "   A new title   ", author: "   A new author   ", category_id_3: "3" }, user_2_session
     assert_equal 302, last_response.status
     assert_equal "Book details have been updated for A new title.", session[:message]
     
@@ -874,19 +874,19 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_book_details_blank_title
-    post "/book/1/edit", { title: "", author: "A new author", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/1/edit", { title: "", author: "A new author", category_id_3: "3" }, user_2_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title cannot be blank! Please enter a title."
   end
   
   def test_change_book_details_blank_author
-    post "/book/1/edit", { title: "A new title", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/1/edit", { title: "A new title", author: "", category_id_3: "3" }, user_2_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Author cannot be blank! Please enter an author."
   end
   
   def test_change_book_details_blank_title_and_author
-    post "/book/1/edit", { title: "", author: "", category_id_3: "3" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/book/1/edit", { title: "", author: "", category_id_3: "3" }, user_2_session
     assert_equal 422, last_response.status
     assert_includes last_response.body, "Title and author cannot be blank! Please enter a title and an author."
   end
@@ -900,7 +900,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_users_page_not_admin
-    get "/users", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    get "/users", {}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
@@ -928,7 +928,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_reset_password_not_admin
-    post "/users/reset_password", {user_name: "Beth Broom"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/users/reset_password", {user_name: "Beth Broom"}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
@@ -1103,7 +1103,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_username
-    post "/user/edit_login", {new_username: "joe", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "joe", current_password: "a", new_password: "", reenter_password: ""}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "joe", session[:user_name]
     assert_equal "Your username has been updated.", session[:message]
@@ -1113,7 +1113,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_username_strip_input
-    post "/user/edit_login", {new_username: "   joe ", current_password: "   a ", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "   joe ", current_password: "   a ", new_password: "", reenter_password: ""}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "joe", session[:user_name]
     assert_equal "Your username has been updated.", session[:message]
@@ -1123,28 +1123,28 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_username_to_blank
-    post "/user/edit_login", {new_username: "", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "", current_password: "a", new_password: "", reenter_password: ""}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "New username cannot be blank! Please enter a username."
   end
   
   def test_change_username_to_admin
-    post "/user/edit_login", {new_username: "admin", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "admin", current_password: "a", new_password: "", reenter_password: ""}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "New username cannot be 'admin'! Please choose a different username."
   end
   
   def test_change_username_to_existing_username
-    post "/user/edit_login", {new_username: "Alice Allbright", current_password: "a", new_password: "", reenter_password: ""}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "Alice Allbright", current_password: "a", new_password: "", reenter_password: ""}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "That username already exists. Please choose a different username."
   end
   
   def test_change_password
-    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "Qwerty90", reenter_password: "Qwerty90"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "Qwerty90", reenter_password: "Qwerty90"}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_equal "Your password has been updated.", session[:message]
@@ -1156,7 +1156,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_password_strip_input
-    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: " a   ", new_password: " Qwerty90 ", reenter_password: "   Qwerty90 "}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: " a   ", new_password: " Qwerty90 ", reenter_password: "   Qwerty90 "}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_equal "Your password has been updated.", session[:message]
@@ -1168,35 +1168,35 @@ class CMSTest < Minitest::Test
   end
    
   def test_change_password_mismatched
-    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "b", reenter_password: "c"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "b", reenter_password: "c"}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "The passwords do not match."
   end
    
   def test_change_password_no_capital
-    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "qwerty90", reenter_password: "qwerty90"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "qwerty90", reenter_password: "qwerty90"}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number."
   end
    
   def test_change_password_no_number
-    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "Qwertyuio", reenter_password: "Qwertyuio"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "Qwertyuio", reenter_password: "Qwertyuio"}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number."
   end
    
   def test_change_password_too_short
-    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "Qwer90", reenter_password: "Qwer90"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "Clare MacAdie", current_password: "a", new_password: "Qwer90", reenter_password: "Qwer90"}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number."
   end
   
   def test_change_username_and_password
-    post "/user/edit_login", {new_username: "joe", current_password: "a", new_password: "Qwerty90", reenter_password: "Qwerty90"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "joe", current_password: "a", new_password: "Qwerty90", reenter_password: "Qwerty90"}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "joe", session[:user_name]
     assert_equal "Your username and password have been updated.", session[:message]
@@ -1208,7 +1208,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_change_user_credentials_password_mismatched
-    post "/user/edit_login", {new_username: "joe", current_password: "wrong_password", new_password: "b", reenter_password: "b"}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/user/edit_login", {new_username: "joe", current_password: "wrong_password", new_password: "b", reenter_password: "b"}, user_2_session
     assert_equal 422, last_response.status
     assert_equal "Clare MacAdie", session[:user_name]
     assert_includes last_response.body, "That is not the correct current password. Try again!"
@@ -1225,7 +1225,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_categories_page_not_admin
-    get "/categories", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    get "/categories", {}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
@@ -1248,7 +1248,7 @@ class CMSTest < Minitest::Test
   end
   
   def test_add_category_page_not_admin
-    get "/categories/add_new", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    get "/categories/add_new", {}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
@@ -1302,7 +1302,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_delete_category_not_admin
-    post "/category/delete", { name: "Fantasy" }, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    post "/category/delete", { name: "Fantasy" }, user_2_session
     assert_equal 302, last_response.status
     assert_equal "You must be an administrator to do that.", session[:message]
     
@@ -1327,7 +1327,7 @@ class CMSTest < Minitest::Test
   end
 
   def test_edit_category_page_not_admin
-    get "/category/Fantasy/edit", {}, {"rack.session" => { user_name: "Clare MacAdie", user_id: 2} }
+    get "/category/Fantasy/edit", {}, user_2_session
     assert_equal 302, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_equal "You must be an administrator to do that.", session[:message]
