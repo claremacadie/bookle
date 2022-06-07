@@ -30,7 +30,9 @@ end
 LIMIT = 3
 
 # Helper methods for views (erb files)
+# rubocop:disable Metrics/BlockLength
 helpers do
+  # rubocop:disable Layout/LineLength
   def book_availability(book)
     if book[:borrower_id]
       book[:borrower_id] == session[:user_id] ? 'On loan to you' : "On loan to #{book[:borrower_name]}"
@@ -40,6 +42,7 @@ helpers do
       'Available'
     end
   end
+  # rubocop:enable Layout/LineLength
 
   def image_file(title)
     image_files = Dir.glob('public/images/*')
@@ -80,6 +83,7 @@ helpers do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
 
 # Helper methods for routes
 def user_signed_in?
@@ -140,6 +144,7 @@ def weak_password?(password)
     !password.match?(/[0-9]/)
 end
 
+# rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength, Layout/LineLength
 def signup_input_error(new_username, new_password, reenter_password)
   if new_username == '' && new_password == ''
     'Username and password cannot be blank! Please enter a username and password.'
@@ -157,7 +162,9 @@ def signup_input_error(new_username, new_password, reenter_password)
     'Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number.'
   end
 end
+# rubocop:enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength, Layout/LineLength
 
+# rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength, Layout/LineLength
 def edit_login_error(new_username, current_password, new_password, reenter_password)
   if new_username == ''
     'New username cannot be blank! Please enter a username.'
@@ -173,7 +180,9 @@ def edit_login_error(new_username, current_password, new_password, reenter_passw
     'Password must contain at least: 8 characters, one uppercase letter, one lowercase letter and one number.'
   end
 end
+# rubocop:enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength, Layout/LineLength
 
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Layout/LineLength
 def update_user_credentials(new_username, current_password, new_password)
   if session[:user_name] != new_username && new_password == ''
     @storage.change_username(session[:user_name], new_username)
@@ -188,6 +197,7 @@ def update_user_credentials(new_username, current_password, new_password)
     session[:message] = 'Your username and password have been updated.'
   end
 end
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Layout/LineLength
 
 def selected_category_ids(params)
   if params.keys.include?('categories')
@@ -228,6 +238,7 @@ def blank_field_message(title, author)
   end
 end
 
+# rubocop:disable Layout/LineLength
 def number_of_books(filter_type)
   method_hash = {
     'search' => @storage.count_filter_books(@title, @author, @categories_selected, @availabilities),
@@ -237,6 +248,7 @@ def number_of_books(filter_type)
   }
   method_hash[filter_type]
 end
+# rubocop:enable Layout/LineLength
 
 def no_books_message(filter_type)
   message_hash = {
@@ -248,6 +260,7 @@ def no_books_message(filter_type)
   message_hash[filter_type]
 end
 
+# rubocop:disable Layout/LineLength
 def books_data(filter_type)
   method_hash = {
     'search' => @storage.filter_books(@title, @author, @categories_selected, @availabilities, @limit, @offset),
@@ -257,10 +270,13 @@ def books_data(filter_type)
   }
   method_hash[filter_type]
 end
+# rubocop:enable Layout/LineLength
 
 def valid_category?(name)
   categories_list = @storage.categories_list
-  category_names = categories_list.each_with_object([]) { |category, arr| arr << category[:name] }
+  category_names = categories_list.each_with_object([]) do |category, arr|
+    arr << category[:name]
+  end
   category_names.map!(&:downcase)
   !category_names.include?(name.downcase)
 end
@@ -282,7 +298,12 @@ post '/user/edit_login' do
   new_password = params[:new_password].strip
   reenter_password = params[:reenter_password].strip
 
-  if (session[:message] = edit_login_error(new_username, current_password, new_password, reenter_password))
+  # rubocop:disable Style/ParenthesesAroundCondition
+  if (session[:message] =
+        edit_login_error(new_username, current_password,
+                         new_password, reenter_password)
+     )
+    # rubocop:enable Style/ParenthesesAroundCondition
     status 422
     erb :user
   else
@@ -301,7 +322,8 @@ post '/users/reset_password' do
   require_signed_in_as_admin
   user_name = params[:user_name]
   @storage.reset_password(user_name)
-  session[:message] = "The password has been reset to 'bookle' for #{user_name}."
+  session[:message] =
+    "The password has been reset to 'bookle' for #{user_name}."
   if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     '/'
   else
@@ -352,7 +374,11 @@ post '/users/signup' do
   new_password = params[:password].strip
   reenter_password = params[:reenter_password].strip
 
-  if (session[:message] = signup_input_error(new_username, new_password, reenter_password))
+  # rubocop:disable Style/ParenthesesAroundCondition
+  if (session[:message] =
+        signup_input_error(new_username, new_password, reenter_password)
+     )
+    # rubocop:enable Style/ParenthesesAroundCondition
     status 422
     erb :signup
   else
@@ -379,7 +405,8 @@ post '/categories/add_new' do
   require_signed_in_as_admin
   name = params[:name].strip.capitalize
   if !valid_category?(name)
-    session[:message] = 'That category name already exists. Please choose another name.'
+    session[:message] =
+      'That category name already exists. Please choose another name.'
     status 422
     erb :add_category
   elsif name == ''
@@ -417,7 +444,8 @@ post '/category/edit' do
   new_name = params[:new_name].strip.capitalize
 
   if !valid_category?(new_name)
-    session[:message] = 'That category name already exists. Please choose another name.'
+    session[:message] =
+      'That category name already exists. Please choose another name.'
     status 422
     erb :edit_category
   elsif new_name == ''
@@ -426,7 +454,8 @@ post '/category/edit' do
     erb :edit_category
   else
     @storage.change_category(@old_name, new_name)
-    session[:message] = "The '#{@old_name}' category has been renamed to '#{new_name}'."
+    session[:message] =
+      "The '#{@old_name}' category has been renamed to '#{new_name}'."
     redirect '/categories'
   end
 end
@@ -436,9 +465,11 @@ get '/books/filter_form' do
   erb :books_filter_form
 end
 
+# rubocop:disable Metrics/BlockLength
 get '/books/filter_results/:filter_type/:offset' do
   @filter_type = params[:filter_type]
-  require_signed_in_user if @filter_type == 'your_books' || @filter_type == 'available_to_borrow'
+  require_signed_in_user if @filter_type == 'your_books' ||
+                            @filter_type == 'available_to_borrow'
   @title = params[:title]
   @author = params[:author]
   @categories_selected = selected_category_ids(params)
@@ -459,6 +490,7 @@ get '/books/filter_results/:filter_type/:offset' do
   @number_of_pages = (@books_count / @limit.to_f).ceil
   erb :books_filter_result
 end
+# rubocop:enable Metrics/BlockLength
 
 get '/book/add_new' do
   require_signed_in_user
@@ -546,7 +578,8 @@ post '/book/:book_id/request' do
   offset = params[:offset]
   @storage.book_add_request(book_id, session[:user_id])
   @book = @storage.book_data(book_id)
-  session[:message] = "You have requested #{@book[:title]} from #{@book[:owner_name]}"
+  session[:message] =
+    "You have requested #{@book[:title]} from #{@book[:owner_name]}"
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
@@ -557,7 +590,9 @@ post '/book/:book_id/cancel_request' do
   offset = params[:offset]
   @storage.book_cancel_request(book_id)
   @book = @storage.book_data(book_id)
-  session[:message] = "You have cancelled your request for #{@book[:title]} from #{@book[:owner_name]}"
+  session[:message] =
+    "You have cancelled your request for " \
+    "#{@book[:title]} from #{@book[:owner_name]}"
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
@@ -568,7 +603,8 @@ post '/book/:book_id/loan' do
   offset = params[:offset]
   @storage.book_loan(book_id)
   @book = @storage.book_data(book_id)
-  session[:message] = "#{@book[:title]} has been loaned to #{@book[:borrower_name]}"
+  session[:message] =
+    "#{@book[:title]} has been loaned to #{@book[:borrower_name]}"
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
 
@@ -578,7 +614,9 @@ post '/book/:book_id/reject_request' do
   filter_type = params[:filter_type]
   offset = params[:offset]
   @book = @storage.book_data(book_id)
-  session[:message] = "You have rejected a request for #{@book[:title]} from #{@book[:requester_name]}"
+  session[:message] =
+    "You have rejected a request for " \
+    "#{@book[:title]} from #{@book[:requester_name]}"
   @storage.book_reject_request(book_id)
   redirect "/books/filter_results/#{filter_type}/#{offset}"
 end
