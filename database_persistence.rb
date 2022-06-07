@@ -80,37 +80,45 @@ class DatabasePersistence
   def all_books_limit_offset(limit, offset)
     limit_clause = "LIMIT #{limit}"
     offset_clause = "OFFSET #{offset}"
-    sql = [select_clause, group_clause, order_clause, limit_clause, offset_clause].join(' ')
+    sql = [
+      select_clause, group_clause, order_clause, limit_clause, offset_clause
+    ].join(' ')
     result = query(sql)
 
-    result.map do |tuple|
-      tuple_to_list_hash(tuple)
-    end
+    result.map { |tuple| tuple_to_list_hash(tuple) }
   end
 
   def count_available_books(user_id)
-    sql = 'SELECT count(books.id) FROM books WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL'
+    sql = <<~SELECT_CLAUSE
+      SELECT count(books.id) FROM books
+      WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL
+    SELECT_CLAUSE
     query(sql, user_id).first['count'].to_i
   end
 
   def available_books(user_id, limit, offset)
     limit_clause = "LIMIT #{limit}"
     offset_clause = "OFFSET #{offset}"
-    where_clause = 'WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL'
-    sql = [select_clause, where_clause, group_clause, order_clause, limit_clause, offset_clause].join(' ')
+    where_clause =
+      'WHERE owner_id != $1 AND requester_id IS NULL AND borrower_id IS NULL'
+    sql = [
+      select_clause, where_clause, group_clause,
+      order_clause, limit_clause, offset_clause
+    ].join(' ')
     result = query(sql, user_id)
 
-    result.map do |tuple|
-      tuple_to_list_hash(tuple)
-    end
+    result.map { |tuple| tuple_to_list_hash(tuple) }
   end
 
   def count_filter_books(title, author, categories, availabilities)
-    sql = [count_clause, where_clause_filter(categories, availabilities)].join(' ')
+    sql = [
+      count_clause, where_clause_filter(categories, availabilities)
+    ].join(' ')
     result = query(sql, "%#{title}%", "%#{author}%").first
     result.nil? ? 0 : convert_string_to_integer(result['count'])
   end
 
+  # rubocop:disable Metrics/ParameterLists
   def filter_books(title, author, categories, availabilities, limit, offset)
     limit_clause = "LIMIT #{limit}"
     offset_clause = "OFFSET #{offset}"
@@ -124,6 +132,7 @@ class DatabasePersistence
       tuple_to_list_hash(tuple)
     end
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def count_user_books(user_id)
     sql = 'SELECT count(books.id) FROM books WHERE owner_id = $1'
@@ -134,12 +143,13 @@ class DatabasePersistence
     where_clause = 'WHERE owners.id = $1'
     limit_clause = "LIMIT #{limit}"
     offset_clause = "OFFSET #{offset}"
-    sql = [select_clause, where_clause, group_clause, order_clause, limit_clause, offset_clause].join(' ')
+    sql = [
+      select_clause, where_clause, group_clause,
+      order_clause, limit_clause, offset_clause
+    ].join(' ')
     result = query(sql, user_id)
 
-    result.map do |tuple|
-      tuple_to_list_hash(tuple)
-    end
+    result.map { |tuple| tuple_to_list_hash(tuple) }
   end
 
   def book_data(book_id)
@@ -273,6 +283,7 @@ class DatabasePersistence
     SELECT_CLAUSE
   end
 
+  # rubocop:disable Layout/LineLength
   def availabilities_clause(availabilities)
     case availabilities
     when 'available,requested,on_loan' then ' AND books.borrower_id IS NULL'
@@ -284,29 +295,35 @@ class DatabasePersistence
     else ''
     end
   end
+  # rubocop:enable Layout/LineLength
 
   def where_clause(categories, availabilities)
     clause = 'WHERE books.title ILIKE $1 AND books.author ILIKE $2'
-    clause << " AND books_categories.category_id IN (#{categories.join(', ')})" unless categories.empty?
+    unless categories.empty?
+      clause <<
+        " AND books_categories.category_id IN (#{categories.join(', ')})"
+    end
     clause << availabilities_clause(availabilities) unless availabilities.empty?
     clause
   end
 
+  # rubocop:disable Metrics/MethodLength
   def where_clause_filter(categories, availabilities)
     clause = 'WHERE books.title ILIKE $1 AND books.author ILIKE $2'
     unless categories.empty?
       clause << <<~CATEGORY_CLAUSE
-         AND books.id IN (
-          SELECT books.id FROM books
-          INNER JOIN books_categories ON books.id = books_categories.book_id
-          WHERE books_categories.category_id IN (#{categories.join(', ')})
-        )
+      AND books.id IN (
+        SELECT books.id FROM books
+        INNER JOIN books_categories ON books.id = books_categories.book_id
+        WHERE books_categories.category_id IN (#{categories.join(', ')})
+      )
       CATEGORY_CLAUSE
     end
 
     clause << availabilities_clause(availabilities) unless availabilities.empty?
     clause
   end
+  # rubocop:enable Metrics/MethodLength
 
   def group_clause
     'GROUP BY books.id, owners.id, requesters.id, borrowers.id'
@@ -337,12 +354,8 @@ class DatabasePersistence
   end
 
   def query(statement, *params)
-    begin
-      @logger.info "#{statement}: #{params}"
-      @db.exec_params(statement, params)
-    rescue StandardError => e
-      p e.message
-    end
+    @logger.info "#{statement}: #{params}"
+    @db.exec_params(statement, params)
   end
 
   def tuple_to_list_hash(tuple)
